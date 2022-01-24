@@ -1,8 +1,10 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from "react";
+import React from "react";
 import {FilterValueType} from "../App";
 import {TaskMap} from "./TaskMap";
 import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
+import {Button, IconButton} from "@material-ui/core";
+import {Delete} from '@material-ui/icons';
 
 
 export type TaskType = {
@@ -42,7 +44,10 @@ export function Todolist(props: PropsType) {
 
         <div>
             <h3><EditableSpan title={props.title} onChange={(title) => changeTodolistTitle(title)}/>
-                <button onClick={removeTodolistHandler}>x</button>
+                <IconButton aria-label="delete" onClick={removeTodolistHandler}>
+                    <Delete />
+                </IconButton>
+
             </h3>
             <AddItemForm callBack={(title) => addTaskHelper(title)}/>
 
@@ -55,14 +60,14 @@ export function Todolist(props: PropsType) {
             />
 
             <div>
-                <button className={props.filter === "all" ? "active-filter" : ""} onClick={onAllClickHanlder}>All
-                </button>
-                <button className={props.filter === "active" ? "active-filter" : ""}
-                        onClick={onActiveClickHanlder}>Active
-                </button>
-                <button className={props.filter === "completed" ? "active-filter" : ""}
-                        onClick={onCompletedClickHanlder}>Completed
-                </button>
+                <Button variant={props.filter === "all" ? "outlined" : "text"}  onClick={onAllClickHanlder}>All
+                </Button>
+                <Button variant={props.filter === "active" ? "outlined" : "text"}
+                        onClick={onActiveClickHanlder} color="secondary">Active
+                </Button>
+                <Button variant={props.filter === "completed" ? "outlined" : "text"}
+                        onClick={onCompletedClickHanlder}  color="primary">Completed
+                </Button>
             </div>
 
         </div>

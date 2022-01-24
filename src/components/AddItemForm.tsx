@@ -1,4 +1,6 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from "react";
+import {IconButton, TextField} from "@material-ui/core";
+import {AddBox} from "@material-ui/icons";
 
 type PropsType = {
     callBack: (title: string) => void
@@ -8,7 +10,9 @@ type PropsType = {
 export function AddItemForm(props: PropsType) {
     let [newTaskTitle, setNewTaskTitle] = useState("")
     let [error, setError] = useState<string | null>(null)
+
     const onSetNewTitleHandler = (e: ChangeEvent<HTMLInputElement>) => setNewTaskTitle(e.currentTarget.value)
+
     const onEnterKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
         setError(null)
         if (e.charCode === 13) {
@@ -26,14 +30,21 @@ export function AddItemForm(props: PropsType) {
     }
     return (
         <div>
-            <input value={newTaskTitle}
-                   onChange={onSetNewTitleHandler}
-                   onKeyPress={onEnterKeyPressHandler}
-                   className={error ? "error" : ""}/>
-            {error && <div className="error-message">{error}</div>}
+            <TextField
+                       variant="outlined"
+                       value={newTaskTitle}
+                       onChange={onSetNewTitleHandler}
+                       onKeyPress={onEnterKeyPressHandler}
+                       error={!!error}
+                       label="Title"
+                       helperText={error}/>
+            {/*{error && <div className="error-message">{error}</div>}*/}
 
-            <button onClick={addItem}>+
-            </button>
+
+
+            <IconButton color='primary' onClick={addItem}>
+                <AddBox />
+            </IconButton>
         </div>
     )
 }
