@@ -9,7 +9,7 @@ import {
     addTaskAC,
     addTasksDefaultAC,
     changeTaskStatusAC,
-    changeTaskTitleAC,
+    changeTaskTitleAC, deleteTasksAC,
     removeTaskAC,
     TaskReducer
 } from "./TaskReducer";
@@ -112,14 +112,14 @@ function App() {
     function removeTodolist(todolistID: string) {
         // setTodolists(todolists.filter(f => f.id !== todolistID))
         todolistsDispatch(removeTodolistAC(todolistID))
-        delete tasks[todolistID]  // mojno eto ostavlyat tut ili nado vinesti vse taki v reducer ?
+        tasksDispatch(deleteTasksAC(todolistID))
+        // delete tasks[todolistID]  // mojno eto ostavlyat tut ili nado vinesti vse taki v reducer ?
     }
 
     function addTodolist(title: string) {
-        let newID = v1() // mojno li eto ostavit . ili toje nado zasunut v reduceri ?
+        const newID = v1()
         todolistsDispatch(addTodolistAC(newID, title))
         tasksDispatch(addTasksDefaultAC(newID))
-
 
         // setTodolists([newTodolist, ...todolists])
         // setTasks({...tasks, [newID]: []})
