@@ -7,9 +7,8 @@ import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography}
 import {Menu} from "@material-ui/icons";
 import {
     addTaskAC,
-    addTasksDefaultAC,
     changeTaskStatusAC,
-    changeTaskTitleAC, deleteTasksAC,
+    changeTaskTitleAC,
     removeTaskAC,
     TaskReducer
 } from "./TaskReducer";
@@ -50,6 +49,7 @@ function App() {
         {id: todolistID1, title: "What to learn", filter: "all"},
         {id: todolistID2, title: "What to watch", filter: "all"}
     ])
+
     let [tasks, tasksDispatch] = useReducer(TaskReducer, {
         [todolistID1]: [
             {id: v1(), title: "HTML", isDone: true},
@@ -63,22 +63,8 @@ function App() {
         ]
     });
 
-    // let [tasks, setTasks] = useState<TasksType>({
-    //     [todolistID1]: [
-    //         {id: v1(), title: "HTML", isDone: true},
-    //         {id: v1(), title: "JS", isDone: true},
-    //         {id: v1(), title: "React", isDone: false},
-    //         {id: v1(), title: "Redux", isDone: false}
-    //     ],
-    //     [todolistID2]: [
-    //         {id: v1(), title: "Lucky number of Slevin", isDone: true},
-    //         {id: v1(), title: "Inception", isDone: true},
-    //     ]
-    // });
 
     function addTask(title: string, todolistID: string) {
-        // let newTask = {id: v1(), title, isDone: false}
-        // setTasks({...tasks, [todolistID]: [newTask, ...tasks[todolistID]]})
         tasksDispatch(addTaskAC(title, todolistID))
     }
 
@@ -87,42 +73,35 @@ function App() {
     }
 
     function changeTaskStatus(taskID: string, isDone: boolean, todolistID: string) {
-        // setTasks({...tasks, [todolistID]: tasks[todolistID].map(m => m.id === taskID ? {...m, isDone} : m)})
         tasksDispatch(changeTaskStatusAC(todolistID, taskID, isDone))
     }
 
     function changeTaskTitle(todolistID: string, taskID: string, title: string) {
         tasksDispatch(changeTaskTitleAC(todolistID, taskID, title))
-        // setTasks({...tasks, [todolistID]: tasks[todolistID].map(m => m.id === taskID ? {...m, title} : m)})
     }
 
 
     function changeTodolistTitle(todolistID: string, title: string) {
-        // setTodolists(todolists.map(m => m.id === todolistID ? {...m, title} : m))
         todolistsDispatch(changeTodolistTitleAC(todolistID, title))
     }
 
     function changeFilter(value: FilterValueType, todolistID: string) {
-        // setTodolists(todolists.map(m => m.id === todolistID ? {...m, filter: value} : m))
         todolistsDispatch(changeFilterAC(value, todolistID))
 
     }
 
 
     function removeTodolist(todolistID: string) {
-        // setTodolists(todolists.filter(f => f.id !== todolistID))
-        todolistsDispatch(removeTodolistAC(todolistID))
-        tasksDispatch(deleteTasksAC(todolistID))
-        // delete tasks[todolistID]  // mojno eto ostavlyat tut ili nado vinesti vse taki v reducer ?
+        const action = removeTodolistAC(todolistID)
+        todolistsDispatch(action)
+        tasksDispatch(action)
+
     }
 
     function addTodolist(title: string) {
-        const newID = v1()
-        todolistsDispatch(addTodolistAC(newID, title))
-        tasksDispatch(addTasksDefaultAC(newID))
-
-        // setTodolists([newTodolist, ...todolists])
-        // setTasks({...tasks, [newID]: []})
+        const action = addTodolistAC(title)
+        todolistsDispatch(action)
+        tasksDispatch(action)
     }
 
 
@@ -132,11 +111,9 @@ function App() {
             <AppBar position="static">
                 <Toolbar>
                     <IconButton
-
                         edge="start"
                         color="inherit"
                         aria-label="menu"
-
                     >
                         <Menu/>
                     </IconButton>
@@ -164,11 +141,10 @@ function App() {
                         }
 
 
-                        return <Grid item>
+                        return <Grid key={m.id} item>
                             <Paper style={{padding: "10px"}}>
                                 <Todolist
                                     todolistID={m.id}
-                                    key={m.id}
                                     title={m.title}
                                     tasks={tasksForTodolist}
                                     removeTask={removeTask}
