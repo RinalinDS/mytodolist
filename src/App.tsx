@@ -11,14 +11,14 @@ import {
     changeTaskTitleAC,
     removeTaskAC,
     TaskReducer
-} from "./redux/TaskReducer";
+} from "./redux/TasksReducer";
 import {
     addTodolistAC,
     changeFilterAC,
     changeTodolistTitleAC,
     removeTodolistAC,
     TodolistReducer
-} from "./redux/TodolistReducer";
+} from "./redux/TodolistsReducer";
 
 
 export type TodolistType = {

@@ -1,5 +1,11 @@
 import {v1} from "uuid";
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, TaskReducer} from "../redux/TaskReducer";
+import {
+    addTaskAC,
+    changeTaskStatusAC,
+    changeTaskTitleAC,
+    removeTaskAC,
+    tasksReducer
+} from "../redux/TasksReducer";
 import {TasksType} from "../App";
 
 let todolistID1: string;
@@ -26,7 +32,7 @@ beforeEach(() => {
 
 test("proper task should be removed", () => {
 
-    const removeProperTask = TaskReducer(tasks, removeTaskAC(tasks[todolistID1][0].id, todolistID1))
+    const removeProperTask = tasksReducer(tasks, removeTaskAC(tasks[todolistID1][0].id, todolistID1))
 
     expect(removeProperTask[todolistID1].length).toBe(3)
     expect(removeProperTask[todolistID2].length).toBe(2)
@@ -39,7 +45,7 @@ test("proper task should be removed", () => {
 test("proper task should be added", () => {
 
     let newTaskTitle = "CSS"
-    const updatedTasks = TaskReducer(tasks, addTaskAC(newTaskTitle, todolistID1))
+    const updatedTasks = tasksReducer(tasks, addTaskAC(newTaskTitle, todolistID1))
 
     expect(updatedTasks[todolistID1].length).toBe(5)
     expect(updatedTasks[todolistID2].length).toBe(2)
@@ -50,7 +56,7 @@ test("proper task should be added", () => {
 
 test("proper task should have new status", () => {
 
-    const updatedTaskStatus = TaskReducer(tasks, changeTaskStatusAC(todolistID2, tasks[todolistID2][0].id, !tasks[todolistID2][0].isDone))
+    const updatedTaskStatus = tasksReducer(tasks, changeTaskStatusAC(todolistID2, tasks[todolistID2][0].id, !tasks[todolistID2][0].isDone))
 
     expect(updatedTaskStatus[todolistID1].length).toBe(4)
     expect(updatedTaskStatus[todolistID2].length).toBe(2)
@@ -62,7 +68,7 @@ test("proper task should have new title", () => {
 
     let newTaskTitle = "Centurion"
 
-    const updatedTaskTitle = TaskReducer(tasks, changeTaskTitleAC(todolistID2, tasks[todolistID2][0].id, newTaskTitle))
+    const updatedTaskTitle = tasksReducer(tasks, changeTaskTitleAC(todolistID2, tasks[todolistID2][0].id, newTaskTitle))
 
     expect(updatedTaskTitle[todolistID1].length).toBe(4)
     expect(updatedTaskTitle[todolistID2].length).toBe(2)

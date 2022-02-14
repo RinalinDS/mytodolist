@@ -1,7 +1,7 @@
 import {FilterValueType, TodolistType} from "../App";
 import {v1} from "uuid";
 
-export const TodolistReducer = (state: Array<TodolistType>, action: GeneralType): Array<TodolistType> => {
+export const todolistsReducer = (state: Array<TodolistType>, action: GeneralType): Array<TodolistType> => {
 
     switch (action.type) {
         case "CHANGE-TODOLIST-TITLE":
@@ -15,6 +15,7 @@ export const TodolistReducer = (state: Array<TodolistType>, action: GeneralType)
             return [newTodolist, ...state]
         default:
             return state
+
 
     }
 }
