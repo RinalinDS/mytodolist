@@ -1,13 +1,16 @@
 import {v1} from "uuid";
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, TaskReducer} from "../TaskReducer";
+import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, TaskReducer} from "../redux/TaskReducer";
+import {TasksType} from "../App";
 
+let todolistID1: string;
+let todolistID2: string;
 
+let tasks: TasksType;
 
-test("proper task should be removed", () => {
-    let todolistID1 = v1();
-    let todolistID2 = v1();
-
-    const tasks = {
+beforeEach(() => {
+    todolistID1 = v1();
+    todolistID2 = v1();
+    tasks = {
         [todolistID1]: [
             {id: v1(), title: "HTML", isDone: true},
             {id: v1(), title: "JS", isDone: true},
@@ -19,6 +22,9 @@ test("proper task should be removed", () => {
             {id: v1(), title: "Inception", isDone: true},
         ]
     }
+})
+
+test("proper task should be removed", () => {
 
     const removeProperTask = TaskReducer(tasks, removeTaskAC(tasks[todolistID1][0].id, todolistID1))
 
@@ -31,24 +37,8 @@ test("proper task should be removed", () => {
 
 
 test("proper task should be added", () => {
-    let todolistID1 = v1();
-    let todolistID2 = v1();
-
-    const tasks = {
-        [todolistID1]: [
-            {id: v1(), title: "HTML", isDone: true},
-            {id: v1(), title: "JS", isDone: true},
-            {id: v1(), title: "React", isDone: false},
-            {id: v1(), title: "Redux", isDone: false}
-        ],
-        [todolistID2]: [
-            {id: v1(), title: "Lucky number of Slevin", isDone: true},
-            {id: v1(), title: "Inception", isDone: true},
-        ]
-    }
 
     let newTaskTitle = "CSS"
-
     const updatedTasks = TaskReducer(tasks, addTaskAC(newTaskTitle, todolistID1))
 
     expect(updatedTasks[todolistID1].length).toBe(5)
@@ -59,22 +49,6 @@ test("proper task should be added", () => {
 
 
 test("proper task should have new status", () => {
-    let todolistID1 = v1();
-    let todolistID2 = v1();
-
-    const tasks = {
-        [todolistID1]: [
-            {id: v1(), title: "HTML", isDone: true},
-            {id: v1(), title: "JS", isDone: true},
-            {id: v1(), title: "React", isDone: false},
-            {id: v1(), title: "Redux", isDone: false}
-        ],
-        [todolistID2]: [
-            {id: v1(), title: "Lucky number of Slevin", isDone: true},
-            {id: v1(), title: "Inception", isDone: true},
-        ]
-    }
-
 
     const updatedTaskStatus = TaskReducer(tasks, changeTaskStatusAC(todolistID2, tasks[todolistID2][0].id, !tasks[todolistID2][0].isDone))
 
@@ -85,22 +59,8 @@ test("proper task should have new status", () => {
 })
 
 test("proper task should have new title", () => {
-    let todolistID1 = v1();
-    let todolistID2 = v1();
 
-    const tasks = {
-        [todolistID1]: [
-            {id: v1(), title: "HTML", isDone: true},
-            {id: v1(), title: "JS", isDone: true},
-            {id: v1(), title: "React", isDone: false},
-            {id: v1(), title: "Redux", isDone: false}
-        ],
-        [todolistID2]: [
-            {id: v1(), title: "Lucky number of Slevin", isDone: true},
-            {id: v1(), title: "Inception", isDone: true},
-        ]
-    }
-let newTaskTitle = "Centurion"
+    let newTaskTitle = "Centurion"
 
     const updatedTaskTitle = TaskReducer(tasks, changeTaskTitleAC(todolistID2, tasks[todolistID2][0].id, newTaskTitle))
 
@@ -108,7 +68,7 @@ let newTaskTitle = "Centurion"
     expect(updatedTaskTitle[todolistID2].length).toBe(2)
     expect(updatedTaskTitle[todolistID1][2].isDone).toBe(false)
     expect(updatedTaskTitle[todolistID2][0].isDone).toBe(true)
-    expect(updatedTaskTitle[todolistID2][0].title).toBe("Centurion" )
+    expect(updatedTaskTitle[todolistID2][0].title).toBe("Centurion")
     expect(updatedTaskTitle[todolistID2][1].title).toBe("Inception")
     expect(updatedTaskTitle[todolistID1][0].title).toBe("HTML")
 })

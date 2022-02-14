@@ -40,6 +40,8 @@ export function Todolist(props: PropsType) {
     }
     const changeTaskTitle = (title: string, tID: string) => props.changeTaskTitle(props.todolistID,tID, title)
     const changeTodolistTitle =(title: string) => props.changeTodolistTitle(props.todolistID, title)
+
+
     return (
 
         <div>

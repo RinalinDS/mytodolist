@@ -1,7 +1,7 @@
 
 import {v1} from 'uuid';
 import {FilterValueType, TodolistType} from "../App";
-import {changeFilterAC, changeTodolistTitleAC, TodolistReducer} from "../TodolistReducer";
+import {changeFilterAC, changeTodolistTitleAC, removeTodolistAC, TodolistReducer} from "../redux/TodolistReducer";
 
 
 test('correct todolist should be removed', () => {
@@ -13,7 +13,7 @@ test('correct todolist should be removed', () => {
         {id: todolistId2, title: "What to buy", filter: "all"}
     ]
 
-    const endState = TodolistReducer(startState, { type: 'REMOVE-TODOLIST', payload: {todolistID: todolistId1}})
+    const endState = TodolistReducer(startState, removeTodolistAC(todolistId1))
 
     expect(endState.length).toBe(1);
     expect(endState[0].id).toBe(todolistId2);
@@ -48,7 +48,7 @@ test('correct todolist should change its name', () => {
         {id: todolistId1, title: "What to learn", filter: "all"},
         {id: todolistId2, title: "What to buy", filter: "all"}
     ]
-    
+
 
     const endState = TodolistReducer(startState, changeTodolistTitleAC(todolistId2, newTodolistTitle));
 
