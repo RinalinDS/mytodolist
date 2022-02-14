@@ -1,78 +1,96 @@
 import React from "react";
-import {FilterValueType} from "../App";
 import {TaskMap} from "./TaskMap";
 import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
-import {Button, IconButton} from "@material-ui/core";
+import {Button, Checkbox, IconButton} from "@material-ui/core";
 import {Delete} from '@material-ui/icons';
+import {useDispatch, useSelector} from "react-redux";
+import {AppRootStateType} from "../redux/store";
+import {TaskType, TodolistType} from "../AppWithRedux";
+import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "../redux/TasksReducer";
+import {changeFilterAC, changeTodolistTitleAC, removeTodolistAC} from "../redux/TodolistsReducer";
 
-
-export type TaskType = {
-    id: string
-    title: string
-    isDone: boolean
-}
 
 type PropsType = {
     todolistID: string
-    title: string
-    tasks: Array<TaskType>
-    removeTask: (id: string, todolistID: string) => void
-    changeFilter: (value: FilterValueType, todolistID: string) => void
-    addTask: (title: string, todolistID: string) => void
-    changeTaskStatus: (taskID: string, isDone: boolean, todolistID: string) => void
-    filter: FilterValueType
-    removeTodolist: (todolistID: string) => void
-    changeTaskTitle : (title: string, tID:string, todolistID: string) => void
-    changeTodolistTitle : ( todolistID: string, title: string) => void
-
 }
 
 export function Todolist(props: PropsType) {
+    debugger
+    const dispatch = useDispatch()
+    const tasks = useSelector<AppRootStateType, Array<TaskType>>(state => state.tasks[props.todolistID])
+    const todolist = useSelector<AppRootStateType, TodolistType>(state => state.todolists.filter(f => props.todolistID === f.id)[0])
 
+    const onAllClickHandler = () => dispatch(changeFilterAC('all', props.todolistID))
+    const onActiveClickHandler = () => dispatch(changeFilterAC('active', props.todolistID))
+    const onCompletedClickHandler = () => dispatch(changeFilterAC('completed', props.todolistID))
+    const removeTodolistHandler = () => dispatch(removeTodolistAC(props.todolistID))
+    const addTaskHelper = (title: string) => dispatch(addTaskAC(title, props.todolistID))
+    const changeTaskTitle = (title: string, tID: string) => dispatch(changeTaskTitleAC(props.todolistID, tID, title))
+    const changeTodolistTitle = (title: string) => dispatch(changeTodolistTitleAC(props.todolistID, title))
 
-    const onAllClickHanlder = () => props.changeFilter("all", props.todolistID)
-    const onActiveClickHanlder = () => props.changeFilter("active", props.todolistID)
-    const onCompletedClickHanlder = () => props.changeFilter("completed", props.todolistID)
-    const removeTodolistHandler = () => props.removeTodolist(props.todolistID)
-    const addTaskHelper = (title: string) =>  {
-    props.addTask(title, props.todolistID)
+    function removeTask(id: string, todolistID: string) {
+        dispatch(removeTaskAC(id, todolistID))
     }
-    const changeTaskTitle = (title: string, tID: string) => props.changeTaskTitle(props.todolistID,tID, title)
-    const changeTodolistTitle =(title: string) => props.changeTodolistTitle(props.todolistID, title)
+
+    function changeTaskStatus(taskID: string, isDone: boolean, todolistID: string) {
+        dispatch(changeTaskStatusAC(todolistID, taskID, isDone))
+    }
 
 
+    let tasksForTodolist = tasks
+    if (todolist.filter === "active") {
+        tasksForTodolist = tasks.filter(t => !t.isDone);
+    }
+    if (todolist.filter === "completed") {
+        tasksForTodolist = tasks.filter(f => f.isDone);
+    }
     return (
 
         <div>
-            <h3><EditableSpan title={props.title} onChange={(title) => changeTodolistTitle(title)}/>
+            <h3><EditableSpan title={todolist.title} onChange={(title) => changeTodolistTitle(title)}/>
                 <IconButton aria-label="delete" onClick={removeTodolistHandler}>
-                    <Delete />
+                    <Delete/>
                 </IconButton>
 
             </h3>
             <AddItemForm callBack={(title) => addTaskHelper(title)}/>
+            {tasksForTodolist.map(m => {
+                return (
+                    <div key={m.id} className={m.isDone ? "is-done" : ""}>
+                        <Checkbox
+                            color='primary'
+                            onChange={(e) => changeTaskStatus(m.id, e.currentTarget.checked, props.todolistID)}
+                            checked={m.isDone}/>
+                        <EditableSpan title={m.title} onChange={(title) => changeTaskTitle(title, m.id)}/>
 
-            <TaskMap
-                tasks={props.tasks}
-                removeTask={props.removeTask}
+                        <IconButton aria-label="delete" onClick={() => removeTask(m.id, props.todolistID)}>
+                            <Delete/>
+                        </IconButton>
+                    </div>
+                        )})}
+
+                        {/*        <TaskMap
+                tasks={tasksForTodolist}
+                removeTask={removeTask}
                 todolistID={props.todolistID}
-                changeTaskStatus={props.changeTaskStatus}
-                changeTaskTitle = {(title, tID)=> changeTaskTitle(title, tID)}
+                changeTaskStatus={changeTaskStatus}
+                changeTaskTitle ={changeTaskTitle}
             />
+*/}
+                        <div>
+                            <Button variant={todolist.filter === "all" ? "outlined" : "text"}
+                                    onClick={onAllClickHandler}>All
+                            </Button>
+                            <Button variant={todolist.filter === "active" ? "outlined" : "text"}
+                                    onClick={onActiveClickHandler} color="secondary">Active
+                            </Button>
+                            <Button variant={todolist.filter === "completed" ? "outlined" : "text"}
+                                    onClick={onCompletedClickHandler} color="primary">Completed
+                            </Button>
+                        </div>
 
-            <div>
-                <Button variant={props.filter === "all" ? "outlined" : "text"}  onClick={onAllClickHanlder}>All
-                </Button>
-                <Button variant={props.filter === "active" ? "outlined" : "text"}
-                        onClick={onActiveClickHanlder} color="secondary">Active
-                </Button>
-                <Button variant={props.filter === "completed" ? "outlined" : "text"}
-                        onClick={onCompletedClickHanlder}  color="primary">Completed
-                </Button>
-            </div>
-
-        </div>
-    )
-}
+                    </div>
+                )
+            }
 

@@ -1,5 +1,5 @@
 import React, {ChangeEvent} from "react";
-import {TaskType} from "./Todolist";
+import {TaskType} from "./../AppWithRedux";
 import {EditableSpan} from "./EditableSpan";
 import {Checkbox, IconButton} from "@material-ui/core";
 import {Delete} from "@material-ui/icons";
@@ -12,10 +12,10 @@ type TaskMapPropsType = {
     changeTaskTitle : (title: string, tID: string) => void
 }
 
-export function TaskMap({tasks, removeTask, todolistID, changeTaskStatus, ...props}: TaskMapPropsType) {
+export function TaskMap({tasks, removeTask, todolistID, changeTaskStatus, changeTaskTitle, ...props}: TaskMapPropsType) {
     const removeTaskHandler = (id: string) => removeTask(id, todolistID)
     const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>, taskId: string) => changeTaskStatus(taskId, e.currentTarget.checked, todolistID)
-    const ChangeTaskTitle = (title: string, tID: string) => props.changeTaskTitle(title, tID)
+    const ChangeTaskTitle = (title: string, tID: string) => changeTaskTitle(title, tID)
     return (
         <div>
             {tasks.map(m => {
