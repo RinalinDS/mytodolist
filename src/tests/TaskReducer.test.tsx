@@ -6,7 +6,7 @@ import {
     removeTaskAC,
     tasksReducer
 } from "../redux/TasksReducer";
-import {TasksType} from "../AppWithRedux";
+import {TasksType} from "../App";
 
 let todolistID1: string;
 let todolistID2: string;

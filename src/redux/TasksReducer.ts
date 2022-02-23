@@ -1,33 +1,22 @@
-import {TasksType} from "../AppWithRedux";
+import {TasksType} from "../App";
 import {v1} from "uuid";
-import {addTodolistACType, removeTodolistACType, todolistID1, todolistID2} from "./TodolistsReducer";
+import {addTodolistACType, removeTodolistACType} from "./TodolistsReducer";
 
 
-const initialState: TasksType = {
-    [todolistID1]: [
-        {id: v1(), title: "HTML", isDone: true},
-        {id: v1(), title: "JS", isDone: true},
-        {id: v1(), title: "React", isDone: false},
-        {id: v1(), title: "Redux", isDone: false}
-    ],
-    [todolistID2]: [
-        {id: v1(), title: "Lucky number of Slevin", isDone: true},
-        {id: v1(), title: "Inception", isDone: true},
-    ]
-}
+const initialState: TasksType = {}
 
 export const tasksReducer = (state: TasksType = initialState, action: GeneralType) => {
     switch (action.type) {
         case "REMOVE-TASK":
             return {
                 ...state,
-
                 [action.payload.todolistID]: state[action.payload.todolistID].filter(f => f.id !== action.payload.id)
             }
         case "ADD-TASK":
             let newTask = {id: v1(), title: action.payload.title, isDone: false}
             return {...state, [action.payload.todolistID]: [newTask, ...state[action.payload.todolistID]]}
         case "CHANGE-TASK-STATUS" :
+
             return {
                 ...state,
                 [action.payload.todolistID]: state[action.payload.todolistID].map(m => m.id === action.payload.taskID ? {

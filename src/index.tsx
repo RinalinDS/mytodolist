@@ -4,11 +4,11 @@ import './index.css';
 import * as serviceWorker from './serviceWorker';
 import {Provider} from "react-redux";
 import {store} from "./redux/store";
-import {AppWithRedux} from "./AppWithRedux";
+import {App} from "./App";
 
 ReactDOM.render(
     <Provider store={store}>
-        <AppWithRedux />
+        <App />
     </Provider>
     , document.getElementById('root'));
 
