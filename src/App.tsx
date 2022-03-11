@@ -4,33 +4,17 @@ import {Todolist} from "./components/Todolist";
 import {AddItemForm} from "./components/AddItemForm";
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@material-ui/core";
 import {Menu} from "@material-ui/icons";
-import {addTodolistAC} from "./redux/TodolistsReducer";
+import {addTodolistAC, TodolistDomainType} from "./redux/TodolistsReducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./redux/store";
 
 
-export type TodolistType = {
-    id: string
-    title: string
-    filter: FilterValueType
-}
-export type FilterValueType = "all" | "active" | "completed"
-
-export type TaskType = {
-    id: string
-    title: string
-    isDone: boolean
-}
-
-export type TasksType = {
-    [key: string]: Array<TaskType>
-}
 
 export function App() {
-    console.log('App')
+
 
     const dispatch = useDispatch()
-    const todolists = useSelector<AppRootStateType, Array<TodolistType>>(state => state.todolists)
+    const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists)
 
     const addTodolist = useCallback((title: string) => {
         dispatch(addTodolistAC(title))

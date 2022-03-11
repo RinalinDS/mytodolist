@@ -1,8 +1,9 @@
 import React, {ChangeEvent, memo, useCallback} from "react";
-import {TaskType} from "../App";
+
 import {EditableSpan} from "./EditableSpan";
 import {Checkbox, IconButton} from "@material-ui/core";
 import {Delete} from "@material-ui/icons";
+import {TaskStatuses, TaskType} from "../api/todolist-api";
 
 type TaskPropsType = {
     task: TaskType
@@ -18,7 +19,6 @@ export const Task = memo(({
                               todolistID,
                               changeTaskStatus,
                               changeTaskTitle,
-                              ...props
                           }: TaskPropsType) => {
     console.log('task')
 
@@ -26,11 +26,11 @@ export const Task = memo(({
     const changeTaskStatusHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => changeTaskStatus(task.id, e.currentTarget.checked, todolistID), [task.id, todolistID])
     const ChangeTaskTitle = useCallback((title: string) => changeTaskTitle(title, task.id), [task.id])
     return (
-        <div key={task.id} className={task.isDone ? "is-done" : ""}>
+        <div key={task.id} className={task.status ? "is-done" : ""}>
             <Checkbox
                 color='primary'
                 onChange={changeTaskStatusHandler}
-                checked={task.isDone}/>
+                checked={task.status===TaskStatuses.Completed}/>
             <EditableSpan title={task.title} onChange={ChangeTaskTitle}/>
 
             <IconButton aria-label="delete" onClick={removeTaskHandler}>

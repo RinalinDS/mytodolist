@@ -4,9 +4,11 @@ import {
     changeTaskStatusAC,
     changeTaskTitleAC,
     removeTaskAC,
-    tasksReducer
+    tasksReducer,
+    TasksType
 } from "../redux/TasksReducer";
-import {TasksType} from "../App";
+import {TaskPriorities, TaskStatuses} from "../api/todolist-api";
+
 
 let todolistID1: string;
 let todolistID2: string;
@@ -18,14 +20,20 @@ beforeEach(() => {
     todolistID2 = v1();
     tasks = {
         [todolistID1]: [
-            {id: v1(), title: "HTML", isDone: true},
-            {id: v1(), title: "JS", isDone: true},
-            {id: v1(), title: "React", isDone: false},
-            {id: v1(), title: "Redux", isDone: false}
+            {id: v1(), title: "HTML", status: TaskStatuses.Completed, addedDate: '', deadline: '', description: '', startDate: '',
+                order: 0, priority: TaskPriorities.Low, todoListId: todolistID1},
+            {id: v1(), title: "JS", status: TaskStatuses.Completed, addedDate: '', deadline: '', description: '', startDate: '',
+                order: 0, priority: TaskPriorities.Low, todoListId: todolistID1},
+            {id: v1(), title: "React", status: TaskStatuses.New , addedDate: '', deadline: '', description: '', startDate: '',
+                order: 0, priority: TaskPriorities.Low, todoListId: todolistID1},
+            {id: v1(), title: "Redux", status: TaskStatuses.New , addedDate: '', deadline: '', description: '', startDate: '',
+                order: 0, priority: TaskPriorities.Low, todoListId: todolistID1}
         ],
         [todolistID2]: [
-            {id: v1(), title: "Lucky number of Slevin", isDone: true},
-            {id: v1(), title: "Inception", isDone: true},
+            {id: v1(), title: "Lucky number of Slevin",status: TaskStatuses.Completed , addedDate: '', deadline: '', description: '', startDate: '',
+                order: 0, priority: TaskPriorities.Low, todoListId:todolistID2},
+            {id: v1(), title: "Inception", addedDate: '',status: TaskStatuses.New, deadline: '', description: '', startDate: '',
+                order: 0, priority: TaskPriorities.Low, todoListId: todolistID2},
         ]
     }
 })
@@ -56,12 +64,12 @@ test("proper task should be added", () => {
 
 test("proper task should have new status", () => {
 
-    const updatedTaskStatus = tasksReducer(tasks, changeTaskStatusAC(todolistID2, tasks[todolistID2][0].id, !tasks[todolistID2][0].isDone))
+    const updatedTaskStatus = tasksReducer(tasks, changeTaskStatusAC(todolistID2, tasks[todolistID2][0].id, TaskStatuses.New))
 
     expect(updatedTaskStatus[todolistID1].length).toBe(4)
     expect(updatedTaskStatus[todolistID2].length).toBe(2)
-    expect(updatedTaskStatus[todolistID1][2].isDone).toBe(false)
-    expect(updatedTaskStatus[todolistID2][0].isDone).toBe(false)
+    expect(updatedTaskStatus[todolistID1][2].status).toBe(TaskStatuses.New)
+    expect(updatedTaskStatus[todolistID2][0].status).toBe(TaskStatuses.New)
 })
 
 test("proper task should have new title", () => {
@@ -72,8 +80,8 @@ test("proper task should have new title", () => {
 
     expect(updatedTaskTitle[todolistID1].length).toBe(4)
     expect(updatedTaskTitle[todolistID2].length).toBe(2)
-    expect(updatedTaskTitle[todolistID1][2].isDone).toBe(false)
-    expect(updatedTaskTitle[todolistID2][0].isDone).toBe(true)
+    expect(updatedTaskTitle[todolistID1][2].status).toBe(TaskStatuses.New)
+    expect(updatedTaskTitle[todolistID2][0].status).toBe(TaskStatuses.Completed)
     expect(updatedTaskTitle[todolistID2][0].title).toBe("Centurion")
     expect(updatedTaskTitle[todolistID2][1].title).toBe("Inception")
     expect(updatedTaskTitle[todolistID1][0].title).toBe("HTML")
