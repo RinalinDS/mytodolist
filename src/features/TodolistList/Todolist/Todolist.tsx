@@ -6,14 +6,14 @@ import {Delete} from '@material-ui/icons';
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../../../app/store";
 
-import {addTaskTC, getTasksTC} from "../../TasksReducer";
+import {addTaskTC, getTasksTC} from "../TasksReducer";
 import {
     changeFilterAC,
     changeTodolistTitleTC,
     deleteTodolistTC,
     FilterValueType,
     TodolistDomainType
-} from "../../TodolistsReducer";
+} from "../TodolistsReducer";
 import {Task} from "./ Task/Task";
 import {TaskStatuses, TaskType} from "../../../api/todolist-api";
 
