@@ -10,7 +10,6 @@ type propsType = {
 
 export const EditableSpan = memo((props: propsType) => {
 
-    console.log('EditableSpan')
     let [edit, setEdit] = useState(false)
     let [title, setTitle] = useState(props.title)
 

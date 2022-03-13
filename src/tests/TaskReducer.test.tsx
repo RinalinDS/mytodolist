@@ -53,7 +53,10 @@ test("proper task should be removed", () => {
 test("proper task should be added", () => {
 
     let newTaskTitle = "CSS"
-    const updatedTasks = tasksReducer(tasks, addTaskAC(newTaskTitle, todolistID1))
+    const updatedTasks = tasksReducer(tasks, addTaskAC(
+        {id: '1', title: newTaskTitle, status: TaskStatuses.New, addedDate: '', startDate: '', order: 0,
+            priority: TaskPriorities.Low, todoListId: todolistID1, deadline:' ', description: ''},
+        ))
 
     expect(updatedTasks[todolistID1].length).toBe(5)
     expect(updatedTasks[todolistID2].length).toBe(2)
