@@ -6,8 +6,6 @@ type propsType = {
     onChange: (newValue: string) => void
 }
 
-
-
 export const EditableSpan = memo((props: propsType) => {
 
     let [edit, setEdit] = useState(false)
