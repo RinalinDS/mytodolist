@@ -11,7 +11,6 @@ const initialState: TasksType = {}
 export const tasksReducer = (state: TasksType = initialState, action: GeneralType): TasksType => {
     switch (action.type) {
         case "REMOVE-TASK":
-            debugger
             return {
                 ...state,
                 [action.payload.todolistID]: state[action.payload.todolistID].filter(f => f.id !== action.payload.id)
@@ -24,10 +23,8 @@ export const tasksReducer = (state: TasksType = initialState, action: GeneralTyp
         case "UPDATE-TASK":
             return {
                 ...state,
-                [action.payload.todolistID]: state[action.payload.todolistID].map(m => m.id === action.payload.taskID ? {
-                    ...m, ...action.payload.domainModel
-
-                } : m)
+                [action.payload.todolistID]: state[action.payload.todolistID].map(m => m.id === action.payload.taskID ?
+                    {...m, ...action.payload.domainModel} : m)
             }
         case "REMOVE-TODOLIST":
             const copyState = {...state}

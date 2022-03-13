@@ -1,5 +1,5 @@
-import {tasksReducer, TasksType} from "../redux/TasksReducer";
-import {addTodolistAC, TodolistDomainType, todolistsReducer} from "../redux/TodolistsReducer";
+import {tasksReducer, TasksType} from "../features/TasksReducer";
+import {addTodolistAC, TodolistDomainType, todolistsReducer} from "../features/TodolistsReducer";
 
 
 
