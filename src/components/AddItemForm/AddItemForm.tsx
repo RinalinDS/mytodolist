@@ -1,5 +1,6 @@
 import React, {ChangeEvent, KeyboardEvent, memo, useState} from "react";
-import {IconButton, TextField} from "@material-ui/core";
+import IconButton from "@material-ui/core/IconButton";
+import TextField from "@material-ui/core/TextField";
 import {AddBox} from "@mui/icons-material";
 
 
@@ -19,7 +20,7 @@ export const AddItemForm = memo((props: PropsType) => {
         if (error) {
             setError(null)
         }
-        if (e.charCode === 13) {
+        if (e.key === 'Enter') {
             addItem()
         }
     }
@@ -33,6 +34,7 @@ export const AddItemForm = memo((props: PropsType) => {
     }
     return (
         <div>
+
             <TextField
                 variant="outlined"
                 value={newTaskTitle}
@@ -42,7 +44,6 @@ export const AddItemForm = memo((props: PropsType) => {
                 label="Title"
                 helperText={error}
                 disabled={props.disabled}/>
-
 
             <IconButton color='primary' onClick={addItem}>
                 <AddBox/>

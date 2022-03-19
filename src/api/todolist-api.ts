@@ -1,4 +1,5 @@
 import axios from "axios";
+import {RequestStatusType} from "../app/AppReducer";
 
 let instance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.1/',
@@ -28,20 +29,19 @@ export const todolistApi = {
         return instance.get<GetTasksResponseType>(`todo-lists/${todolistID}/tasks`)
     },
     deleteTask(todolistID: string, taskID: string) {
-        debugger
         return instance.delete<BaseResponseType>(`todo-lists/${todolistID}/tasks/${taskID}`)
     },
     updateTask(todolistID: string, taskID: string, model: UpdateTaskModelType) {
-        return instance.put<BaseResponseType>(`todo-lists/${todolistID}/tasks/${taskID}` , model)
+        return instance.put<BaseResponseType>(`todo-lists/${todolistID}/tasks/${taskID}`, model)
     },
     createTask(todolistID: string, title: string) {
-        return instance.post<BaseResponseType<{item: TaskType}>>(`todo-lists/${todolistID}/tasks` , {title})
+        return instance.post<BaseResponseType<{ item: TaskType }>>(`todo-lists/${todolistID}/tasks`, {title})
     }
 }
 
 // types
 
-type BaseResponseType<T = {}> = {
+export type BaseResponseType<T = {}> = {
     resultCode: number
     messages: string[]
     fieldsErrors: string[]
@@ -81,6 +81,7 @@ export type TaskType = {
     startDate: string
     deadline: string
     addedDate: string
+    entityStatus: RequestStatusType
 }
 
 export type UpdateTaskModelType = {

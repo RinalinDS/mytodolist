@@ -1,5 +1,3 @@
-
-
 const initialState = {
     status: 'loading' as RequestStatusType,
     error: null as NullableType<string>

@@ -1,9 +1,10 @@
 import React, {ChangeEvent, memo, useState} from "react";
-import {TextField} from "@material-ui/core";
+import TextField from "@material-ui/core/TextField";
 
 type propsType = {
     title: string
     onChange: (newValue: string) => void
+    disabled? : boolean
 }
 
 export const EditableSpan = memo((props: propsType) => {
@@ -24,7 +25,8 @@ export const EditableSpan = memo((props: propsType) => {
 
     return (
         edit
-           ? <TextField variant='outlined' size='small' value={title} onBlur={onBlurHandler} autoFocus onChange={onSetNewTitleHandler}/>
+           ? <TextField variant='outlined' size='small' value={title} onBlur={onBlurHandler}
+                       disabled={props.disabled} autoFocus onChange={onSetNewTitleHandler}/>
          : <span onDoubleClick={onDoubleClickHandler}>{props.title}</span>
 
     )
