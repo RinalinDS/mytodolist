@@ -109,7 +109,7 @@ export const getTasksTC = (todolistID: string): ThunkType => async dispatch => {
         dispatch(getTasksAC(res.data.items, todolistID))
         dispatch(setAppStatusAC('succeeded'))
     } catch (e) {
-        console.warn(e)
+        handleServerNetworkError((e as Error).message, dispatch)
     }
 }
 
@@ -124,8 +124,8 @@ export const removeTaskTC = (todolistID: string, taskID: string): ThunkType => a
         } else {
             handlerServerError(res.data, dispatch)
         }
-    } catch (e: any) {
-        handleServerNetworkError(e.message, dispatch)
+    } catch (e) {
+        handleServerNetworkError((e as Error).message, dispatch)
     }
 }
 
@@ -147,10 +147,10 @@ export const updateTaskTC = (task: TaskType, domainModel: UpdateTaskModelDomainT
             dispatch(updateTaskAC(task.todoListId, task.id, domainModel))
             dispatch(setAppStatusAC('succeeded'))
         } else {
-            handlerServerError(res.data, dispatch)
+            handlerServerError<{item: TaskType}>(res.data, dispatch)
         }
-    } catch (e: any) {
-        handleServerNetworkError(e.message, dispatch)
+    } catch (e) {
+        handleServerNetworkError((e as Error).message, dispatch)
     }
     finally {
         dispatch(changeTaskEntityStatusAC('idle',task.todoListId, task.id))
@@ -165,10 +165,10 @@ export const addTaskTC = (todolistID: string, title: string): ThunkType => async
             dispatch(addTaskAC(res.data.data.item))
             dispatch(setAppStatusAC('succeeded'))
         } else {
-            handlerServerError<{ item: TaskType }>(res.data, dispatch)
+            handlerServerError<{item: TaskType}>(res.data, dispatch)
         }
-    } catch (e: any) {
-        handleServerNetworkError(e.message, dispatch)
+    } catch (e) {
+        handleServerNetworkError((e as Error).message, dispatch)
     }
 }
 

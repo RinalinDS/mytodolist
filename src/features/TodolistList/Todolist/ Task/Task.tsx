@@ -38,7 +38,7 @@ export const Task = React.memo((props: TaskPropsType) => {
             <Checkbox
                 checked={task.status === TaskStatuses.Completed}
                 color="primary"
-                onChange={changeTaskStatus}
+                onChange={changeTaskStatus} disabled={task.entityStatus === 'loading'}
             />
 
             <EditableSpan title={task.title} onChange={changeTaskTitle} disabled={task.entityStatus === 'loading'}/>
