@@ -1,9 +1,11 @@
 import React, {ChangeEvent, KeyboardEvent, memo, useState} from "react";
 import {IconButton, TextField} from "@material-ui/core";
-import {AddBox} from "@material-ui/icons";
+import {AddBox} from "@mui/icons-material";
+
 
 type PropsType = {
     callBack: (title: string) => void
+    disabled?: boolean
 }
 
 export const AddItemForm = memo((props: PropsType) => {
@@ -32,19 +34,18 @@ export const AddItemForm = memo((props: PropsType) => {
     return (
         <div>
             <TextField
-                       variant="outlined"
-                       value={newTaskTitle}
-                       onChange={onSetNewTitleHandler}
-                       onKeyPress={onEnterKeyPressHandler}
-                       error={!!error}
-                       label="Title"
-                       helperText={error}/>
-
-
+                variant="outlined"
+                value={newTaskTitle}
+                onChange={onSetNewTitleHandler}
+                onKeyPress={onEnterKeyPressHandler}
+                error={!!error}
+                label="Title"
+                helperText={error}
+                disabled={props.disabled}/>
 
 
             <IconButton color='primary' onClick={addItem}>
-                <AddBox />
+                <AddBox/>
             </IconButton>
         </div>
     )
