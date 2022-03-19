@@ -1,12 +1,13 @@
 import React, {ChangeEvent, useCallback} from 'react';
-import {Checkbox, IconButton} from "@material-ui/core";
+import IconButton from "@material-ui/core/IconButton";
+import Checkbox from "@material-ui/core/Checkbox";
+import {Delete} from "@mui/icons-material/";
 import {EditableSpan} from "../../../../components/EditableSpan/EditableSpan";
-
 import {useDispatch, useSelector} from "react-redux";
 import {removeTaskTC, updateTaskTC} from "../../TasksReducer";
 import {AppRootStateType} from "../../../../app/store";
 import {TaskStatuses, TaskType} from "../../../../api/todolist-api";
-import {Delete} from "@mui/icons-material";
+
 
 
 type TaskPropsType = {
@@ -40,7 +41,7 @@ export const Task = React.memo((props: TaskPropsType) => {
                 onChange={changeTaskStatus}
             />
 
-            <EditableSpan title={task.title} onChange={changeTaskTitle}/>
+            <EditableSpan title={task.title} onChange={changeTaskTitle} disabled={task.entityStatus === 'loading'}/>
             <IconButton onClick={removeTask}>
                 <Delete/>
             </IconButton>

@@ -23,7 +23,8 @@ beforeEach(() => {
                 startDate: '',
                 order: 0,
                 priority: TaskPriorities.Low,
-                todoListId: todolistID1
+                todoListId: todolistID1,
+                entityStatus: 'idle'
             },
             {
                 id: v1(),
@@ -35,7 +36,8 @@ beforeEach(() => {
                 startDate: '',
                 order: 0,
                 priority: TaskPriorities.Low,
-                todoListId: todolistID1
+                todoListId: todolistID1,
+                entityStatus: 'idle'
             },
             {
                 id: v1(),
@@ -47,7 +49,8 @@ beforeEach(() => {
                 startDate: '',
                 order: 0,
                 priority: TaskPriorities.Low,
-                todoListId: todolistID1
+                todoListId: todolistID1,
+                entityStatus: 'idle'
             },
             {
                 id: v1(),
@@ -59,7 +62,8 @@ beforeEach(() => {
                 startDate: '',
                 order: 0,
                 priority: TaskPriorities.Low,
-                todoListId: todolistID1
+                todoListId: todolistID1,
+                entityStatus: 'idle',
             }
         ],
         [todolistID2]: [
@@ -73,7 +77,8 @@ beforeEach(() => {
                 startDate: '',
                 order: 0,
                 priority: TaskPriorities.Low,
-                todoListId: todolistID2
+                todoListId: todolistID2,
+                entityStatus: 'idle',
             },
             {
                 id: v1(),
@@ -85,7 +90,8 @@ beforeEach(() => {
                 startDate: '',
                 order: 0,
                 priority: TaskPriorities.Low,
-                todoListId: todolistID2
+                todoListId: todolistID2,
+                entityStatus: 'idle',
             },
         ]
     }
@@ -109,7 +115,7 @@ test("proper task should be added", () => {
     const updatedTasks = tasksReducer(tasks, addTaskAC(
         {
             id: '1', title: newTaskTitle, status: TaskStatuses.New, addedDate: '', startDate: '', order: 0,
-            priority: TaskPriorities.Low, todoListId: todolistID1, deadline: ' ', description: ''
+            priority: TaskPriorities.Low, todoListId: todolistID1, deadline: ' ', description: '', entityStatus: 'idle'
         },
     ))
 
