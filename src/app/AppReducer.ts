@@ -1,13 +1,23 @@
+import {ThunkType} from './store';
+import {authAPI} from '../api/todolist-api';
+import {setIsLoggedInAC} from '../features/Login/authReducer';
+import {handlerServerError, handleServerNetworkError} from '../utils/error-utils';
+import {AxiosError} from 'axios';
+
 const initialState = {
-    status: 'loading' as RequestStatusType,
-    error: null as NullableType<string>
+    status: 'idle' as RequestStatusType,
+    error: null as NullableType<string>,
+    isInitialized: false
 }
 
-export const appReducer = (state: InitialStateTypeForAppReducer = initialState, action: AppReducerActionsType):InitialStateTypeForAppReducer => {
+export const appReducer = (state: InitialStateTypeForAppReducer = initialState, action: AppReducerActionsType): InitialStateTypeForAppReducer => {
+
     switch (action.type) {
         case "APP/SET-STATUS":
             return {...state, ...action.payload}
         case "APP/SET-ERROR":
+            return {...state, ...action.payload}
+        case 'APP/SET-INITIALIZE':
             return {...state, ...action.payload}
         default:
             return state
@@ -31,12 +41,38 @@ export const setAppErrorAC = (error: NullableType<string>) => {
     } as const
 }
 
+export const setInitializeAC = (isInitialized: boolean) => {
+    return {
+        type: 'APP/SET-INITIALIZE',
+        payload: {
+            isInitialized
+        }
+    } as const
+}
+
+// thunks
+
+export const initializeAppTC = (): ThunkType => dispatch => {
+    authAPI.me().then(res => {
+
+        if (res.data.resultCode === 0) {
+            dispatch(setIsLoggedInAC(true));
+        } else {
+            handlerServerError(res.data, dispatch)
+        }
+    }).catch((error: AxiosError) => {
+        handleServerNetworkError(error.message, dispatch)
+    })
+        .finally(() => {
+            dispatch(setInitializeAC(true))
+        })
+}
 
 
 export type setAppStatusACType = ReturnType<typeof setAppStatusAC>
 export type setAppErrorACType = ReturnType<typeof setAppErrorAC>
 
-export type AppReducerActionsType = setAppStatusACType | setAppErrorACType
+export type AppReducerActionsType = setAppStatusACType | setAppErrorACType | ReturnType<typeof setInitializeAC>
 
 
 export type NullableType<T> = null | T

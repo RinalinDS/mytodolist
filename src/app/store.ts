@@ -4,12 +4,14 @@ import {TasksActionType, tasksReducer} from "../features/TodolistList/TasksReduc
 import thunkMiddleware, {ThunkAction} from "redux-thunk";
 import {appReducer, AppReducerActionsType} from "./AppReducer";
 import {TypedUseSelectorHook, useSelector} from "react-redux";
+import {AuthActionsType, authReducer} from '../features/Login/authReducer';
 
 
 const reducers = combineReducers({
     todolists: todolistsReducer,
     tasks: tasksReducer,
-    app: appReducer
+    app: appReducer,
+    auth: authReducer
 })
 
 export const store = createStore(reducers, applyMiddleware(thunkMiddleware))
@@ -18,7 +20,7 @@ export const store = createStore(reducers, applyMiddleware(thunkMiddleware))
 export type AppRootStateType = ReturnType<typeof reducers>
 
 // все типы action-ов из редьюсеров. (всего приложения)
-export type AppActionTypes = TodolistsActionType | TasksActionType | AppReducerActionsType
+export type AppActionTypes = TodolistsActionType | TasksActionType | AppReducerActionsType | AuthActionsType
 export const useAppSelector: TypedUseSelectorHook<AppRootStateType> = useSelector
 
 // по умолчанию если не указано ретурн тайп будет войд

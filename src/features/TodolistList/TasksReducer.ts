@@ -107,9 +107,11 @@ export const getTasksTC = (todolistID: string): ThunkType => async dispatch => {
         dispatch(setAppStatusAC('loading'))
         const res = await todolistApi.getTasks(todolistID)
         dispatch(getTasksAC(res.data.items, todolistID))
-        dispatch(setAppStatusAC('succeeded'))
+
     } catch (e) {
         handleServerNetworkError((e as Error).message, dispatch)
+    } finally {
+        dispatch(setAppStatusAC('idle'))
     }
 }
 
