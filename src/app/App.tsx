@@ -47,16 +47,16 @@ export function App() {
         <div className="App">
             <AppBar position="static">
                 <Toolbar>
-                    <IconButton
-                        edge="start"
-                        color="inherit"
-                        aria-label="menu"
-                    >
-                        <Menu/>
-                    </IconButton>
-                    <Typography variant="h6">
-                        News
-                    </Typography>
+                    {/*<IconButton*/}
+                    {/*    edge="start"*/}
+                    {/*    color="inherit"*/}
+                    {/*    aria-label="menu"*/}
+                    {/*>*/}
+                    {/*    <Menu/>*/}
+                    {/*</IconButton>*/}
+                    {/*<Typography variant="h6">*/}
+                    {/*    News*/}
+                    {/*</Typography>*/}
                     {isLoggedIn && <Button color="inherit" onClick={logoutHandler}>Log out</Button>}
                 </Toolbar>
             </AppBar>
@@ -66,8 +66,8 @@ export function App() {
                 <Routes>
                     <Route path={'login'} element={<Login/>}/>
                     <Route path={'/'} element={<TodolistsList/>}/>
-                    <Route path={"404"} element={<h1>Someone FUCKED UP</h1>} />
-                    <Route path={"*"} element={<Navigate to={'404'} />} />
+                    <Route path={'404'} element={<h1>Someone FUCKED UP</h1>} />
+                    <Route path={'*'} element={<Navigate to={'404'} />} />
 
                 </Routes>
             </Container>

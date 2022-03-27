@@ -3,6 +3,7 @@ import {ThunkType} from "../../app/store";
 import {RequestStatusType, setAppStatusAC} from "../../app/AppReducer";
 import {AxiosError} from "axios";
 import {handlerServerError, handleServerNetworkError} from "../../utils/error-utils";
+import {clearTodolistsDataAC, getTasksTC} from './TasksReducer';
 
 //initial state
 
@@ -27,6 +28,8 @@ export const todolistsReducer = (state: Array<TodolistDomainType> = initialState
             return [{...action.payload.todolist, filter: 'all', entityStatus: 'idle'}, ...state]
         case "GET-TODOLISTS":
             return action.payload.todolists.map(m => ({...m, filter: "all", entityStatus: 'idle'}))
+        case 'CLEAR-DATA':
+            return []
         default:
             return state
     }
@@ -89,10 +92,15 @@ export const getTodolistsTC = (): ThunkType => dispatch => {
         .then((res) => {
             dispatch(getTodolitsAC(res.data))
             dispatch(setAppStatusAC('succeeded'))
+            return res.data
         })
-        .catch((error: AxiosError) => {
-            handleServerNetworkError(error.message, dispatch)
-        })
+        .then((tl) => {
+            tl.forEach(tl => {
+                dispatch(getTasksTC(tl.id))
+            })
+        }).catch((error: AxiosError) => {
+        handleServerNetworkError(error.message, dispatch)
+    })
 }
 
 export const deleteTodolistTC = (todolistID: string): ThunkType => dispatch => {
@@ -152,11 +160,13 @@ export type TodolistsActionType = ReturnType<typeof changeTodolistTitleAC>
     | removeTodolistACType
     | addTodolistACType
     | getTodolitsACType
+    | clearTodolistsDataACType
 
 
 export type getTodolitsACType = ReturnType<typeof getTodolitsAC>
 export type addTodolistACType = ReturnType<typeof addTodolistAC>
 export type removeTodolistACType = ReturnType<typeof removeTodolistAC>
+export type clearTodolistsDataACType = ReturnType<typeof clearTodolistsDataAC>
 
 
 export type FilterValueType = "all" | "active" | "completed"

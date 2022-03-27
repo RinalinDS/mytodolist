@@ -3,6 +3,7 @@ import {setAppErrorACType, setAppStatusAC, setAppStatusACType} from '../../app/A
 import {handlerServerError, handleServerNetworkError} from '../../utils/error-utils';
 import {AxiosError} from 'axios';
 import {ThunkType} from '../../app/store';
+import {clearTodolistsDataAC} from '../TodolistList/TasksReducer';
 
 const initialState = {
     isLoggedIn: false
@@ -44,6 +45,7 @@ export const logoutTC = (): ThunkType => dispatch => {
             if (res.data.resultCode === 0) {
                 dispatch(setIsLoggedInAC(false))
                 dispatch(setAppStatusAC('succeeded'))
+                dispatch(clearTodolistsDataAC())
             } else {
                 handlerServerError(res.data, dispatch)
             }

@@ -1,4 +1,4 @@
-import {addTodolistACType, getTodolitsACType, removeTodolistACType} from "./TodolistsReducer";
+import {addTodolistACType, clearTodolistsDataACType, getTodolitsACType, removeTodolistACType} from "./TodolistsReducer";
 import {TaskType, todolistApi, UpdateTaskModelType} from "../../api/todolist-api";
 import {ThunkType} from "../../app/store";
 import {RequestStatusType, setAppStatusAC} from "../../app/AppReducer";
@@ -49,6 +49,8 @@ export const tasksReducer = (state: TasksType = initialState, action: TasksActio
         }
         case "SET-TASKS":
             return {...state, [action.payload.todolistID]: action.payload.tasks}
+        case 'CLEAR-DATA':
+            return {}
         default :
             return state
     }
@@ -100,6 +102,9 @@ export const changeTaskEntityStatusAC = (entityStatus: RequestStatusType, todoli
 } as const)
 
 
+export const clearTodolistsDataAC = () => ({type: 'CLEAR-DATA'} as const)
+
+
 // thunk
 
 export const getTasksTC = (todolistID: string): ThunkType => async dispatch => {
@@ -117,7 +122,7 @@ export const getTasksTC = (todolistID: string): ThunkType => async dispatch => {
 
 export const removeTaskTC = (todolistID: string, taskID: string): ThunkType => async dispatch => {
     try {
-        dispatch(changeTaskEntityStatusAC('loading',todolistID, taskID))
+        dispatch(changeTaskEntityStatusAC('loading', todolistID, taskID))
         dispatch(setAppStatusAC('loading'))
         const res = await todolistApi.deleteTask(todolistID, taskID)
         if (res.data.resultCode === 0) {
@@ -133,7 +138,7 @@ export const removeTaskTC = (todolistID: string, taskID: string): ThunkType => a
 
 export const updateTaskTC = (task: TaskType, domainModel: UpdateTaskModelDomainType): ThunkType => async dispatch => {
     try {
-        dispatch(changeTaskEntityStatusAC('loading',task.todoListId, task.id))
+        dispatch(changeTaskEntityStatusAC('loading', task.todoListId, task.id))
         dispatch(setAppStatusAC('loading'))
         const apiModel: UpdateTaskModelType = {
             title: task.title,
@@ -149,13 +154,12 @@ export const updateTaskTC = (task: TaskType, domainModel: UpdateTaskModelDomainT
             dispatch(updateTaskAC(task.todoListId, task.id, domainModel))
             dispatch(setAppStatusAC('succeeded'))
         } else {
-            handlerServerError<{item: TaskType}>(res.data, dispatch)
+            handlerServerError<{ item: TaskType }>(res.data, dispatch)
         }
     } catch (e) {
         handleServerNetworkError((e as Error).message, dispatch)
-    }
-    finally {
-        dispatch(changeTaskEntityStatusAC('idle',task.todoListId, task.id))
+    } finally {
+        dispatch(changeTaskEntityStatusAC('idle', task.todoListId, task.id))
     }
 }
 
@@ -167,7 +171,7 @@ export const addTaskTC = (todolistID: string, title: string): ThunkType => async
             dispatch(addTaskAC(res.data.data.item))
             dispatch(setAppStatusAC('succeeded'))
         } else {
-            handlerServerError<{item: TaskType}>(res.data, dispatch)
+            handlerServerError<{ item: TaskType }>(res.data, dispatch)
         }
     } catch (e) {
         handleServerNetworkError((e as Error).message, dispatch)
@@ -222,6 +226,8 @@ function isAxiosError(some : any): some is AxiosError {
 // }
 
 // types
+
+
 export type TasksActionType =
     ReturnType<typeof removeTaskAC> |
     ReturnType<typeof addTaskAC> |
@@ -230,7 +236,9 @@ export type TasksActionType =
     ReturnType<typeof changeTaskEntityStatusAC> |
     addTodolistACType |
     removeTodolistACType |
-    getTodolitsACType
+    getTodolitsACType |
+    clearTodolistsDataACType
+
 
 export type TasksType = {
     [key: string]: Array<TaskType>

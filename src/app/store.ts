@@ -25,3 +25,6 @@ export const useAppSelector: TypedUseSelectorHook<AppRootStateType> = useSelecto
 
 // по умолчанию если не указано ретурн тайп будет войд
 export type ThunkType<ReturnType = void> = ThunkAction<ReturnType, AppRootStateType, unknown, AppActionTypes>
+
+// @ts-ignore
+window.store = store

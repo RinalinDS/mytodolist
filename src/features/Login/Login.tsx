@@ -12,13 +12,9 @@ import {useDispatch} from 'react-redux';
 import {loginTC} from './authReducer';
 import {useAppSelector} from '../../app/store';
 import { Navigate } from 'react-router-dom';
+import {LoginParamsType} from '../../api/todolist-api';
 
 
-type ValidateErrorsType = {
-    email?: string
-    password?: string
-    rememberMe?: boolean
-}
 
 export const Login = () => {
     const isLoggedIn = useAppSelector<boolean>(state => state.auth.isLoggedIn)
@@ -31,7 +27,7 @@ export const Login = () => {
             rememberMe: false
         },
         validate: values => {
-            const errors: ValidateErrorsType = {};
+            const errors: Partial<Omit<LoginParamsType, "captcha">> = {};
             if (!values.password) {
                 errors.password = 'Required';
             } else if (values.password.length < 3) {
