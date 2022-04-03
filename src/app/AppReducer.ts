@@ -3,6 +3,7 @@ import {authAPI} from '../api/todolist-api';
 import {setIsLoggedInAC} from '../features/Login/authReducer';
 import {handlerServerError, handleServerNetworkError} from '../utils/error-utils';
 import {AxiosError} from 'axios';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 const initialState = {
     status: 'idle' as RequestStatusType,
@@ -10,45 +11,29 @@ const initialState = {
     isInitialized: false
 }
 
-export const appReducer = (state: InitialStateTypeForAppReducer = initialState, action: AppReducerActionsType): InitialStateTypeForAppReducer => {
-
-    switch (action.type) {
-        case "APP/SET-STATUS":
-            return {...state, ...action.payload}
-        case "APP/SET-ERROR":
-            return {...state, ...action.payload}
-        case 'APP/SET-INITIALIZE':
-            return {...state, ...action.payload}
-        default:
-            return state
+const slice = createSlice({
+    name: 'app',
+    initialState: initialState,
+    reducers: {
+        setAppStatusAC(state, action: PayloadAction<{ status: RequestStatusType }>) {
+            state.status = action.payload.status
+        },
+        setAppErrorAC(state, action: PayloadAction<{ error: NullableType<string> }>) {
+            state.error = action.payload.error
+        },
+        setInitializeAC(state, action: PayloadAction<{ isInitialized: boolean }>) {
+            state.isInitialized = action.payload.isInitialized
+        }
     }
-}
 
-export const setAppStatusAC = (status: RequestStatusType) => {
-    return {
-        type: 'APP/SET-STATUS',
-        payload: {
-            status
-        }
-    } as const
-}
-export const setAppErrorAC = (error: NullableType<string>) => {
-    return {
-        type: 'APP/SET-ERROR',
-        payload: {
-            error
-        }
-    } as const
-}
+})
 
-export const setInitializeAC = (isInitialized: boolean) => {
-    return {
-        type: 'APP/SET-INITIALIZE',
-        payload: {
-            isInitialized
-        }
-    } as const
-}
+export const appReducer = slice.reducer
+
+// это реально ЭКШН КРЕАТОРЫ , автоматом сформрованные РедаксТулКитом, на основе методов(мини-редюсеров)
+// да они идентичны по названию, но это разные штуки.
+export const {setAppStatusAC, setAppErrorAC, setInitializeAC} = slice.actions
+
 
 // thunks
 
@@ -56,7 +41,7 @@ export const initializeAppTC = (): ThunkType => dispatch => {
     authAPI.me().then(res => {
 
         if (res.data.resultCode === 0) {
-            dispatch(setIsLoggedInAC(true));
+            dispatch(setIsLoggedInAC({value: true}));
         } else {
             handlerServerError(res.data, dispatch)
         }
@@ -64,7 +49,7 @@ export const initializeAppTC = (): ThunkType => dispatch => {
         handleServerNetworkError(error.message, dispatch)
     })
         .finally(() => {
-            dispatch(setInitializeAC(true))
+            dispatch(setInitializeAC({ isInitialized: true }))
         })
 }
 
@@ -79,5 +64,5 @@ export type NullableType<T> = null | T
 
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
 
-type InitialStateTypeForAppReducer = typeof initialState
+
 

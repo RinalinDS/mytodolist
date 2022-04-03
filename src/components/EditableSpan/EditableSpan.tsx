@@ -9,6 +9,7 @@ type propsType = {
 
 export const EditableSpan = memo((props: propsType) => {
 
+
     let [edit, setEdit] = useState(false)
     let [title, setTitle] = useState(props.title)
 
@@ -17,6 +18,7 @@ export const EditableSpan = memo((props: propsType) => {
     }
 
     const onBlurHandler = () => {
+
         setEdit(false)
         props.onChange(title)
     }

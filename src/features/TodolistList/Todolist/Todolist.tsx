@@ -1,11 +1,10 @@
-import React, {memo, useCallback, useEffect} from "react";
+import React, {memo, useCallback} from "react";
 import {AddItemForm} from "../../../components/AddItemForm/AddItemForm";
 import {EditableSpan} from "../../../components/EditableSpan/EditableSpan";
 import {Button, IconButton} from "@material-ui/core";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../../../app/store";
-
-import {addTaskTC, getTasksTC} from "../TasksReducer";
+import {addTaskTC} from "../TasksReducer";
 import {
     changeFilterAC,
     changeTodolistTitleTC,
@@ -24,18 +23,13 @@ type PropsType = {
 
 export const Todolist = memo((props: PropsType) => {
 
-    useEffect(() => {
-        dispatch(getTasksTC(props.todolistID))
-    }, [])
-
 
     const dispatch = useDispatch()
     const tasks = useSelector<AppRootStateType, Array<TaskType>>(state => state.tasks[props.todolistID])
     const todolist = useSelector<AppRootStateType, TodolistDomainType>(state => state.todolists.filter(f => props.todolistID === f.id)[0])
 
-
     const changeFilter = useCallback((filter: FilterValueType) => {
-        dispatch(changeFilterAC(filter, props.todolistID))
+        dispatch(changeFilterAC({filter, todolistID: props.todolistID}))
     }, [dispatch, props.todolistID])
 
 
@@ -44,7 +38,6 @@ export const Todolist = memo((props: PropsType) => {
     const addTaskHelper = useCallback((title: string) => dispatch(addTaskTC(props.todolistID, title)), [dispatch, props.todolistID])
 
     const changeTodolistTitle = useCallback((title: string) => dispatch(changeTodolistTitleTC(props.todolistID, title)), [dispatch, props.todolistID])
-
 
     let tasksForTodolist = tasks
     if (todolist.filter === "active") {

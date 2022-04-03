@@ -99,7 +99,10 @@ beforeEach(() => {
 
 test("proper task should be removed", () => {
 
-    const removeProperTask = tasksReducer(tasks, removeTaskAC(tasks[todolistID1][0].id, todolistID1))
+    const removeProperTask = tasksReducer(tasks, removeTaskAC({
+        taskID: tasks[todolistID1][0].id,
+        todolistID: todolistID1
+    }))
 
     expect(removeProperTask[todolistID1].length).toBe(3)
     expect(removeProperTask[todolistID2].length).toBe(2)
@@ -114,8 +117,19 @@ test("proper task should be added", () => {
     let newTaskTitle = "CSS"
     const updatedTasks = tasksReducer(tasks, addTaskAC(
         {
-            id: '1', title: newTaskTitle, status: TaskStatuses.New, addedDate: '', startDate: '', order: 0,
-            priority: TaskPriorities.Low, todoListId: todolistID1, deadline: ' ', description: '', entityStatus: 'idle'
+            task: {
+                id: '1',
+                title: newTaskTitle,
+                status: TaskStatuses.New,
+                addedDate: '',
+                startDate: '',
+                order: 0,
+                priority: TaskPriorities.Low,
+                todoListId: todolistID1,
+                deadline: ' ',
+                description: '',
+                entityStatus: 'idle'
+            }
         },
     ))
 
@@ -128,7 +142,11 @@ test("proper task should be added", () => {
 
 test("proper task should have new status", () => {
 
-    const updatedTaskStatus = tasksReducer(tasks, updateTaskAC(todolistID2, tasks[todolistID2][0].id, {status: TaskStatuses.New}))
+    const updatedTaskStatus = tasksReducer(tasks, updateTaskAC({
+        todolistID: todolistID2,
+        taskID: tasks[todolistID2][0].id,
+        domainModel: {status: TaskStatuses.New}
+    }))
 
     expect(updatedTaskStatus[todolistID1].length).toBe(4)
     expect(updatedTaskStatus[todolistID2].length).toBe(2)
@@ -140,7 +158,11 @@ test("proper task should have new title", () => {
 
     let newTaskTitle = "Centurion"
 
-    const updatedTaskTitle = tasksReducer(tasks, updateTaskAC(todolistID2, tasks[todolistID2][0].id, {title: newTaskTitle}))
+    const updatedTaskTitle = tasksReducer(tasks, updateTaskAC({
+        todolistID: todolistID2,
+        taskID: tasks[todolistID2][0].id,
+        domainModel: {title: newTaskTitle}
+    }))
 
     expect(updatedTaskTitle[todolistID1].length).toBe(4)
     expect(updatedTaskTitle[todolistID2].length).toBe(2)
