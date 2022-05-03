@@ -3,7 +3,7 @@ import {TaskType, todolistApi, UpdateTaskModelType} from "../../api/todolist-api
 import {ThunkType} from "../../app/store";
 import {RequestStatusType, setAppStatusAC} from "../../app/AppReducer";
 import {handlerServerError, handleServerNetworkError} from "../../utils/error-utils";
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 // INIT STATE
 
@@ -65,18 +65,30 @@ export const {removeTaskAC, addTaskAC, updateTaskAC, getTasksAC, changeTaskEntit
 
 // thunk
 
-export const getTasksTC = (todolistID: string): ThunkType => async dispatch => {
+export const getTasksTC =  createAsyncThunk('tasks/getTasks', async (todolistID: string, {dispatch, ...thunkAPI})=> {
     try {
         dispatch(setAppStatusAC({status: 'loading'}))
         const res = await todolistApi.getTasks(todolistID)
         dispatch(getTasksAC({tasks: res.data.items, todolistID}))
-
     } catch (e) {
         handleServerNetworkError((e as Error).message, dispatch)
     } finally {
         dispatch(setAppStatusAC({status: 'idle'}))
     }
-}
+})
+
+// export const getTasksTC_ = (todolistID: string): ThunkType => async dispatch => {
+//     try {
+//         dispatch(setAppStatusAC({status: 'loading'}))
+//         const res = await todolistApi.getTasks(todolistID)
+//         dispatch(getTasksAC({tasks: res.data.items, todolistID}))
+//
+//     } catch (e) {
+//         handleServerNetworkError((e as Error).message, dispatch)
+//     } finally {
+//         dispatch(setAppStatusAC({status: 'idle'}))
+//     }
+// }
 
 export const removeTaskTC = (todolistID: string, taskID: string): ThunkType => async dispatch => {
     try {

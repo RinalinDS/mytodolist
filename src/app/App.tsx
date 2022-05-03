@@ -12,7 +12,7 @@ import {useAppSelector} from "./store";
 import {ErrorSnackbar} from "../components/SnackbarError/SnackbarError";
 
 import {Login} from '../features/Login/Login';
-import {Navigate, Route, Routes} from 'react-router-dom';
+import {Navigate, Route, Routes, useNavigate} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
 import {logoutTC} from '../features/Login/authReducer';
 
@@ -22,6 +22,7 @@ export function App() {
     const isInitialized = useAppSelector<boolean>(state => state.app.isInitialized)
     const isLoggedIn = useAppSelector<boolean>(state => state.auth.isLoggedIn)
     const dispatch = useDispatch()
+    const navigate = useNavigate();
 
     useEffect(() => {
         dispatch(initializeAppTC())
@@ -30,6 +31,9 @@ export function App() {
 
     const logoutHandler = () => {
         dispatch(logoutTC())
+    }
+    const backHomeHandler = () => {
+        navigate('/')
     }
 
     if (!isInitialized) {
@@ -44,6 +48,7 @@ export function App() {
             <AppBar position="static">
                 <Toolbar>
                     {isLoggedIn && <Button color="inherit" onClick={logoutHandler}>Log out</Button>}
+                    {isLoggedIn && <Button color="inherit" onClick={backHomeHandler}>Home</Button>}
                 </Toolbar>
             </AppBar>
             {status === 'loading' && <LinearProgress color={'secondary'}/>}
@@ -51,11 +56,9 @@ export function App() {
 
                 <Routes>
                     <Route path={'/'} element={<TodolistsList/>}/>
-                    <Route path={'login'} element={<Login/>}/>
-
-                    <Route path={'404'} element={<h1>Someone FUCKED UP</h1>}/>
-                    <Route path={'*'} element={<Navigate to={'404'}/>}/>
-
+                    <Route path={'/login'} element={<Login/>}/>
+                    <Route path={'/404'} element={<h1>Someone FUCKED UP</h1>}/>
+                    <Route path={'*'} element={<Navigate to={'/404'}/>}/>
                 </Routes>
             </Container>
             <ErrorSnackbar/>
