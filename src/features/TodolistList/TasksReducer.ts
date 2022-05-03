@@ -30,12 +30,9 @@ const slice = createSlice({
             state[action.payload.todolistID] = action.payload.tasks
         },
         changeTaskEntityStatusAC: (state, action: PayloadAction<{ entityStatus: RequestStatusType, todolistID: string, taskID: string }>) => {
-
             const index = state[action.payload.todolistID].findIndex(s => s.id === action.payload.taskID)
             state[action.payload.todolistID][index].entityStatus = action.payload.entityStatus
-
         },
-
     },
     extraReducers: (builder) => {
         builder
@@ -47,7 +44,7 @@ const slice = createSlice({
                 state[action.payload.todolist.id] = []
             })
 
-            .addCase(clearTodolistsDataAC, (state, action) => {
+            .addCase(clearTodolistsDataAC, () => {
                 return {}
             })
             .addCase(getTodolitsAC, (state, action) => {
