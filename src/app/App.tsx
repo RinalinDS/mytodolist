@@ -47,8 +47,9 @@ export function App() {
         <div className="App">
             <AppBar position="static">
                 <Toolbar>
+                    <Button color="inherit" onClick={backHomeHandler}>Home</Button>
                     {isLoggedIn && <Button color="inherit" onClick={logoutHandler}>Log out</Button>}
-                    {isLoggedIn && <Button color="inherit" onClick={backHomeHandler}>Home</Button>}
+
                 </Toolbar>
             </AppBar>
             {status === 'loading' && <LinearProgress color={'secondary'}/>}
