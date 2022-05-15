@@ -1,7 +1,6 @@
 import {addTodolistAC, clearTodolistsDataAC, getTodolitsAC, removeTodolistAC} from "./TodolistsReducer";
-import { todolistApi } from "../../api/todolist-api";
-import {ThunkType} from "../../app/store";
-import { setAppStatusAC} from "../../app/AppReducer";
+import {todolistApi} from "../../api/todolist-api";
+import {setAppStatusAC} from "../../app/AppReducer";
 import {handlerServerError, handleServerNetworkError} from "../../utils/error-utils";
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {RequestStatusType, TasksType, TaskType, UpdateTaskModelDomainType, UpdateTaskModelType} from '../../types';
@@ -57,44 +56,48 @@ export const addTaskTC = createAsyncThunk('tasks/addTask', async (param: { todol
   }
 })
 
-export const updateTaskTC = (task: TaskType, domainModel: UpdateTaskModelDomainType): ThunkType => async dispatch => {
+export const updateTaskTC = createAsyncThunk('tasks/updateTask', async (param: { task: TaskType, domainModel: UpdateTaskModelDomainType }, {
+  dispatch,
+  rejectWithValue
+}) => {
   try {
-    dispatch(changeTaskEntityStatusAC({entityStatus: 'loading', todolistID: task.todoListId, taskID: task.id}))
+    dispatch(changeTaskEntityStatusAC({
+      entityStatus: 'loading',
+      todolistID: param.task.todoListId,
+      taskID: param.task.id
+    }))
     dispatch(setAppStatusAC({status: 'loading'}))
     const apiModel: UpdateTaskModelType = {
-      title: task.title,
-      description: task.description,
-      status: task.status,
-      priority: task.priority,
-      startDate: task.startDate,
-      deadline: task.deadline,
-      ...domainModel
+      title: param.task.title,
+      description: param.task.description,
+      status: param.task.status,
+      priority: param.task.priority,
+      startDate: param.task.startDate,
+      deadline: param.task.deadline,
+      ...param.domainModel
     }
-    const res = await todolistApi.updateTask(task.todoListId, task.id, apiModel)
+    const res = await todolistApi.updateTask(param.task.todoListId, param.task.id, apiModel)
     if (res.data.resultCode === 0) {
-      dispatch(updateTaskAC({todolistID: task.todoListId, taskID: task.id, domainModel}))
       dispatch(setAppStatusAC({status: 'succeeded'}))
+      return {todolistID: param.task.todoListId, taskID: param.task.id, domainModel: param.domainModel}
     } else {
       handlerServerError<{ item: TaskType }>(res.data, dispatch)
+      return rejectWithValue(null)
     }
   } catch (e) {
     handleServerNetworkError((e as Error).message, dispatch)
+    return rejectWithValue(null)
   } finally {
-    dispatch(changeTaskEntityStatusAC({entityStatus: 'idle', todolistID: task.todoListId, taskID: task.id}))
+    dispatch(changeTaskEntityStatusAC({entityStatus: 'idle', todolistID: param.task.todoListId, taskID: param.task.id}))
   }
-}
+})
+
 
 // REDUCER
 const slice = createSlice({
   name: 'tasks',
   initialState: {} as TasksType,
   reducers: {
-    updateTaskAC: (state, action: PayloadAction<{ todolistID: string, taskID: string, domainModel: UpdateTaskModelDomainType }>) => {
-      const tasks = state[action.payload.todolistID]
-      const index = tasks.findIndex(s => s.id === action.payload.taskID)
-      tasks[index] = {...tasks[index], ...action.payload.domainModel}
-    },
-
     changeTaskEntityStatusAC: (state, action: PayloadAction<{ entityStatus: RequestStatusType, todolistID: string, taskID: string }>) => {
       const index = state[action.payload.todolistID].findIndex(s => s.id === action.payload.taskID)
       state[action.payload.todolistID][index].entityStatus = action.payload.entityStatus
@@ -132,6 +135,11 @@ const slice = createSlice({
       .addCase(addTaskTC.fulfilled, (state, action) => {
         state[action.payload.todoListId].unshift(action.payload)
       })
+      .addCase(updateTaskTC.fulfilled, (state, action) => {
+        const tasks = state[action.payload.todolistID]
+        const index = tasks.findIndex(s => s.id === action.payload.taskID)
+        tasks[index] = {...tasks[index], ...action.payload.domainModel}
+      })
 
   },
 })
@@ -140,7 +148,7 @@ export const tasksReducer = slice.reducer
 
 
 // ACTION CREATORS
-export const {updateTaskAC, changeTaskEntityStatusAC} = slice.actions
+export const {changeTaskEntityStatusAC} = slice.actions
 
 
 

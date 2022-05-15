@@ -1,14 +1,7 @@
 import {v1} from "uuid";
-import {
-  addTaskTC,
-  getTasksTC,
-  removeTaskTC,
-  tasksReducer,
-  updateTaskAC
-} from "../features/TodolistList/TasksReducer";
+import {addTaskTC, getTasksTC, removeTaskTC, tasksReducer, updateTaskTC,} from "../features/TodolistList/TasksReducer";
 import {TaskPriorities, TaskStatuses} from '../enums';
 import {TasksType, TaskType} from '../types';
-
 
 
 let todolistID1: string;
@@ -125,18 +118,21 @@ test("proper task should be added", () => {
   let newTaskTitle = "CSS"
   const task: TaskType = {
     id: '1',
-      title: newTaskTitle,
-      status: TaskStatuses.New,
-      addedDate: '',
-      startDate: '',
-      order: 0,
-      priority: TaskPriorities.Low,
-      todoListId: todolistID1,
-      deadline: ' ',
-      description: '',
-      entityStatus: 'idle'
+    title: newTaskTitle,
+    status: TaskStatuses.New,
+    addedDate: '',
+    startDate: '',
+    order: 0,
+    priority: TaskPriorities.Low,
+    todoListId: todolistID1,
+    deadline: ' ',
+    description: '',
+    entityStatus: 'idle'
   }
-  const updatedTasks = tasksReducer(tasks, addTaskTC.fulfilled(task, '', {todolistID: task.todoListId , title: task.title}))
+  const updatedTasks = tasksReducer(tasks, addTaskTC.fulfilled(task, '', {
+    todolistID: task.todoListId,
+    title: task.title
+  }))
   console.log(updatedTasks)
 
   expect(updatedTasks[todolistID1].length).toBe(5)
@@ -147,12 +143,24 @@ test("proper task should be added", () => {
 
 
 test("proper task should have new status", () => {
-
-  const updatedTaskStatus = tasksReducer(tasks, updateTaskAC({
+  const task: TaskType = {
+    id: '1',
+    title: 'DOES IT MATTER?',
+    status: TaskStatuses.New,
+    addedDate: '',
+    startDate: '',
+    order: 0,
+    priority: TaskPriorities.Low,
+    todoListId: todolistID1,
+    deadline: ' ',
+    description: '',
+    entityStatus: 'idle'
+  }
+  const updatedTaskStatus = tasksReducer(tasks, updateTaskTC.fulfilled({
     todolistID: todolistID2,
     taskID: tasks[todolistID2][0].id,
     domainModel: {status: TaskStatuses.New}
-  }))
+  }, '', {task, domainModel: {status: TaskStatuses.New}}))
 
   expect(updatedTaskStatus[todolistID1].length).toBe(4)
   expect(updatedTaskStatus[todolistID2].length).toBe(2)
@@ -161,14 +169,27 @@ test("proper task should have new status", () => {
 })
 
 test("proper task should have new title", () => {
+  const task: TaskType = {
+    id: '1',
+    title: 'DOES IT MATTER?',
+    status: TaskStatuses.New,
+    addedDate: '',
+    startDate: '',
+    order: 0,
+    priority: TaskPriorities.Low,
+    todoListId: todolistID1,
+    deadline: ' ',
+    description: '',
+    entityStatus: 'idle'
+  }
 
   let newTaskTitle = "Centurion"
 
-  const updatedTaskTitle = tasksReducer(tasks, updateTaskAC({
+  const updatedTaskTitle = tasksReducer(tasks, updateTaskTC.fulfilled({
     todolistID: todolistID2,
     taskID: tasks[todolistID2][0].id,
     domainModel: {title: newTaskTitle}
-  }))
+  }, '', {task, domainModel: {title: newTaskTitle}}))
 
   expect(updatedTaskTitle[todolistID1].length).toBe(4)
   expect(updatedTaskTitle[todolistID2].length).toBe(2)

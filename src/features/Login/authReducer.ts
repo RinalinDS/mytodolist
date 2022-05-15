@@ -36,7 +36,7 @@ export const logoutTC = createAsyncThunk('auth/logout', async (_, {dispatch, rej
     const res = await authAPI.logout()
     if (res.data.resultCode === 0) {
       dispatch(setAppStatusAC({status: 'succeeded'}))
-      dispatch(clearTodolistsDataAC({}))
+      dispatch(clearTodolistsDataAC())
       return
     } else {
       handlerServerError(res.data, dispatch)
