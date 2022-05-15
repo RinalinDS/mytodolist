@@ -1,7 +1,6 @@
-import React, {useCallback, useEffect} from "react";
+import React, {FC, useCallback, useEffect} from "react";
 import {createTodolistTC, getTodolistsTC} from "./TodolistsReducer";
-import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType, useAppSelector} from "../../app/store";
+import {useAppDispatch, useAppSelector} from "../../app/store";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
@@ -9,11 +8,9 @@ import {Todolist} from "./Todolist/Todolist";
 import {Navigate} from "react-router-dom";
 import {TodolistDomainType} from '../../types';
 
-export const TodolistsList = () => {
-
-
-  const dispatch = useDispatch()
-  const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists)
+export const TodolistsList: FC = () => {
+  const dispatch = useAppDispatch()
+  const todolists = useAppSelector<Array<TodolistDomainType>>(state => state.todolists)
   const isLoggedIn = useAppSelector<boolean>(state => state.auth.isLoggedIn)
 
   useEffect(() => {
@@ -26,7 +23,6 @@ export const TodolistsList = () => {
   }, [dispatch])
 
   if (!isLoggedIn) return <Navigate to={'login'}/>
-
 
   return (
     <>
@@ -43,11 +39,8 @@ export const TodolistsList = () => {
               />
             </Paper>
           </Grid>
-
-        })
-        }
+        })}
       </Grid>
     </>
   )
-
 }

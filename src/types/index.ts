@@ -2,19 +2,27 @@ export type {
   TasksType,
   TaskType,
   UpdateTaskModelDomainType,
-  AuthMeResponseType,
-  LoginParamsType,
-  FieldsErrorsType,
-  BaseResponseType,
   GetTasksResponseType,
   UpdateTaskModelType,
-  TodolistType,
-  NullableType,
-  RequestStatusType
 } from './TaskTypes'
 
 
 export type {
   FilterValueType,
-  TodolistDomainType
+  TodolistDomainType,
+  TodolistType
 } from './TodolistTypes'
+
+
+export type {
+  FormValuesType,
+  LoginParamsType,
+  AuthMeResponseType,
+} from './LoginTypes'
+
+export type {
+  NullableType,
+  RequestStatusType,
+  BaseResponseType,
+  FieldsErrorsType,
+} from './AppTypes'

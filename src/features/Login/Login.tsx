@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {FC} from 'react'
 import Grid from '@mui/material/Grid';
 import Checkbox from '@mui/material/Checkbox';
 import FormControl from '@mui/material/FormControl';
@@ -11,16 +11,10 @@ import {FormikHelpers, useFormik} from 'formik';
 import {loginTC} from './authReducer';
 import {useAppDispatch, useAppSelector} from '../../app/store';
 import {Navigate} from 'react-router-dom';
-import {LoginParamsType} from '../../types';
+import {FormValuesType, LoginParamsType} from '../../types';
 
 
-type FormValuesType = {
-  email: string
-  password: string
-  rememberMe: boolean
-}
-
-export const Login = () => {
+export const Login: FC = () => {
   const isLoggedIn = useAppSelector<boolean>(state => state.auth.isLoggedIn)
   const dispatch = useAppDispatch()
 
@@ -50,7 +44,6 @@ export const Login = () => {
         // будет fields error , и значит можно его записывать в локальный стейт формика с помощью формикхелпепа
         if (action.payload?.fieldsError) {
           const error = action.payload.fieldsError[0]
-          console.log(error)
           formikHelpers.setFieldError(error.field, error.error)
         }
       }

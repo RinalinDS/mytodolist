@@ -2,14 +2,9 @@ import React, {FC, memo, useCallback} from "react";
 import {AddItemForm} from "../../../components/AddItemForm/AddItemForm";
 import {EditableSpan} from "../../../components/EditableSpan/EditableSpan";
 import {Button, IconButton} from "@material-ui/core";
-import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "../../../app/store";
+import {useAppDispatch, useAppSelector} from "../../../app/store";
 import {addTaskTC} from "../TasksReducer";
-import {
-  changeFilterAC,
-  changeTodolistTitleTC,
-  deleteTodolistTC,
-} from "../TodolistsReducer";
+import {changeFilterAC, changeTodolistTitleTC, deleteTodolistTC,} from "../TodolistsReducer";
 import {Task} from "./ Task/Task";
 import {Delete} from "@mui/icons-material";
 import {TaskStatuses} from '../../../enums';
@@ -22,15 +17,13 @@ type TodolistPropsType = {
 
 export const Todolist: FC<TodolistPropsType> = memo(({todolistID}) => {
 
-
-  const dispatch = useDispatch()
-  const tasks = useSelector<AppRootStateType, Array<TaskType>>(state => state.tasks[todolistID])
-  const todolist = useSelector<AppRootStateType, TodolistDomainType>(state => state.todolists.filter(f => todolistID === f.id)[0])
+  const dispatch = useAppDispatch()
+  const tasks = useAppSelector<Array<TaskType>>(state => state.tasks[todolistID])
+  const todolist = useAppSelector<TodolistDomainType>(state => state.todolists.filter(f => todolistID === f.id)[0])
 
   const changeFilter = useCallback((filter: FilterValueType) => {
     dispatch(changeFilterAC({filter, todolistID: todolistID}))
   }, [dispatch, todolistID])
-
 
   const removeTodolistHandler = useCallback(() => dispatch(deleteTodolistTC(todolistID)), [dispatch, todolistID])
 
@@ -39,7 +32,10 @@ export const Todolist: FC<TodolistPropsType> = memo(({todolistID}) => {
     title
   })), [dispatch, todolistID])
 
-  const changeTodolistTitle = useCallback((title: string) => dispatch(changeTodolistTitleTC({todolistID, title})), [dispatch, todolistID])
+  const changeTodolistTitle = useCallback((title: string) => dispatch(changeTodolistTitleTC({
+    todolistID,
+    title
+  })), [dispatch, todolistID])
 
   let tasksForTodolist = tasks
   if (todolist.filter === "active") {

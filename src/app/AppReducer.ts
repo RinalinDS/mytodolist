@@ -6,7 +6,6 @@ import {NullableType, RequestStatusType} from '../types';
 
 // НИКОГДА БЛЯДЬ НЕ ПИШИ ПУСТОЙ ОБЪЕКТ ( {} ) ЕСЛИ НЕ ПАРАМЕТРОВ ! ВСТАВЬ РАНДОМНОЕ НАЗВАНИЕ , НО НЕ ПУСТОЙ ОБЪЕКТ !
 export const initializeAppTC = createAsyncThunk('app/initializeAppTC', async (_, {dispatch}) => {
-  console.log('hello')
   const res = await authAPI.me()
   if (res.data.resultCode === 0) {
     dispatch(setIsLoggedInAC({value: true}))

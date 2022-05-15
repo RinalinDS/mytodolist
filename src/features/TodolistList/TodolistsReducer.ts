@@ -122,21 +122,11 @@ const slice = createSlice({
 
 export const todolistsReducer = slice.reducer
 
-
-// actions
 export const {
   changeFilterAC,
   changeEntityStatusAC,
   clearTodolistsDataAC,
 } = slice.actions
 
-
-// types
-
-
-// export type getTodolitsACType = ReturnType<typeof getTodolitsAC>
-
-
-export type clearTodolistsDataACType = ReturnType<typeof clearTodolistsDataAC>
 
 

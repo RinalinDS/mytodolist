@@ -1,4 +1,5 @@
 import {TaskPriorities, TaskStatuses} from '../enums';
+import {RequestStatusType} from './index';
 
 export type TasksType = {
   [key: string]: Array<TaskType>
@@ -32,31 +33,6 @@ export type TaskType = {
   entityStatus: RequestStatusType
 }
 
-
-export type AuthMeResponseType = {
-  id: number
-  email: string
-  login: string
-}
-
-export type LoginParamsType = {
-  email: string
-  password: string
-  rememberMe?: boolean
-  captcha?: string
-}
-
-
-export type FieldsErrorsType = { field: string, error: string };
-
-export type BaseResponseType<T = {}> = {
-  resultCode: number
-  messages: string[]
-  fieldsErrors: FieldsErrorsType[]
-  data: T
-
-}
-
 export type GetTasksResponseType = {
   items: Array<TaskType>
   totalCount: number
@@ -64,13 +40,9 @@ export type GetTasksResponseType = {
 }
 
 
-export type TodolistType = {
-  id: string
-  title: string
-  addedDate: string
-  order: number
-}
 
-export type NullableType<T> = null | T
 
-export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
+
+
+
+

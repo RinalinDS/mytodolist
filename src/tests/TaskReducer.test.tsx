@@ -133,7 +133,7 @@ test("proper task should be added", () => {
     todolistID: task.todoListId,
     title: task.title
   }))
-  console.log(updatedTasks)
+
 
   expect(updatedTasks[todolistID1].length).toBe(5)
   expect(updatedTasks[todolistID2].length).toBe(2)

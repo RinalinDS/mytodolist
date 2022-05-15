@@ -1,15 +1,15 @@
-import React, {ChangeEvent, KeyboardEvent, memo, useState} from "react";
+import React, {ChangeEvent, FC, KeyboardEvent, memo, useState} from "react";
 import IconButton from "@material-ui/core/IconButton";
 import TextField from "@material-ui/core/TextField";
 import {AddBox} from "@mui/icons-material";
 
 
-type PropsType = {
+type AddItemFormPropsType = {
     callBack: (title: string) => void
     disabled?: boolean
 }
 
-export const AddItemForm = memo((props: PropsType) => {
+export const AddItemForm:FC<AddItemFormPropsType> = memo(({callBack, disabled}) => {
 
     let [newTaskTitle, setNewTaskTitle] = useState("")
     let [error, setError] = useState<string | null>(null)
@@ -26,7 +26,7 @@ export const AddItemForm = memo((props: PropsType) => {
     }
     const addItem = () => {
         if (newTaskTitle.trim()) {
-            props.callBack(newTaskTitle.trim())
+            callBack(newTaskTitle.trim())
             setNewTaskTitle("")
         } else {
             setError("Title is required")
@@ -43,9 +43,9 @@ export const AddItemForm = memo((props: PropsType) => {
                 error={!!error}
                 label="Title"
                 helperText={error}
-                disabled={props.disabled}/>
+                disabled={disabled}/>
 
-            <IconButton color='primary' onClick={addItem} disabled={props.disabled}>
+            <IconButton color='primary' onClick={addItem} disabled={disabled}>
                 <AddBox/>
             </IconButton>
         </div>

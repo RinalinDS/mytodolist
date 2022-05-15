@@ -117,7 +117,7 @@ const slice = createSlice({
         return {}
       })
       .addCase(getTodolistsTC.fulfilled, (state, action) => {
-        action.payload.todolists.forEach((m: any) => {
+        action.payload.todolists.forEach((m) => {
           state[m.id] = []
         })
       })

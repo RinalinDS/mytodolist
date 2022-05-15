@@ -1,35 +1,34 @@
-import React, {ChangeEvent, memo, useState} from "react";
+import React, {ChangeEvent, FC, memo, useState} from "react";
 import TextField from "@material-ui/core/TextField";
 
-type propsType = {
-    title: string
-    onChange: (newValue: string) => void
-    disabled? : boolean
+type EditableSpanPropsType = {
+  title: string
+  onChange: (newValue: string) => void
+  disabled?: boolean
 }
 
-export const EditableSpan = memo((props: propsType) => {
+export const EditableSpan: FC<EditableSpanPropsType> = memo(({title, onChange, disabled}) => {
 
 
-    let [edit, setEdit] = useState(false)
-    let [title, setTitle] = useState(props.title)
+  let [edit, setEdit] = useState(false)
+  let [newTitle, setNewTitle] = useState(title)
 
-    const onDoubleClickHandler = () => {
-        setEdit(true)
-    }
+  const onDoubleClickHandler = () => {
+    setEdit(true)
+  }
 
-    const onBlurHandler = () => {
+  const onBlurHandler = () => {
+    setEdit(false)
+    onChange(newTitle)
+  }
 
-        setEdit(false)
-        props.onChange(title)
-    }
+  const onSetNewTitleHandler = (e: ChangeEvent<HTMLInputElement>) => setNewTitle(e.currentTarget.value)
 
-    const onSetNewTitleHandler = (e: ChangeEvent<HTMLInputElement>) => setTitle(e.currentTarget.value)
+  return (
+    edit
+      ? <TextField variant='outlined' size='small' value={newTitle} onBlur={onBlurHandler}
+                   disabled={disabled} autoFocus onChange={onSetNewTitleHandler}/>
+      : <span onDoubleClick={onDoubleClickHandler}>{title}</span>
 
-    return (
-        edit
-           ? <TextField variant='outlined' size='small' value={title} onBlur={onBlurHandler}
-                       disabled={props.disabled} autoFocus onChange={onSetNewTitleHandler}/>
-         : <span onDoubleClick={onDoubleClickHandler}>{props.title}</span>
-
-    )
+  )
 })
