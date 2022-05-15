@@ -1,4 +1,4 @@
-import {addTodolistAC, clearTodolistsDataAC, getTodolitsAC, removeTodolistAC} from "./TodolistsReducer";
+import {clearTodolistsDataAC, createTodolistTC, deleteTodolistTC, getTodolistsTC} from "./TodolistsReducer";
 import {todolistApi} from "../../api/todolist-api";
 import {setAppStatusAC} from "../../app/AppReducer";
 import {handlerServerError, handleServerNetworkError} from "../../utils/error-utils";
@@ -105,18 +105,18 @@ const slice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(removeTodolistAC, (state, action) => {
-        delete state[action.payload.todolistID]
+      .addCase(deleteTodolistTC.fulfilled, (state, action) => {
+        delete state[action.payload]
       })
 
-      .addCase(addTodolistAC, (state, action) => {
-        state[action.payload.todolist.id] = []
+      .addCase(createTodolistTC.fulfilled, (state, action) => {
+        state[action.payload.id] = []
       })
 
       .addCase(clearTodolistsDataAC, () => {
         return {}
       })
-      .addCase(getTodolitsAC, (state, action) => {
+      .addCase(getTodolistsTC.fulfilled, (state, action) => {
         action.payload.todolists.forEach((m: any) => {
           state[m.id] = []
         })

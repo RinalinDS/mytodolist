@@ -12,3 +12,9 @@ export type {
   NullableType,
   RequestStatusType
 } from './TaskTypes'
+
+
+export type {
+  FilterValueType,
+  TodolistDomainType
+} from './TodolistTypes'

@@ -48,6 +48,7 @@ export type LoginParamsType = {
 
 
 export type FieldsErrorsType = { field: string, error: string };
+
 export type BaseResponseType<T = {}> = {
   resultCode: number
   messages: string[]

@@ -9,13 +9,11 @@ import {
   changeFilterAC,
   changeTodolistTitleTC,
   deleteTodolistTC,
-  FilterValueType,
-  TodolistDomainType
 } from "../TodolistsReducer";
 import {Task} from "./ Task/Task";
 import {Delete} from "@mui/icons-material";
 import {TaskStatuses} from '../../../enums';
-import {TaskType} from '../../../types';
+import {FilterValueType, TaskType, TodolistDomainType} from '../../../types';
 
 
 type TodolistPropsType = {
@@ -41,7 +39,7 @@ export const Todolist: FC<TodolistPropsType> = memo(({todolistID}) => {
     title
   })), [dispatch, todolistID])
 
-  const changeTodolistTitle = useCallback((title: string) => dispatch(changeTodolistTitleTC(todolistID, title)), [dispatch, todolistID])
+  const changeTodolistTitle = useCallback((title: string) => dispatch(changeTodolistTitleTC({todolistID, title})), [dispatch, todolistID])
 
   let tasksForTodolist = tasks
   if (todolist.filter === "active") {
