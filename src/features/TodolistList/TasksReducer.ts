@@ -10,7 +10,7 @@ import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 const initialState: TasksType = {}
 
 
-export const getTasksTC = createAsyncThunk('tasks/getTasks', async (todolistID: string, {dispatch, ...thunkAPI}) => {
+export const getTasksTC = createAsyncThunk('tasks/getTasks', async (todolistID: string, {dispatch}) => {
   try {
     dispatch(setAppStatusAC({status: 'loading'}))
     const res = await todolistApi.getTasks(todolistID)
@@ -23,8 +23,7 @@ export const getTasksTC = createAsyncThunk('tasks/getTasks', async (todolistID: 
 })
 
 export const removeTaskTC = createAsyncThunk('tasks/removeTask', async (param: { todolistID: string, taskID: string }, {
-  dispatch,
-  ...thunkAPI
+  dispatch
 }) => {
   try {
     dispatch(setAppStatusAC({status: 'loading'}))

@@ -19,7 +19,7 @@ export const store = configureStore({
   reducer: reducers,
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunkMiddleware)
 })
-
+// На суппорте друг сказал, что можно вообще не использовать миддлвейр если РТК + асинк санки , но я пока не все таки буду использовать
 // middleware: [thunkMiddleware] , такая запись приводила к ошибке при типизации диспатча, который типизировался тут в сторе, и выдавало ошибку, когда диспатчили санку!
 
 

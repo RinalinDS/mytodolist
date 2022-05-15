@@ -2,15 +2,15 @@ import {authAPI, FieldsErrorsType, LoginParamsType} from '../../api/todolist-api
 import {setAppStatusAC} from '../../app/AppReducer';
 import {handlerServerError, handleServerNetworkError} from '../../utils/error-utils';
 import {AxiosError} from 'axios';
-
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {clearTodolistsDataAC} from '../TodolistList/TodolistsReducer';
 
 
-
-
-
-export const loginTC = createAsyncThunk<{ isLoggedIn: boolean }, LoginParamsType, { rejectValue: { errors: Array<string>, fieldsError?: FieldsErrorsType[] } }>('auth/login', async (data: LoginParamsType, {
+// вот эта огромная типизация снизу : 1е это типизация fullfilled payloda , 2е, типизация передаваемых аргументов в санку, 3е типизация reject payloda.
+// чтобы в формике не говорило, что action.payload при reject - type unknown, а нормально все было,
+// только андефайнд в филдсерроре надо проверить (action.payload?.fieldsErrors), т.к. его задавал Я.
+// UPD : так как мне теперь не нужен первый тип вместо, то {isLoggedIn: boolean} стал undefined, т.к. у меня пустой ретурн.
+export const loginTC = createAsyncThunk<undefined, LoginParamsType, { rejectValue: { errors: Array<string>, fieldsError?: FieldsErrorsType[] } }>('auth/login', async (data: LoginParamsType, {
   dispatch,
   ...thunkAPI
 }) => {
@@ -19,7 +19,7 @@ export const loginTC = createAsyncThunk<{ isLoggedIn: boolean }, LoginParamsType
     const res = await authAPI.login(data)
     if (res.data.resultCode === 0) {
       dispatch(setAppStatusAC({status: 'succeeded'}))
-      return {isLoggedIn: true}
+      return; // получается , что если я нажму ретурн, значит позитивный ауткам, а значит можно не передавать лишний раз "тру", а в редюсере менять без пейлоада на "тру"
     } else {
       handlerServerError(res.data, dispatch)
       return thunkAPI.rejectWithValue({errors: res.data.messages, fieldsError: res.data.fieldsErrors}) // выплюнуть action с типом rejected, v reduxe я его не обрабатываю, хотя можно, но использую его в формике. Еррорс попадает в пейлоад actiona-a
@@ -30,15 +30,15 @@ export const loginTC = createAsyncThunk<{ isLoggedIn: boolean }, LoginParamsType
     return thunkAPI.rejectWithValue({errors: [e.message], fieldsError: undefined})
   }
 })
-
-export const logoutTC = createAsyncThunk('auth/logout', async ({}, {dispatch, ...thunkAPI}) => {
+// НИКОГДА БЛЯДЬ НЕ ПИШИ ПУСТОЙ ОБЪЕКТ ( {} ) ЕСЛИ НЕT ПАРАМЕТРОВ ! ВСТАВЬ РАНДОМНОЕ НАЗВАНИЕ , НО НЕ ПУСТОЙ ОБЪЕКТ !
+export const logoutTC = createAsyncThunk('auth/logout', async (_, {dispatch, ...thunkAPI}) => {
   try {
     dispatch(setAppStatusAC({status: 'loading'}))
     const res = await authAPI.logout()
     if (res.data.resultCode === 0) {
       dispatch(setAppStatusAC({status: 'succeeded'}))
       dispatch(clearTodolistsDataAC({}))
-      return {isLoggedIn: false}
+      return
     } else {
       handlerServerError(res.data, dispatch)
       return thunkAPI.rejectWithValue({errors: res.data.messages, fieldsError: res.data.fieldsErrors})
@@ -63,11 +63,11 @@ const slice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(loginTC.fulfilled, (state, action) => {
-        state.isLoggedIn = action.payload.isLoggedIn
+      .addCase(loginTC.fulfilled, (state) => {
+        state.isLoggedIn = true
       })
-      .addCase(logoutTC.fulfilled, (state, action) => {
-        state.isLoggedIn = action.payload.isLoggedIn
+      .addCase(logoutTC.fulfilled, (state) => {
+        state.isLoggedIn = false
       })
   }
 
