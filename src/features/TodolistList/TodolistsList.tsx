@@ -32,10 +32,10 @@ export const TodolistsList = () => {
             <Grid container style={{padding: "20px"}}>
                 <AddItemForm callBack={addTodolist}/>
             </Grid>
-            <Grid container spacing={3}>
+            <Grid container spacing={10}>
                 {todolists.map(m => {
                     return <Grid key={m.id} item>
-                        <Paper style={{padding: "10px"}}>
+                        <Paper style={{padding: "20px"}}>
                             <Todolist
                                 key={m.id}
                                 todolistID={m.id}

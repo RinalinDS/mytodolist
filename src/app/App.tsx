@@ -42,7 +42,7 @@ export function App() {
   }
 
   return (
-    <div className="App">
+    <div>
       <AppBar position="static">
         <Toolbar>
           <Button color="inherit" onClick={backHomeHandler}>Home</Button>
@@ -52,7 +52,6 @@ export function App() {
       </AppBar>
       {status === 'loading' && <LinearProgress color={'secondary'}/>}
       <Container fixed>
-
         <Routes>
           <Route path={'/'} element={<TodolistsList/>}/>
           <Route path={'/login'} element={<Login/>}/>

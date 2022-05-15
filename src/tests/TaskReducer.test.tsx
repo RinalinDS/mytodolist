@@ -1,13 +1,13 @@
 import {v1} from "uuid";
 import {
-  addTaskAC,
+  addTaskTC,
   getTasksTC,
   removeTaskTC,
   tasksReducer,
   TasksType,
   updateTaskAC
 } from "../features/TodolistList/TasksReducer";
-import {TaskPriorities, TaskStatuses} from "../api/todolist-api";
+import {TaskPriorities, TaskStatuses, TaskType} from "../api/todolist-api";
 
 
 let todolistID1: string;
@@ -122,23 +122,21 @@ test("proper task should be removed", () => {
 test("proper task should be added", () => {
 
   let newTaskTitle = "CSS"
-  const updatedTasks = tasksReducer(tasks, addTaskAC(
-    {
-      task: {
-        id: '1',
-        title: newTaskTitle,
-        status: TaskStatuses.New,
-        addedDate: '',
-        startDate: '',
-        order: 0,
-        priority: TaskPriorities.Low,
-        todoListId: todolistID1,
-        deadline: ' ',
-        description: '',
-        entityStatus: 'idle'
-      }
-    },
-  ))
+  const task: TaskType = {
+    id: '1',
+      title: newTaskTitle,
+      status: TaskStatuses.New,
+      addedDate: '',
+      startDate: '',
+      order: 0,
+      priority: TaskPriorities.Low,
+      todoListId: todolistID1,
+      deadline: ' ',
+      description: '',
+      entityStatus: 'idle'
+  }
+  const updatedTasks = tasksReducer(tasks, addTaskTC.fulfilled(task, '', {todolistID: task.todoListId , title: task.title}))
+  console.log(updatedTasks)
 
   expect(updatedTasks[todolistID1].length).toBe(5)
   expect(updatedTasks[todolistID2].length).toBe(2)
