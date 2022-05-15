@@ -7,12 +7,13 @@ import Container from "@material-ui/core/Container";
 import Toolbar from "@material-ui/core/Toolbar";
 import CircularProgress from '@mui/material/CircularProgress';
 import {TodolistsList} from "../features/TodolistList/TodolistsList";
-import {initializeAppTC, RequestStatusType} from "./AppReducer";
+import {initializeAppTC} from "./AppReducer";
 import {useAppDispatch, useAppSelector} from "./store";
 import {ErrorSnackbar} from "../components/SnackbarError/SnackbarError";
 import {Login} from '../features/Login/Login';
 import {Navigate, Route, Routes, useNavigate} from 'react-router-dom';
 import {logoutTC} from '../features/Login/authReducer';
+import {RequestStatusType} from '../types';
 
 
 export function App() {

@@ -11,7 +11,7 @@ import {FormikHelpers, useFormik} from 'formik';
 import {loginTC} from './authReducer';
 import {useAppDispatch, useAppSelector} from '../../app/store';
 import {Navigate} from 'react-router-dom';
-import {LoginParamsType} from '../../api/todolist-api';
+import {LoginParamsType} from '../../types';
 
 
 type FormValuesType = {

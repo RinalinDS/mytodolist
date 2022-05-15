@@ -13,8 +13,9 @@ import {
   TodolistDomainType
 } from "../TodolistsReducer";
 import {Task} from "./ Task/Task";
-import {TaskStatuses, TaskType} from "../../../api/todolist-api";
 import {Delete} from "@mui/icons-material";
+import {TaskStatuses} from '../../../enums';
+import {TaskType} from '../../../types';
 
 
 type TodolistPropsType = {

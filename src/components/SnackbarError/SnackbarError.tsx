@@ -2,8 +2,10 @@ import React from 'react';
 import MuiAlert, {AlertProps} from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import {useAppSelector} from "../../app/store";
-import {NullableType, setAppErrorAC} from "../../app/AppReducer";
+
 import {useDispatch} from "react-redux";
+import {setAppErrorAC} from '../../app/AppReducer';
+import {NullableType} from '../../types';
 
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(

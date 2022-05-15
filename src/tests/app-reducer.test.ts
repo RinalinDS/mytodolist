@@ -1,11 +1,10 @@
 import {
   appReducer,
   initializeAppTC,
-  NullableType,
-  RequestStatusType,
   setAppErrorAC,
   setAppStatusAC,
 } from '../app/AppReducer';
+import {NullableType, RequestStatusType} from '../types';
 
 type initialStateType = {
   status: RequestStatusType,

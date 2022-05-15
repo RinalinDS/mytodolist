@@ -1,6 +1,7 @@
 import {authAPI} from '../api/todolist-api';
 import {setIsLoggedInAC} from '../features/Login/authReducer';
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {NullableType, RequestStatusType} from '../types';
 
 
 // НИКОГДА БЛЯДЬ НЕ ПИШИ ПУСТОЙ ОБЪЕКТ ( {} ) ЕСЛИ НЕ ПАРАМЕТРОВ ! ВСТАВЬ РАНДОМНОЕ НАЗВАНИЕ , НО НЕ ПУСТОЙ ОБЪЕКТ !
@@ -65,9 +66,7 @@ export type setAppErrorACType = ReturnType<typeof setAppErrorAC>
 export type AppReducerActionsType = setAppStatusACType | setAppErrorACType
 
 
-export type NullableType<T> = null | T
 
-export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
 
 
 

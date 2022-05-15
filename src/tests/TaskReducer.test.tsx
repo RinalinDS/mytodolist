@@ -4,10 +4,11 @@ import {
   getTasksTC,
   removeTaskTC,
   tasksReducer,
-  TasksType,
   updateTaskAC
 } from "../features/TodolistList/TasksReducer";
-import {TaskPriorities, TaskStatuses, TaskType} from "../api/todolist-api";
+import {TaskPriorities, TaskStatuses} from '../enums';
+import {TasksType, TaskType} from '../types';
+
 
 
 let todolistID1: string;

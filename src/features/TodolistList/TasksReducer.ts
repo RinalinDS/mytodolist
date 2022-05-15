@@ -1,9 +1,10 @@
 import {addTodolistAC, clearTodolistsDataAC, getTodolitsAC, removeTodolistAC} from "./TodolistsReducer";
-import {TaskType, todolistApi, UpdateTaskModelType} from "../../api/todolist-api";
+import { todolistApi } from "../../api/todolist-api";
 import {ThunkType} from "../../app/store";
-import {RequestStatusType, setAppStatusAC} from "../../app/AppReducer";
+import { setAppStatusAC} from "../../app/AppReducer";
 import {handlerServerError, handleServerNetworkError} from "../../utils/error-utils";
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {RequestStatusType, TasksType, TaskType, UpdateTaskModelDomainType, UpdateTaskModelType} from '../../types';
 
 
 export const getTasksTC = createAsyncThunk('tasks/getTasks', async (todolistID: string, {dispatch}) => {
@@ -145,20 +146,3 @@ export const {updateTaskAC, changeTaskEntityStatusAC} = slice.actions
 
 
 
-// util types
-
-export type TasksType = {
-  [key: string]: Array<TaskType>
-}
-
-
-// Тип внизу, создан для того чтобы можно было объединить changeTitle и changeStatus, чтобы они диспатчили
-//  один объект в котором будет объект с нужным свойством, либо title, либо status, а все остальные взять по дефолту.
-export type UpdateTaskModelDomainType = {
-  title?: string
-  description?: string
-  status?: number
-  priority?: number
-  startDate?: string
-  deadline?: string
-}

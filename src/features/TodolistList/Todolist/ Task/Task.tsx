@@ -6,7 +6,8 @@ import {EditableSpan} from "../../../../components/EditableSpan/EditableSpan";
 import {useDispatch, useSelector} from "react-redux";
 import {removeTaskTC, updateTaskTC} from "../../TasksReducer";
 import {AppRootStateType} from "../../../../app/store";
-import {TaskStatuses, TaskType} from "../../../../api/todolist-api";
+import {TaskStatuses} from '../../../../enums'
+import {TaskType} from '../../../../types';
 
 
 type TaskPropsType = {

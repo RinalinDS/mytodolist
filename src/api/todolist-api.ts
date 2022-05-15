@@ -1,5 +1,13 @@
 import axios from "axios";
-import {RequestStatusType} from "../app/AppReducer";
+import {
+    AuthMeResponseType,
+    BaseResponseType,
+    GetTasksResponseType,
+    LoginParamsType,
+    TaskType,
+    TodolistType,
+    UpdateTaskModelType
+} from '../types';
 
 let instance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.1/',
@@ -53,77 +61,3 @@ export const authAPI = {
 }
 
 
-// types
-export type AuthMeResponseType = {
-    id: number
-    email: string
-    login: string
-}
-
-export type LoginParamsType = {
-    email: string
-    password: string
-    rememberMe?: boolean
-    captcha?: string
-}
-
-
-export type FieldsErrorsType = { field: string, error: string };
-export type BaseResponseType<T = {}> = {
-    resultCode: number
-    messages: string[]
-    fieldsErrors: FieldsErrorsType[]
-    data: T
-
-}
-
-type GetTasksResponseType = {
-    items: Array<TaskType>
-    totalCount: number
-    error: string | null
-}
-
-export enum TaskStatuses {
-    New = 0,
-    InProgress = 1,
-    Completed = 2,
-    Draft = 3,
-}
-
-export enum TaskPriorities {
-    Low = 0,
-    Middle = 1,
-    High = 2,
-    Urgently = 3,
-    Later = 4,
-}
-
-export type TaskType = {
-    description: string
-    id: string
-    title: string
-    status: TaskStatuses
-    priority: TaskPriorities
-    todoListId: string
-    order: number
-    startDate: string
-    deadline: string
-    addedDate: string
-    entityStatus: RequestStatusType
-}
-
-export type UpdateTaskModelType = {
-    title: string
-    description: string
-    status: number
-    priority: number
-    startDate: string
-    deadline: string
-}
-
-export type TodolistType = {
-    id: string
-    title: string
-    addedDate: string
-    order: number
-}

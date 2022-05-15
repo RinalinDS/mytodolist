@@ -1,6 +1,6 @@
 import {AppReducerActionsType, setAppErrorAC, setAppStatusAC} from "../app/AppReducer";
-import {BaseResponseType} from "../api/todolist-api";
 import {Dispatch} from "redux";
+import {BaseResponseType} from '../types';
 
 export const handlerServerError = <T>(data: BaseResponseType<T>, dispatch: errorUtilsDispatchActionTypes) => {
     if (data.messages.length) {

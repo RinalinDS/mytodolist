@@ -1,8 +1,9 @@
-import {authAPI, FieldsErrorsType, LoginParamsType} from '../../api/todolist-api';
+import {authAPI} from '../../api/todolist-api';
 import {setAppStatusAC} from '../../app/AppReducer';
 import {handlerServerError, handleServerNetworkError} from '../../utils/error-utils';
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {clearTodolistsDataAC} from '../TodolistList/TodolistsReducer';
+import {FieldsErrorsType, LoginParamsType} from '../../types';
 
 
 // вот эта огромная типизация снизу : 1е это типизация fullfilled payloda , 2е, типизация передаваемых аргументов в санку, 3е типизация reject payloda.
