@@ -2,6 +2,7 @@ import {v1} from "uuid";
 import {addTaskTC, getTasksTC, removeTaskTC, tasksReducer, updateTaskTC,} from "../features/TodolistList/TasksReducer";
 import {TaskPriorities, TaskStatuses} from '../enums';
 import {TasksType, TaskType} from '../types';
+import {getTodolistsTC} from '../features/TodolistList/TodolistsReducer';
 
 
 let todolistID1: string;
@@ -214,3 +215,20 @@ test('task for todolist should be added', () => {
 
 })
 
+
+test('empty arrays should be added when we getting todolists from server', () => {
+
+  const action = getTodolistsTC.fulfilled({
+    todolists: [{id: '1', title: 'test', addedDate: '', order: 1},
+      {id: '2', title: 'test2', addedDate: '', order: 2}]
+  }, 'requestID',)
+
+  const endState = tasksReducer({}, action)
+
+  const keys = Object.keys(endState)
+
+  expect(keys.length).toBe(2)
+  expect(endState['1']).toBeDefined()
+  expect(endState['2']).toBeDefined()
+
+})
