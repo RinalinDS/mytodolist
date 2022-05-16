@@ -1,4 +1,4 @@
-import {authAPI} from '../api/todolist-api';
+import {authAPI} from '../api/API';
 import {setIsLoggedInAC} from '../features/Login/authReducer';
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {NullableType, RequestStatusType} from '../types';

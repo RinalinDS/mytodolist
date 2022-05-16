@@ -1,5 +1,5 @@
 import {clearTodolistsDataAC, createTodolistTC, deleteTodolistTC, getTodolistsTC} from "./TodolistsReducer";
-import {todolistApi} from "../../api/todolist-api";
+import {taskAPI} from "../../api/API";
 import {setAppStatusAC} from "../../app/AppReducer";
 import {handlerServerError, handleServerNetworkError} from "../../utils/error-utils";
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
@@ -9,7 +9,7 @@ import {RequestStatusType, TasksType, TaskType, UpdateTaskModelDomainType, Updat
 export const getTasksTC = createAsyncThunk('tasks/getTasks', async (todolistID: string, {dispatch}) => {
   try {
     dispatch(setAppStatusAC({status: 'loading'}))
-    const res = await todolistApi.getTasks(todolistID)
+    const res = await taskAPI.getTasks(todolistID)
     return {tasks: res.data.items, todolistID}
   } catch (e) {
     handleServerNetworkError((e as Error).message, dispatch)
@@ -23,7 +23,7 @@ export const removeTaskTC = createAsyncThunk('tasks/removeTask', async (param: {
 }) => {
   try {
     dispatch(setAppStatusAC({status: 'loading'}))
-    const res = await todolistApi.deleteTask(param.todolistID, param.taskID)
+    const res = await taskAPI.deleteTask(param.todolistID, param.taskID)
     if (res.data.resultCode === 0) {
       return {todolistID: param.todolistID, taskID: param.taskID}
     } else {
@@ -42,7 +42,7 @@ export const addTaskTC = createAsyncThunk('tasks/addTask', async (param: { todol
 }) => {
   try {
     dispatch(setAppStatusAC({status: 'loading'}))
-    const res = await todolistApi.createTask(param.todolistID, param.title)
+    const res = await taskAPI.createTask(param.todolistID, param.title)
     if (res.data.resultCode === 0) {
       dispatch(setAppStatusAC({status: 'succeeded'}))
       return res.data.data.item
@@ -76,7 +76,7 @@ export const updateTaskTC = createAsyncThunk('tasks/updateTask', async (param: {
       deadline: param.task.deadline,
       ...param.domainModel
     }
-    const res = await todolistApi.updateTask(param.task.todoListId, param.task.id, apiModel)
+    const res = await taskAPI.updateTask(param.task.todoListId, param.task.id, apiModel)
     if (res.data.resultCode === 0) {
       dispatch(setAppStatusAC({status: 'succeeded'}))
       return {todolistID: param.task.todoListId, taskID: param.task.id, domainModel: param.domainModel}

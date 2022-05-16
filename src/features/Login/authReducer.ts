@@ -1,4 +1,4 @@
-import {authAPI} from '../../api/todolist-api';
+import {authAPI} from '../../api/API';
 import {setAppStatusAC} from '../../app/AppReducer';
 import {handlerServerError, handleServerNetworkError} from '../../utils/error-utils';
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
