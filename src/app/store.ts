@@ -19,7 +19,7 @@ export const store = configureStore({
   reducer: reducers,
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunkMiddleware)
 })
-// На суппорте друг сказал, что можно вообще не использовать миддлвейр если РТК + асинк санки , но я пока не все таки буду использовать
+// На суппорте друг сказал, что можно вообще не использовать миддлвейр если РТК + асинк санки , но я пока все таки буду использовать
 // middleware: [thunkMiddleware] , такая запись приводила к ошибке при типизации диспатча, который типизировался тут в сторе, и выдавало ошибку, когда диспатчили санку!
 
 
@@ -39,7 +39,7 @@ type AppDispatchType = typeof store.dispatch
 // In order to correctly dispatch thunks, you need to use the specific customized AppDispatch type
 // from the store that includes the thunk middleware types, and use that with useDispatch.
 // Adding a pre-typed useDispatch hook keeps you from forgetting to import AppDispatch where it's needed
-// короче чтобы впитывал санки нормально? Санки мидлвейр обязатльеон через concat.
+// короче чтобы впитывал санки нормально? Санки мидлвейр обязательно через concat.
 export const useAppDispatch = () => useDispatch<AppDispatchType>()
 // useAppDispatch чтобы легче было чето-там делать контретко, чтобы action, который вернулся из редакс тулкита был типизирован, кажется так.
 

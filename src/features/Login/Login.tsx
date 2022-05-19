@@ -12,10 +12,11 @@ import {loginTC} from './authReducer';
 import {useAppDispatch, useAppSelector} from '../../app/store';
 import {Navigate} from 'react-router-dom';
 import {FormValuesType, LoginParamsType} from '../../types';
+import {selectIsLoggedIn} from '../../app/Selectors';
 
 
 export const Login: FC = () => {
-  const isLoggedIn = useAppSelector<boolean>(state => state.auth.isLoggedIn)
+  const isLoggedIn = useAppSelector<boolean>(selectIsLoggedIn)
   const dispatch = useAppDispatch()
 
   const formik = useFormik({
@@ -39,9 +40,9 @@ export const Login: FC = () => {
       return errors;
     },
     onSubmit: async (values, formikHelpers: FormikHelpers<FormValuesType>) => {
-      const action = await dispatch(loginTC(values)) // придет либо loginTC.fullfilled, libo rejected
-      if (loginTC.rejected.match(action)) { // из документации. Если тип актиона = rejected , то значит в пейлоаде
-        // будет fields error , и значит можно его записывать в локальный стейт формика с помощью формикхелпепа
+      const action = await dispatch(loginTC(values)) // придет либо loginTC.fulfilled, или rejected
+      if (loginTC.rejected.match(action)) { //Из документации. Если тип action = rejected, то значит в пейлоаде
+        // будет fields error, и значит можно его записывать в локальный state formik с помощью formikHelper
         if (action.payload?.fieldsError) {
           const error = action.payload.fieldsError[0]
           formikHelpers.setFieldError(error.field, error.error)

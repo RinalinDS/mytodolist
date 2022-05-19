@@ -14,12 +14,13 @@ import {Login} from '../features/Login/Login';
 import {Navigate, Route, Routes, useNavigate} from 'react-router-dom';
 import {logoutTC} from '../features/Login/authReducer';
 import {RequestStatusType} from '../types';
+import {selectIsInitialized, selectIsLoggedIn, selectStatus} from './Selectors';
 
 
 export function App() {
-  const status = useAppSelector<RequestStatusType>(state => state.app.status)
-  const isInitialized = useAppSelector<boolean>(state => state.app.isInitialized)
-  const isLoggedIn = useAppSelector<boolean>(state => state.auth.isLoggedIn)
+  const status = useAppSelector<RequestStatusType>(selectStatus)
+  const isInitialized = useAppSelector<boolean>(selectIsInitialized)
+  const isLoggedIn = useAppSelector<boolean>(selectIsLoggedIn)
   const dispatch = useAppDispatch()
   const navigate = useNavigate();
 

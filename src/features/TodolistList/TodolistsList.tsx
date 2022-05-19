@@ -6,12 +6,13 @@ import Grid from "@material-ui/core/Grid";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {Todolist} from "./Todolist/Todolist";
 import {Navigate} from "react-router-dom";
-import {TodolistDomainType} from '../../types';
+import {selectTodolists} from './Todolist/Selectors';
+import {selectIsLoggedIn} from '../../app/Selectors';
 
 export const TodolistsList: FC = () => {
   const dispatch = useAppDispatch()
-  const todolists = useAppSelector<Array<TodolistDomainType>>(state => state.todolists)
-  const isLoggedIn = useAppSelector<boolean>(state => state.auth.isLoggedIn)
+  const todolists = useAppSelector(selectTodolists)
+  const isLoggedIn = useAppSelector(selectIsLoggedIn)
 
   useEffect(() => {
     if (!isLoggedIn) return

@@ -14,10 +14,10 @@ type TaskPropsType = {
   todolistID: string
 }
 
-export const Task: FC<TaskPropsType> = React.memo(({taskID, todolistID}) => {
+export const Task: FC<TaskPropsType> = React.memo(({taskID, todolistID}) => { 
 
-  const task = useAppSelector<TaskType>(state => state.tasks[todolistID].filter(f => f.id === taskID)[0])
-  const dispatch = useAppDispatch()
+ const task = useAppSelector<TaskType>(state => state.tasks[todolistID].filter(f => f.id === taskID)[0])
+ const dispatch = useAppDispatch()
 
   const removeTask = useCallback(() => dispatch(removeTaskTC({
     todolistID,
