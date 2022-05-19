@@ -1,5 +1,5 @@
 import {todolistApi} from "../../api/API";
-import {setAppStatusAC} from "../../app/AppReducer";
+import {setAppStatusAC} from "./AppReducer";
 import {handlerServerError, handleServerNetworkError} from "../../utils/error-utils";
 import {getTasksTC} from './TasksReducer';
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';

@@ -1,23 +1,24 @@
 import React, {useEffect} from 'react';
-import './App.css';
+import './app/App.css';
 import LinearProgress from "@material-ui/core/LinearProgress";
 import AppBar from "@material-ui/core/AppBar";
 import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
 import Toolbar from "@material-ui/core/Toolbar";
 import CircularProgress from '@mui/material/CircularProgress';
-import {TodolistsList} from "../features/TodolistList/TodolistsList";
-import {initializeAppTC} from "./AppReducer";
-import {useAppDispatch, useAppSelector} from "./store";
-import {ErrorSnackbar} from "../components/SnackbarError/SnackbarError";
-import {Login} from '../features/Login/Login';
+import {TodolistsList} from "./components/TodolistList/TodolistsList";
+import {initializeAppTC} from "./store/reducers/AppReducer";
+import {useAppDispatch, useAppSelector} from "./store/store";
+import {ErrorSnackbar} from "./components/common/SnackbarError/SnackbarError";
+import {Login} from './components/Login/Login';
 import {Navigate, Route, Routes, useNavigate} from 'react-router-dom';
-import {logoutTC} from '../features/Login/authReducer';
-import {RequestStatusType} from '../types';
-import {selectIsInitialized, selectIsLoggedIn, selectStatus} from './Selectors';
+import {logoutTC} from './store/reducers/authReducer';
+import {RequestStatusType} from './types';
+import {appSelectors} from './store/selectors';
 
 
 export function App() {
+  const {selectStatus, selectIsInitialized, selectIsLoggedIn} = appSelectors
   const status = useAppSelector<RequestStatusType>(selectStatus)
   const isInitialized = useAppSelector<boolean>(selectIsInitialized)
   const isLoggedIn = useAppSelector<boolean>(selectIsLoggedIn)

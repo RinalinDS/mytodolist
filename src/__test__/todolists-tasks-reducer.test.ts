@@ -1,5 +1,5 @@
-import {tasksReducer} from "../features/TodolistList/TasksReducer";
-import {createTodolistTC, todolistsReducer} from "../features/TodolistList/TodolistsReducer";
+import {tasksReducer} from "../store/reducers/TasksReducer";
+import {createTodolistTC, todolistsReducer} from "../store/reducers/TodolistsReducer";
 import {TasksType, TodolistDomainType} from '../types';
 
 

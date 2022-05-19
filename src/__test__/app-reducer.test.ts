@@ -3,7 +3,7 @@ import {
   initializeAppTC,
   setAppErrorAC,
   setAppStatusAC,
-} from '../app/AppReducer';
+} from '../store/reducers/AppReducer';
 import {NullableType, RequestStatusType} from '../types';
 
 type initialStateType = {

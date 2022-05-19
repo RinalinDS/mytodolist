@@ -1,18 +1,17 @@
 import React, {FC, useCallback, useEffect} from "react";
-import {createTodolistTC, getTodolistsTC} from "./TodolistsReducer";
-import {useAppDispatch, useAppSelector} from "../../app/store";
+import {createTodolistTC, getTodolistsTC} from "../../store/reducers/TodolistsReducer";
+import {useAppDispatch, useAppSelector} from "../../store/store";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
-import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
+import {AddItemForm} from "../common/AddItemForm/AddItemForm";
 import {Todolist} from "./Todolist/Todolist";
 import {Navigate} from "react-router-dom";
-import {selectTodolists} from './Todolist/Selectors';
-import {selectIsLoggedIn} from '../../app/Selectors';
+import {appSelectors, todolistSelectors} from '../../store/selectors';
 
 export const TodolistsList: FC = () => {
   const dispatch = useAppDispatch()
-  const todolists = useAppSelector(selectTodolists)
-  const isLoggedIn = useAppSelector(selectIsLoggedIn)
+  const todolists = useAppSelector(todolistSelectors.selectTodolists)
+  const isLoggedIn = useAppSelector(appSelectors.selectIsLoggedIn)
 
   useEffect(() => {
     if (!isLoggedIn) return

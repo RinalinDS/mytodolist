@@ -5,7 +5,7 @@ import {
   createTodolistTC,
   deleteTodolistTC, getTodolistsTC,
   todolistsReducer,
-} from "../features/TodolistList/TodolistsReducer";
+} from "../store/reducers/TodolistsReducer";
 import {FilterValueType, TodolistDomainType} from '../types';
 
 

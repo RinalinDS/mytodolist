@@ -1,10 +1,10 @@
 import React, {FC, memo, useCallback} from "react";
-import {AddItemForm} from "../../../components/AddItemForm/AddItemForm";
-import {EditableSpan} from "../../../components/EditableSpan/EditableSpan";
+import {AddItemForm} from "../../common/AddItemForm/AddItemForm";
+import {EditableSpan} from "../../common/EditableSpan/EditableSpan";
 import {Button, IconButton} from "@material-ui/core";
-import {useAppDispatch, useAppSelector} from "../../../app/store";
-import {addTaskTC} from "../TasksReducer";
-import {changeFilterAC, changeTodolistTitleTC, deleteTodolistTC,} from "../TodolistsReducer";
+import {useAppDispatch, useAppSelector} from "../../../store/store";
+import {addTaskTC} from "../../../store/reducers/TasksReducer";
+import {changeFilterAC, changeTodolistTitleTC, deleteTodolistTC,} from "../../../store/reducers/TodolistsReducer";
 import {Task} from "./ Task/Task";
 import {Delete} from "@mui/icons-material";
 import {TaskStatuses} from '../../../enums';

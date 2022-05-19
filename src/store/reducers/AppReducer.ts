@@ -1,7 +1,7 @@
-import {authAPI} from '../api/API';
-import {setIsLoggedInAC} from '../features/Login/authReducer';
+import {authAPI} from '../../api/API';
+import {setIsLoggedInAC} from './authReducer';
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {NullableType, RequestStatusType} from '../types';
+import {NullableType, RequestStatusType} from '../../types';
 
 
 // НИКОГДА БЛЯДЬ НЕ ПИШИ ПУСТОЙ ОБЪЕКТ ( {} ) ЕСЛИ НЕ ПАРАМЕТРОВ ! ВСТАВЬ РАНДОМНОЕ НАЗВАНИЕ , НО НЕ ПУСТОЙ ОБЪЕКТ !
