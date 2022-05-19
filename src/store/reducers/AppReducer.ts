@@ -1,32 +1,7 @@
-import {authAPI} from '../../api/API';
-import {setIsLoggedInAC} from './authReducer';
-import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {NullableType, RequestStatusType} from '../../types';
+import {initializeApp} from './actions/AppActions';
 
-
-// НИКОГДА БЛЯДЬ НЕ ПИШИ ПУСТОЙ ОБЪЕКТ ( {} ) ЕСЛИ НЕ ПАРАМЕТРОВ ! ВСТАВЬ РАНДОМНОЕ НАЗВАНИЕ , НО НЕ ПУСТОЙ ОБЪЕКТ !
-export const initializeAppTC = createAsyncThunk('app/initializeAppTC', async (_, {dispatch}) => {
-  const res = await authAPI.me()
-  if (res.data.resultCode === 0) {
-    dispatch(setIsLoggedInAC({value: true}))
-  }
-  return {}
-})
-
-// export const initializeAppTC_ = (): ThunkType => dispatch => {
-//   authAPI.me().then(res => {
-//     if (res.data.resultCode === 0) {
-//       dispatch(setIsLoggedInAC({value: true}));
-//     } else {
-//       handlerServerError(res.data, dispatch)
-//     }
-//   }).catch((error: AxiosError) => {
-//     handleServerNetworkError(error.message, dispatch)
-//   })
-//     .finally(() => {
-//       dispatch(setInitializeAC({isInitialized: true}))
-//     })
-// }
 
 const slice = createSlice({
   name: 'app',
@@ -45,7 +20,7 @@ const slice = createSlice({
   },
   extraReducers: builder => {
     builder
-      .addCase(initializeAppTC.fulfilled, (state) => {
+      .addCase(initializeApp.fulfilled, (state) => {
         state.isInitialized = true
       })
   }

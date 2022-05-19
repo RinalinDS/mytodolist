@@ -1,4 +1,4 @@
-import {AnyAction, combineReducers} from "redux";
+import {ActionCreatorsMapObject, AnyAction, bindActionCreators, combineReducers} from "redux";
 import {todolistsReducer} from "./reducers/TodolistsReducer";
 import {tasksReducer} from "./reducers/TasksReducer";
 import thunkMiddleware, {ThunkAction} from "redux-thunk";
@@ -6,6 +6,7 @@ import {appReducer} from "./reducers/AppReducer";
 import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
 import {authReducer} from './reducers/authReducer';
 import {configureStore} from '@reduxjs/toolkit';
+import {useMemo} from 'react';
 
 
 const reducers = combineReducers({
@@ -41,7 +42,21 @@ type AppDispatchType = typeof store.dispatch
 // Adding a pre-typed useDispatch hook keeps you from forgetting to import AppDispatch where it's needed
 // короче чтобы впитывал санки нормально? Санки мидлвейр обязательно через concat.
 export const useAppDispatch = () => useDispatch<AppDispatchType>()
+
 // useAppDispatch чтобы легче было чето-там делать контретко, чтобы action, который вернулся из редакс тулкита был типизирован, кажется так.
+
+export function useActions<T extends ActionCreatorsMapObject<any>>(actions: T) {
+  const dispatch = useAppDispatch()
+
+  return useMemo(() => {
+    return bindActionCreators(actions, dispatch)
+  }, [])
+
+}
+
+// кстомный хук useActions позволяет не писать диспатч ( санку) , а просто вызывать санку, так как она уже будет обернута диспатчем внутри хука,
+// поведение подобное mapDispatchToProps в соц.сети, когда передаешь их в одном объекте.
+
 
 // @ts-ignore
 window.store = store

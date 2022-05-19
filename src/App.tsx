@@ -1,5 +1,4 @@
-import React, {useEffect} from 'react';
-import './app/App.css';
+import React, {FC, useEffect} from 'react';
 import LinearProgress from "@material-ui/core/LinearProgress";
 import AppBar from "@material-ui/core/AppBar";
 import Button from "@material-ui/core/Button";
@@ -7,26 +6,28 @@ import Container from "@material-ui/core/Container";
 import Toolbar from "@material-ui/core/Toolbar";
 import CircularProgress from '@mui/material/CircularProgress';
 import {TodolistsList} from "./components/TodolistList/TodolistsList";
-import {initializeAppTC} from "./store/reducers/AppReducer";
-import {useAppDispatch, useAppSelector} from "./store/store";
+import {useActions, useAppDispatch, useAppSelector} from "./store/store";
 import {ErrorSnackbar} from "./components/common/SnackbarError/SnackbarError";
 import {Login} from './components/Login/Login';
 import {Navigate, Route, Routes, useNavigate} from 'react-router-dom';
 import {logoutTC} from './store/reducers/authReducer';
 import {RequestStatusType} from './types';
-import {appSelectors} from './store/selectors';
+import {appSelectors, authSelectors} from './store/selectors';
+import {initializeApp} from './store/reducers/actions/AppActions';
+import {AppActions} from './store/reducers/actions';
 
 
-export function App() {
-  const {selectStatus, selectIsInitialized, selectIsLoggedIn} = appSelectors
-  const status = useAppSelector<RequestStatusType>(selectStatus)
-  const isInitialized = useAppSelector<boolean>(selectIsInitialized)
-  const isLoggedIn = useAppSelector<boolean>(selectIsLoggedIn)
+export const App:FC = () => {
+  const status = useAppSelector<RequestStatusType>(appSelectors.selectStatus)
+  const isInitialized = useAppSelector<boolean>(appSelectors.selectIsInitialized)
+  const isLoggedIn = useAppSelector<boolean>(authSelectors.selectIsLoggedIn)
   const dispatch = useAppDispatch()
   const navigate = useNavigate();
 
+  const { initializeApp } = useActions(AppActions)
+
   useEffect(() => {
-    dispatch(initializeAppTC())
+    initializeApp()
   }, [])
 
 

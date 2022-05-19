@@ -1,10 +1,10 @@
 import {
   appReducer,
-  initializeAppTC,
   setAppErrorAC,
   setAppStatusAC,
 } from '../store/reducers/AppReducer';
 import {NullableType, RequestStatusType} from '../types';
+import {initializeApp} from '../store/reducers/actions/AppActions';
 
 type initialStateType = {
   status: RequestStatusType,
@@ -41,7 +41,7 @@ test('correct status should be set', () => {
 
 test('correct isInitialized value should be set', () => {
 
-  const endState = appReducer(initialState, initializeAppTC.fulfilled({}, '', undefined))
+  const endState = appReducer(initialState, initializeApp.fulfilled({}, '', undefined))
 
   expect(endState.isInitialized).toBeTruthy()
 
