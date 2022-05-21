@@ -1,6 +1,5 @@
-import React, {FC, useEffect} from "react";
+import React, {FC, useCallback, useEffect} from "react";
 import {useActions, useAppSelector} from "../../store/store";
-import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import {AddItemForm} from "../common/AddItemForm/AddItemForm";
 import {Todolist} from "./Todolist/Todolist";
@@ -15,6 +14,10 @@ export const TodolistsList: FC = () => {
 
   const {addTodolist, getTodolists} = useActions(todolistsActions)
 
+  const addTodolistsCallback = useCallback(async (title: string) => {
+    addTodolist(title)
+  }, [])
+
   useEffect(() => {
     if (!isLoggedIn) return
     getTodolists()
@@ -25,17 +28,17 @@ export const TodolistsList: FC = () => {
   return (
     <>
       <Grid container style={{padding: "20px"}}>
-        <AddItemForm callBack={addTodolist}/>
+        <AddItemForm callBack={addTodolistsCallback}/>
       </Grid>
-      <Grid container spacing={10}>
+      <Grid container spacing={3} style={{flexWrap: 'nowrap', overflowX: 'scroll'}}>
         {todolists.map(m => {
           return <Grid key={m.id} item>
-            <Paper style={{padding: "20px", backgroundColor: 'aliceblue'}}>
+            <div style={{width: '300px', wordBreak: 'break-all'}}>
               <Todolist
                 key={m.id}
                 todolistID={m.id}
               />
-            </Paper>
+            </div>
           </Grid>
         })}
       </Grid>

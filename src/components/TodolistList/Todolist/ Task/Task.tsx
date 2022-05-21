@@ -33,7 +33,7 @@ export const Task: FC<TaskPropsType> = React.memo(({taskID, todolistID}) => {
   const isTaskCompleted =  task.status === TaskStatuses.Completed
 
   return (
-    <div key={task.id} className={isTaskCompleted ? "is-done" : ""}>
+    <div key={task.id} className={isTaskCompleted ? "is-done" : ""} style={{position: 'relative'}}>
       <Checkbox
         checked={isTaskCompleted}
         color="primary"
@@ -41,7 +41,7 @@ export const Task: FC<TaskPropsType> = React.memo(({taskID, todolistID}) => {
         disabled={isTaskDisabled}
       />
       <EditableSpan title={task.title} onChange={changeTaskTitle} disabled={isTaskDisabled}/>
-      <IconButton onClick={removeTaskHandler} disabled={isTaskDisabled}>
+      <IconButton onClick={removeTaskHandler} disabled={isTaskDisabled} style={{position: 'absolute', right: '2px', top: '2px'}}>
         <Delete/>
       </IconButton>
     </div>

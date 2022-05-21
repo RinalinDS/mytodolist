@@ -1,6 +1,13 @@
 import {addTodolist,  clearTodolistsData, getTodolists, removeTodolist} from "./TodolistsReducer";
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {RequestStatusType, TasksType, TaskType, UpdateTaskModelDomainType, UpdateTaskModelType} from '../../types';
+import {
+  FieldsErrorsType,
+  RequestStatusType,
+  TasksType,
+  TaskType,
+  UpdateTaskModelDomainType,
+  UpdateTaskModelType
+} from '../../types';
 import {setAppStatusAC} from './AppReducer';
 import {taskAPI} from '../../api/API';
 import {handlerServerError, handleServerNetworkError} from '../../utils/error-utils';
@@ -34,7 +41,7 @@ export const removeTask = createAsyncThunk('tasks/removeTask', async (param: { t
     dispatch(setAppStatusAC({status: 'idle'}))
   }
 })
-export const addTask = createAsyncThunk('tasks/addTask', async (param: { todolistID: string, title: string }, {
+export const addTask = createAsyncThunk<TaskType, { todolistID: string, title: string },  { rejectValue: { errors: Array<string>, fieldsError?: FieldsErrorsType[] } }>('tasks/addTask', async (param, {
   dispatch,
   rejectWithValue
 }) => {
@@ -45,12 +52,12 @@ export const addTask = createAsyncThunk('tasks/addTask', async (param: { todolis
       dispatch(setAppStatusAC({status: 'succeeded'}))
       return res.data.data.item
     } else {
-      handlerServerError(res.data, dispatch)
-      return rejectWithValue(null)
+      handlerServerError(res.data, dispatch, false)
+      return rejectWithValue({errors: res.data.messages, fieldsError: res.data.fieldsErrors}) // выплюнуть action с типом rejected, v reduxe я его не обрабатываю, хотя можно, но использую его в формике. Еррорс попадает в пейлоад actiona-a
     }
   } catch (e) {
-    handleServerNetworkError((e as Error).message, dispatch)
-    return rejectWithValue(null)
+    handleServerNetworkError((e as Error).message, dispatch, false)
+    return rejectWithValue({errors: [(e as Error).message], fieldsError: undefined})
   }
 })
 export const updateTask = createAsyncThunk('tasks/updateTask', async (param: { task: TaskType, domainModel: UpdateTaskModelDomainType }, {
