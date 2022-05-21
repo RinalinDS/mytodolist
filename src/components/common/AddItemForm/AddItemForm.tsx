@@ -3,9 +3,9 @@ import IconButton from "@material-ui/core/IconButton";
 import TextField from "@material-ui/core/TextField";
 import {AddBox} from "@mui/icons-material";
 
-
+export type AddItemFormSubmitHelperType = { setError: (error:string) => void, setTitle: (title:string) => void}
 type AddItemFormPropsType = {
-  callBack: (title: string) => Promise<any>
+  callBack: (title: string, helper: AddItemFormSubmitHelperType) => void
   disabled?: boolean
 }
 
@@ -26,12 +26,8 @@ export const AddItemForm: FC<AddItemFormPropsType> = memo(({callBack, disabled})
   }
   const addItem = async () => {
     if (newTaskTitle.trim()) {
-      try {
-        await callBack(newTaskTitle.trim())
-        setNewTaskTitle("")
-      } catch (error) {
-        setError((error as Error).message)
-      }
+        await callBack(newTaskTitle.trim(), {setError, setTitle: setNewTaskTitle })
+
     } else {
       setError("Title is required")
     }

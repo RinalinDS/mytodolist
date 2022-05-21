@@ -1,5 +1,5 @@
 import React, {FC, memo, useCallback} from "react";
-import {AddItemForm} from "../../common/AddItemForm/AddItemForm";
+import {AddItemForm, AddItemFormSubmitHelperType} from "../../common/AddItemForm/AddItemForm";
 import {EditableSpan} from "../../common/EditableSpan/EditableSpan";
 import {Button, IconButton} from "@material-ui/core";
 import {useActions, useAppDispatch, useAppSelector} from "../../../store/store";
@@ -27,17 +27,18 @@ export const Todolist: FC<TodolistPropsType> = memo(({todolistID}) => {
     changeFilter({filter, todolistID: todolistID})
   }, [todolistID])
 
-  const addTasksCallback = useCallback(async (title: string) => {
+  const addTasksCallback = useCallback(async (title: string, helper: AddItemFormSubmitHelperType) => {
     let thunk = taskActions.addTask({title, todolistID})
     const resultAction = await dispatch(thunk)
     if (taskActions.addTask.rejected.match(resultAction)) {
       if (resultAction.payload?.errors?.length) {
         const errorMessage = resultAction.payload?.errors[0]
-        console.log(errorMessage)
-        throw new Error(errorMessage)
+        helper.setError(errorMessage)
       } else {
-        throw new Error('some error ocurred')
+        helper.setError('some error ocurred')
       }
+    } else {
+      helper.setTitle('')
     }
   }, [todolistID])
 
