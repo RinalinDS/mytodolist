@@ -8,16 +8,17 @@ import FormLabel from '@mui/material/FormLabel';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import {FormikHelpers, useFormik} from 'formik';
-import {loginTC} from '../../store/reducers/authReducer';
 import {useAppDispatch, useAppSelector} from '../../store/store';
 import {Navigate} from 'react-router-dom';
 import {FormValuesType, LoginParamsType} from '../../types';
 import {authSelectors} from '../../store/selectors/';
+import {authActions} from '../../store/reducers/actions';
 
 
 export const Login: FC = () => {
   const isLoggedIn = useAppSelector<boolean>(authSelectors.selectIsLoggedIn)
   const dispatch = useAppDispatch()
+
 
   const formik = useFormik({
     initialValues: {
@@ -40,8 +41,8 @@ export const Login: FC = () => {
       return errors;
     },
     onSubmit: async (values, formikHelpers: FormikHelpers<FormValuesType>) => {
-      const action = await dispatch(loginTC(values)) // придет либо loginTC.fulfilled, или rejected
-      if (loginTC.rejected.match(action)) { //Из документации. Если тип action = rejected, то значит в пейлоаде
+      const action = await dispatch(authActions.login(values)) // придет либо loginTC.fulfilled, или rejected
+      if (authActions.login.rejected.match(action)) { //Из документации. Если тип action = rejected, то значит в пейлоаде
         // будет fields error, и значит можно его записывать в локальный state formik с помощью formikHelper
         if (action.payload?.fieldsError) {
           const error = action.payload.fieldsError[0]

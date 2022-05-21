@@ -34,7 +34,6 @@ export const AddItemForm:FC<AddItemFormPropsType> = memo(({callBack, disabled}) 
     }
     return (
         <div>
-
             <TextField
                 variant="outlined"
                 value={newTaskTitle}
@@ -43,8 +42,8 @@ export const AddItemForm:FC<AddItemFormPropsType> = memo(({callBack, disabled}) 
                 error={!!error}
                 label="Title"
                 helperText={error}
-                disabled={disabled}/>
-
+                disabled={disabled}
+                style={{backgroundColor: 'white'}}/>
             <IconButton color='primary' onClick={addItem} disabled={disabled}>
                 <AddBox/>
             </IconButton>

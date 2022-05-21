@@ -3,10 +3,10 @@ import IconButton from "@material-ui/core/IconButton";
 import Checkbox from "@material-ui/core/Checkbox";
 import {Delete} from "@mui/icons-material/";
 import {EditableSpan} from "../../../common/EditableSpan/EditableSpan";
-import {removeTaskTC, updateTaskTC} from "../../../../store/reducers/TasksReducer";
 import {TaskStatuses} from '../../../../enums'
 import {TaskType} from '../../../../types';
-import {useAppDispatch, useAppSelector} from '../../../../store/store';
+import {useActions, useAppSelector} from '../../../../store/store';
+import {taskActions} from '../../../../store/reducers/actions';
 
 
 type TaskPropsType = {
@@ -14,24 +14,22 @@ type TaskPropsType = {
   todolistID: string
 }
 
-export const Task: FC<TaskPropsType> = React.memo(({taskID, todolistID}) => { 
+export const Task: FC<TaskPropsType> = React.memo(({taskID, todolistID}) => {
 
- const task = useAppSelector<TaskType>(state => state.tasks[todolistID].filter(f => f.id === taskID)[0])
- const dispatch = useAppDispatch()
+  const task = useAppSelector<TaskType>(state => state.tasks[todolistID].filter(f => f.id === taskID)[0])
 
-  const removeTask = useCallback(() => dispatch(removeTaskTC({
-    todolistID,
-    taskID
-  })), [task.id, todolistID, dispatch])
+  const {updateTask, removeTask} = useActions(taskActions)
+
+  const removeTaskHandler = useCallback(() =>
+    removeTask({todolistID, taskID}), [taskID, todolistID])
 
   const changeTaskStatus = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     let status = e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New
-    dispatch(updateTaskTC({task, domainModel: {status}}))
-  }, [task.id, todolistID, dispatch])
+    updateTask({task, domainModel: {status}})
+  }, [task.id, todolistID, task, updateTask])
 
   const changeTaskTitle = useCallback((title: string) =>
-    dispatch(updateTaskTC({task, domainModel: {title}})), [task, dispatch])
-
+    updateTask({task, domainModel: {title}}), [task])
 
   return (
     <div key={task.id} className={task.status === TaskStatuses.Completed ? "is-done" : ""}>
@@ -41,9 +39,8 @@ export const Task: FC<TaskPropsType> = React.memo(({taskID, todolistID}) => {
         onChange={changeTaskStatus}
         disabled={task.entityStatus === 'loading'}
       />
-
       <EditableSpan title={task.title} onChange={changeTaskTitle} disabled={task.entityStatus === 'loading'}/>
-      <IconButton onClick={removeTask} disabled={task.entityStatus === 'loading'}>
+      <IconButton onClick={removeTaskHandler} disabled={task.entityStatus === 'loading'}>
         <Delete/>
       </IconButton>
     </div>

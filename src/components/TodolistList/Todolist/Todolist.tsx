@@ -2,13 +2,13 @@ import React, {FC, memo, useCallback} from "react";
 import {AddItemForm} from "../../common/AddItemForm/AddItemForm";
 import {EditableSpan} from "../../common/EditableSpan/EditableSpan";
 import {Button, IconButton} from "@material-ui/core";
-import {useAppDispatch, useAppSelector} from "../../../store/store";
-import {addTaskTC} from "../../../store/reducers/TasksReducer";
-import {changeFilterAC, changeTodolistTitleTC, deleteTodolistTC,} from "../../../store/reducers/TodolistsReducer";
+import {useActions, useAppDispatch, useAppSelector} from "../../../store/store";
 import {Task} from "./ Task/Task";
 import {Delete} from "@mui/icons-material";
 import {TaskStatuses} from '../../../enums';
 import {FilterValueType, TaskType, TodolistDomainType} from '../../../types';
+import {addTask} from '../../../store/reducers/actions/TaskActions';
+import {taskActions, todolistsActions} from '../../../store/reducers/actions';
 
 
 type TodolistPropsType = {
@@ -21,21 +21,29 @@ export const Todolist: FC<TodolistPropsType> = memo(({todolistID}) => {
   const tasks = useAppSelector<Array<TaskType>>(state => state.tasks[todolistID])
   const todolist = useAppSelector<TodolistDomainType>(state => state.todolists.filter(f => todolistID === f.id)[0])
 
-  const changeFilter = useCallback((filter: FilterValueType) => {
-    dispatch(changeFilterAC({filter, todolistID: todolistID}))
-  }, [dispatch, todolistID])
+  const {addTask} = useActions(taskActions)
+  const {removeTodolist, changeTodolistTitle, changeFilter} = useActions(todolistsActions)
 
-  const removeTodolistHandler = useCallback(() => dispatch(deleteTodolistTC(todolistID)), [dispatch, todolistID])
+  const changeTodolistFilter = useCallback((filter: FilterValueType) => {
+    changeFilter({filter, todolistID: todolistID})
+  }, [todolistID])
 
-  const addTaskHelper = useCallback((title: string) => dispatch(addTaskTC({
-    todolistID,
-    title
-  })), [dispatch, todolistID])
+  const deleteTodolistHandler = useCallback(() => removeTodolist(todolistID), [todolistID])
+  // это все еще работает как dispatch(removeTodolistТС(todolistID)), но благодаря кастомному хуку useActions и тому, что я засунул внутрь
+  // него в начале компоненты все экшны , которые относятся к таскам, он мне выдал колбэк,
+  // с таким же именем уже обернутый диспатчем
 
-  const changeTodolistTitle = useCallback((title: string) => dispatch(changeTodolistTitleTC({
-    todolistID,
-    title
-  })), [dispatch, todolistID])
+  const changeTodolistTitleHandler = useCallback((title: string) =>
+    changeTodolistTitle({todolistID, title}), [todolistID])
+  // это все еще работает как dispatch(changeTodolistTitleТС(title: string)), но благодаря кастомному хуку useActions и тому, что я засунул внутрь
+  // него в начале компоненты все экшны , которые относятся к таскам, он мне выдал колбэк,
+  // с таким же именем уже обернутый диспатчем
+
+  const addTaskHandler = useCallback((title: string) =>
+    addTask({todolistID, title}), [dispatch, todolistID])
+  // это все еще работает как dispatch(addTaskTC(title: string)), но благодаря кастомному хуку useActions и тому, что я засунул внутрь
+  // него в начале компоненты все экшны , которые относятся к таскам, он мне выдал колбэк,
+  // с таким же именем уже обернутый диспатчем
 
   let tasksForTodolist = tasks
   if (todolist.filter === "active") {
@@ -44,35 +52,33 @@ export const Todolist: FC<TodolistPropsType> = memo(({todolistID}) => {
   if (todolist.filter === "completed") {
     tasksForTodolist = tasks.filter(f => f.status === TaskStatuses.Completed);
   }
-  return (
 
+  return (
     <div>
-      <h3><EditableSpan title={todolist.title} onChange={changeTodolistTitle}/>
+      <h3><EditableSpan title={todolist.title} onChange={changeTodolistTitleHandler}/>
         <IconButton disabled={todolist.entityStatus === 'loading'} aria-label="delete"
-                    onClick={removeTodolistHandler}>
+                    onClick={deleteTodolistHandler}>
           <Delete/>
         </IconButton>
-
       </h3>
-      <AddItemForm callBack={addTaskHelper} disabled={todolist.entityStatus === 'loading'}/>
+      <AddItemForm callBack={addTaskHandler} disabled={todolist.entityStatus === 'loading'}/>
 
       {tasksForTodolist.map(m => <Task
         key={m.id} todolistID={todolistID}
-        taskID={m.id}/>
+        taskID={m.id} />
       )}
 
       <div>
         <Button variant={todolist.filter === "all" ? "outlined" : "text"}
-                onClick={() => changeFilter('all')}>All
+                onClick={() => changeTodolistFilter('all')}>All
         </Button>
         <Button variant={todolist.filter === "active" ? "outlined" : "text"}
-                onClick={() => changeFilter('active')} color="secondary">Active
+                onClick={() => changeTodolistFilter('active')} color="secondary">Active
         </Button>
         <Button variant={todolist.filter === "completed" ? "outlined" : "text"}
-                onClick={() => changeFilter('completed')} color="primary">Completed
+                onClick={() => changeTodolistFilter('completed')} color="primary">Completed
         </Button>
       </div>
-
     </div>
   )
 })

@@ -1,6 +1,6 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import {authAPI} from '../../../api/API';
-import {setIsLoggedInAC} from '../authReducer';
+import {setIsLoggedIn} from '../authReducer';
 
 
 // НИКОГДА БЛЯДЬ НЕ ПИШИ ПУСТОЙ ОБЪЕКТ ( {} ) ЕСЛИ НЕТУ ПАРАМЕТРОВ ! ВСТАВЬ РАНДОМНОЕ НАЗВАНИЕ , НО НЕ ПУСТОЙ ОБЪЕКТ !
@@ -8,7 +8,7 @@ import {setIsLoggedInAC} from '../authReducer';
 export const initializeApp = createAsyncThunk('app/initializeAppTC', async (_, {dispatch}) => {
   const res = await authAPI.me()
   if (res.data.resultCode === 0) {
-    dispatch(setIsLoggedInAC({value: true}))
+    dispatch(setIsLoggedIn({value: true}))
   }
   return {}
 })

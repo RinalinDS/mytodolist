@@ -24,10 +24,10 @@ export const store = configureStore({
 // middleware: [thunkMiddleware] , такая запись приводила к ошибке при типизации диспатча, который типизировался тут в сторе, и выдавало ошибку, когда диспатчили санку!
 
 
-// общая типизация для стейта приложения
+// Общая типизация для стейта приложения
 export type AppRootStateType = ReturnType<typeof reducers>
 
-// все типы action-ов из редьюсеров. (всего приложения)
+//Все типы action-ов из редьюсеров. (всего приложения)
 
 export const useAppSelector: TypedUseSelectorHook<AppRootStateType> = useSelector
 
@@ -47,14 +47,13 @@ export const useAppDispatch = () => useDispatch<AppDispatchType>()
 
 export function useActions<T extends ActionCreatorsMapObject<any>>(actions: T) {
   const dispatch = useAppDispatch()
-
   return useMemo(() => {
     return bindActionCreators(actions, dispatch)
   }, [])
 
 }
 
-// кстомный хук useActions позволяет не писать диспатч ( санку) , а просто вызывать санку, так как она уже будет обернута диспатчем внутри хука,
+// кастомный хук useActions позволяет не писать диспатч(санку), а просто вызывать санку, так как она уже будет обернута диспатчем внутри хука,
 // поведение подобное mapDispatchToProps в соц.сети, когда передаешь их в одном объекте.
 
 

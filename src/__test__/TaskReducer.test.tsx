@@ -1,8 +1,9 @@
 import {v1} from "uuid";
-import {addTaskTC, getTasksTC, removeTaskTC, tasksReducer, updateTaskTC,} from "../store/reducers/TasksReducer";
+import {tasksReducer, } from "../store/reducers/TasksReducer";
 import {TaskPriorities, TaskStatuses} from '../enums';
 import {TasksType, TaskType} from '../types';
-import {getTodolistsTC} from '../store/reducers/TodolistsReducer';
+import {getTodolists} from '../store/reducers/actions/TodolistActions';
+import {addTask, getTasks, removeTask, updateTask} from '../store/reducers/actions/TaskActions';
 
 
 let todolistID1: string;
@@ -101,7 +102,7 @@ beforeEach(() => {
 
 test("proper task should be removed", () => {
 
-  const removeProperTask = tasksReducer(tasks, removeTaskTC.fulfilled({
+  const removeProperTask = tasksReducer(tasks, removeTask.fulfilled({
     taskID: tasks[todolistID1][0].id,
     todolistID: todolistID1
   }, '', {taskID: tasks[todolistID1][0].id, todolistID: todolistID1}))
@@ -130,7 +131,7 @@ test("proper task should be added", () => {
     description: '',
     entityStatus: 'idle'
   }
-  const updatedTasks = tasksReducer(tasks, addTaskTC.fulfilled(task, '', {
+  const updatedTasks = tasksReducer(tasks, addTask.fulfilled(task, '', {
     todolistID: task.todoListId,
     title: task.title
   }))
@@ -157,7 +158,7 @@ test("proper task should have new status", () => {
     description: '',
     entityStatus: 'idle'
   }
-  const updatedTaskStatus = tasksReducer(tasks, updateTaskTC.fulfilled({
+  const updatedTaskStatus = tasksReducer(tasks, updateTask.fulfilled({
     todolistID: todolistID2,
     taskID: tasks[todolistID2][0].id,
     domainModel: {status: TaskStatuses.New}
@@ -186,7 +187,7 @@ test("proper task should have new title", () => {
 
   let newTaskTitle = "Centurion"
 
-  const updatedTaskTitle = tasksReducer(tasks, updateTaskTC.fulfilled({
+  const updatedTaskTitle = tasksReducer(tasks, updateTask.fulfilled({
     todolistID: todolistID2,
     taskID: tasks[todolistID2][0].id,
     domainModel: {title: newTaskTitle}
@@ -204,7 +205,7 @@ test("proper task should have new title", () => {
 
 test('task for todolist should be added', () => {
 
-  const endState = tasksReducer({todolistID1: [], todolistID2: []}, getTasksTC.fulfilled({
+  const endState = tasksReducer({todolistID1: [], todolistID2: []}, getTasks.fulfilled({
     tasks: tasks[todolistID1],
     todolistID: todolistID1
   }, '', todolistID1))
@@ -218,7 +219,7 @@ test('task for todolist should be added', () => {
 
 test('empty arrays should be added when we getting todolists from server', () => {
 
-  const action = getTodolistsTC.fulfilled({
+  const action = getTodolists.fulfilled({
     todolists: [{id: '1', title: 'test', addedDate: '', order: 1},
       {id: '2', title: 'test2', addedDate: '', order: 2}]
   }, 'requestID',)

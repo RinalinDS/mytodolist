@@ -6,33 +6,33 @@ import Container from "@material-ui/core/Container";
 import Toolbar from "@material-ui/core/Toolbar";
 import CircularProgress from '@mui/material/CircularProgress';
 import {TodolistsList} from "./components/TodolistList/TodolistsList";
-import {useActions, useAppDispatch, useAppSelector} from "./store/store";
+import {useActions, useAppSelector} from "./store/store";
 import {ErrorSnackbar} from "./components/common/SnackbarError/SnackbarError";
 import {Login} from './components/Login/Login';
 import {Navigate, Route, Routes, useNavigate} from 'react-router-dom';
-import {logoutTC} from './store/reducers/authReducer';
 import {RequestStatusType} from './types';
 import {appSelectors, authSelectors} from './store/selectors';
-import {initializeApp} from './store/reducers/actions/AppActions';
-import {AppActions} from './store/reducers/actions';
+import {appActions, authActions} from './store/reducers/actions';
 
 
-export const App:FC = () => {
+export const App: FC = () => {
   const status = useAppSelector<RequestStatusType>(appSelectors.selectStatus)
   const isInitialized = useAppSelector<boolean>(appSelectors.selectIsInitialized)
   const isLoggedIn = useAppSelector<boolean>(authSelectors.selectIsLoggedIn)
-  const dispatch = useAppDispatch()
   const navigate = useNavigate();
 
-  const { initializeApp } = useActions(AppActions)
+  const {initializeApp} = useActions(appActions)
+  const {logout} = useActions(authActions)
 
   useEffect(() => {
     initializeApp()
+    // это все та же строка dispatch(initilizeAppTC()),но теперь , благодаря хуку useActions, вызов происходит скрыто от нас, но это просто фикция)
   }, [])
 
 
   const logoutHandler = () => {
-    dispatch(logoutTC())
+    logout()
+    // это все та же строка dispatch(logoutTC()),но теперь , благодаря хуку useActions, вызов происходит скрыто от нас, но это просто фикция)
   }
   const backHomeHandler = () => {
     navigate('/')
@@ -55,7 +55,7 @@ export const App:FC = () => {
         </Toolbar>
       </AppBar>
       {status === 'loading' && <LinearProgress color={'secondary'}/>}
-      <Container fixed>
+      <Container fixed style={{marginBottom: '50px'}}>
         <Routes>
           <Route path={'/'} element={<TodolistsList/>}/>
           <Route path={'/login'} element={<Login/>}/>
