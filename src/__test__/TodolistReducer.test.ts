@@ -1,15 +1,11 @@
 import {v1} from 'uuid';
 import {
-  changeFilter,
+  addTodolist,
+  changeFilter, changeTodolistTitle, getTodolists, removeTodolist,
   todolistsReducer,
 } from "../store/reducers/TodolistsReducer";
 import {FilterValueType, TodolistDomainType} from '../types';
-import {
-  changeTodolistTitle,
-  addTodolist,
-  removeTodolist,
-  getTodolists
-} from '../store/reducers/actions/TodolistActions';
+
 
 
 let todolistId1: string;

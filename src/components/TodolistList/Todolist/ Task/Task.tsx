@@ -6,7 +6,7 @@ import {EditableSpan} from "../../../common/EditableSpan/EditableSpan";
 import {TaskStatuses} from '../../../../enums'
 import {TaskType} from '../../../../types';
 import {useActions, useAppSelector} from '../../../../store/store';
-import {taskActions} from '../../../../store/reducers/actions';
+import {taskActions} from '../../../../store';
 
 
 type TaskPropsType = {
@@ -20,27 +20,28 @@ export const Task: FC<TaskPropsType> = React.memo(({taskID, todolistID}) => {
 
   const {updateTask, removeTask} = useActions(taskActions)
 
-  const removeTaskHandler = useCallback(() =>
-    removeTask({todolistID, taskID}), [taskID, todolistID])
+  const removeTaskHandler = useCallback(() => removeTask({todolistID, taskID}), [taskID, todolistID])
 
   const changeTaskStatus = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    let status = e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New
-    updateTask({task, domainModel: {status}})
-  }, [task.id, todolistID, task, updateTask])
+    updateTask({task, domainModel: {status: e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New}})
+  }, [task])
 
   const changeTaskTitle = useCallback((title: string) =>
     updateTask({task, domainModel: {title}}), [task])
 
+  const isTaskDisabled = task.entityStatus === 'loading'
+  const isTaskCompleted =  task.status === TaskStatuses.Completed
+
   return (
-    <div key={task.id} className={task.status === TaskStatuses.Completed ? "is-done" : ""}>
+    <div key={task.id} className={isTaskCompleted ? "is-done" : ""}>
       <Checkbox
-        checked={task.status === TaskStatuses.Completed}
+        checked={isTaskCompleted}
         color="primary"
         onChange={changeTaskStatus}
-        disabled={task.entityStatus === 'loading'}
+        disabled={isTaskDisabled}
       />
-      <EditableSpan title={task.title} onChange={changeTaskTitle} disabled={task.entityStatus === 'loading'}/>
-      <IconButton onClick={removeTaskHandler} disabled={task.entityStatus === 'loading'}>
+      <EditableSpan title={task.title} onChange={changeTaskTitle} disabled={isTaskDisabled}/>
+      <IconButton onClick={removeTaskHandler} disabled={isTaskDisabled}>
         <Delete/>
       </IconButton>
     </div>

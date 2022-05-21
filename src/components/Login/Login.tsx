@@ -12,7 +12,7 @@ import {useAppDispatch, useAppSelector} from '../../store/store';
 import {Navigate} from 'react-router-dom';
 import {FormValuesType, LoginParamsType} from '../../types';
 import {authSelectors} from '../../store/selectors/';
-import {authActions} from '../../store/reducers/actions';
+import {authActions} from '../../store';
 
 
 export const Login: FC = () => {

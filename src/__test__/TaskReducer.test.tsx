@@ -1,9 +1,8 @@
 import {v1} from "uuid";
-import {tasksReducer, } from "../store/reducers/TasksReducer";
+import {addTask, getTasks, removeTask, tasksReducer, updateTask,} from "../store/reducers/TasksReducer";
 import {TaskPriorities, TaskStatuses} from '../enums';
 import {TasksType, TaskType} from '../types';
-import {getTodolists} from '../store/reducers/actions/TodolistActions';
-import {addTask, getTasks, removeTask, updateTask} from '../store/reducers/actions/TaskActions';
+import {getTodolists} from '../store/reducers/TodolistsReducer';
 
 
 let todolistID1: string;

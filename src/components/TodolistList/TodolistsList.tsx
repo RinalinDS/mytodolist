@@ -6,13 +6,14 @@ import {AddItemForm} from "../common/AddItemForm/AddItemForm";
 import {Todolist} from "./Todolist/Todolist";
 import {Navigate} from "react-router-dom";
 import {authSelectors, todolistSelectors} from '../../store/selectors';
-import {todolistsActions} from '../../store/reducers/actions';
+import {todolistsActions} from '../../store';
+
 
 export const TodolistsList: FC = () => {
   const todolists = useAppSelector(todolistSelectors.selectTodolists)
   const isLoggedIn = useAppSelector(authSelectors.selectIsLoggedIn)
 
-  const {getTodolists, addTodolist} = useActions(todolistsActions)
+  const {addTodolist, getTodolists} = useActions(todolistsActions)
 
   useEffect(() => {
     if (!isLoggedIn) return

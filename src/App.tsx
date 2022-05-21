@@ -12,7 +12,7 @@ import {Login} from './components/Login/Login';
 import {Navigate, Route, Routes, useNavigate} from 'react-router-dom';
 import {RequestStatusType} from './types';
 import {appSelectors, authSelectors} from './store/selectors';
-import {appActions, authActions} from './store/reducers/actions';
+import {appActions, authActions} from './store';
 
 
 export const App: FC = () => {
