@@ -1,5 +1,5 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {FilterValueType, RequestStatusType, TodolistDomainType, TodolistType} from '../../types';
+import {FieldsErrorsType, FilterValueType, RequestStatusType, TodolistDomainType, TodolistType} from '../../types';
 import {handlerServerError, handleServerNetworkError} from '../../utils/error-utils';
 import {todolistApi} from '../../api/API';
 import {setAppStatusAC} from './AppReducer';
@@ -42,7 +42,7 @@ export const removeTodolist = createAsyncThunk('todolists/deleteTodo', async (to
   }
 })
 
-export const addTodolist = createAsyncThunk('todolists/createTodo', async (title: string, {
+export const addTodolist = createAsyncThunk<TodolistType, string, { rejectValue: { errors: Array<string>, fieldsError?: FieldsErrorsType[] } }>('todolists/createTodo', async (title: string, {
   dispatch,
   rejectWithValue
 }) => {
@@ -53,12 +53,12 @@ export const addTodolist = createAsyncThunk('todolists/createTodo', async (title
       dispatch(setAppStatusAC({status: 'succeeded'}))
       return res.data.data.item
     } else {
-      handlerServerError<{ item: TodolistType }>(res.data, dispatch)
-      return rejectWithValue(null)
+      handlerServerError<{ item: TodolistType }>(res.data, dispatch, false)
+      return rejectWithValue({errors: res.data.messages, fieldsError: res.data.fieldsErrors})
     }
   } catch (e) {
-    handleServerNetworkError((e as Error).message, dispatch)
-    return rejectWithValue(null)
+    handleServerNetworkError((e as Error).message, dispatch, false)
+    return rejectWithValue({errors: [(e as Error).message], fieldsError: undefined})
   }
 })
 

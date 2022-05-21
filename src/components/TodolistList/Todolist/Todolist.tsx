@@ -27,6 +27,9 @@ export const Todolist: FC<TodolistPropsType> = memo(({todolistID}) => {
     changeFilter({filter, todolistID: todolistID})
   }, [todolistID])
 
+
+// ya ne ponimayu kak ya peredal funckii naverx iz additem form suda , no oni sid9t v objecte helper ,
+// i tam est callbacki seteerror i settitle, voobwe eto kajets9 plohaya praktika tak delat.
   const addTasksCallback = useCallback(async (title: string, helper: AddItemFormSubmitHelperType) => {
     let thunk = taskActions.addTask({title, todolistID})
     const resultAction = await dispatch(thunk)
