@@ -41,8 +41,8 @@ export const Task: FC<TaskPropsType> = React.memo(({taskID, todolistID}) => {
         disabled={isTaskDisabled}
       />
       <EditableSpan title={task.title} onChange={changeTaskTitle} disabled={isTaskDisabled}/>
-      <IconButton onClick={removeTaskHandler} disabled={isTaskDisabled} style={{position: 'absolute', right: '2px', top: '2px'}}>
-        <Delete/>
+      <IconButton size={'small'} onClick={removeTaskHandler} disabled={isTaskDisabled} style={{position: 'absolute', right: '2px', top: '2px'}}>
+        <Delete fontSize={'small'}/>
       </IconButton>
     </div>
   );

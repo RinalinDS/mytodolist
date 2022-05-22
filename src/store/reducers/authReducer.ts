@@ -1,5 +1,5 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {FieldsErrorsType, LoginParamsType} from '../../types';
+import {LoginParamsType, RejectValueType} from '../../types';
 import {setAppStatusAC} from './AppReducer';
 import {authAPI} from '../../api/API';
 import {handlerServerError, handleServerNetworkError} from '../../utils/error-utils';
@@ -10,7 +10,7 @@ import {clearTodolistsData} from './TodolistsReducer';
 // только андефайнд в филдсерроре надо проверить (action.payload?.fieldsErrors), т.к. его задавал Я.
 // UPD : так как мне теперь не нужен первый тип вместо, то {isLoggedIn: boolean} стал undefined, т.к. у меня пустой ретурн.
 
-export const login = createAsyncThunk<undefined, LoginParamsType, { rejectValue: { errors: Array<string>, fieldsError?: FieldsErrorsType[] } }>('auth/login', async (data: LoginParamsType, {
+export const login = createAsyncThunk<undefined, LoginParamsType, RejectValueType>('auth/login', async (data: LoginParamsType, {
   dispatch,
   rejectWithValue,
 }) => {

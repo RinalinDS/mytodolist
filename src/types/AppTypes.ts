@@ -10,3 +10,4 @@ export type BaseResponseType<T = {}> = {
 }
 
 export type FieldsErrorsType = { field: string, error: string };
+export type RejectValueType = { rejectValue: { errors: Array<string>, fieldsError?: FieldsErrorsType[] } }

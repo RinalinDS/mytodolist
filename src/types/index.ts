@@ -25,4 +25,5 @@ export type {
   RequestStatusType,
   BaseResponseType,
   FieldsErrorsType,
+  RejectValueType,
 } from './AppTypes'

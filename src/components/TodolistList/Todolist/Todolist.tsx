@@ -72,9 +72,9 @@ export const Todolist: FC<TodolistPropsType> = memo(({todolistID}) => {
   const isTodoDisabled = todolist.entityStatus === 'loading'
   return (
     <Paper style={{position: 'relative', padding: '10px', backgroundColor: 'aliceblue'}}>
-      <IconButton disabled={isTodoDisabled} aria-label="delete"
+      <IconButton size={'small'}
                   onClick={deleteTodolistHandler} style={{position: 'absolute', right: '13px', top: '20px'}}>
-        <Delete/>
+        <Delete fontSize={'small'}/>
       </IconButton>
       <h3 style={{marginRight: '35px'}}><EditableSpan title={todolist.title} onChange={changeTodolistTitleHandler}/>
 

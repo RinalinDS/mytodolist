@@ -1,50 +1,50 @@
-import {addTodolist,  clearTodolistsData, getTodolists, removeTodolist} from "./TodolistsReducer";
+import {addTodolist, clearTodolistsData, getTodolists, removeTodolist} from "./TodolistsReducer";
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {
-  FieldsErrorsType,
+  RejectValueType,
   RequestStatusType,
   TasksType,
   TaskType,
+  TodolistType,
   UpdateTaskModelDomainType,
   UpdateTaskModelType
 } from '../../types';
 import {setAppStatusAC} from './AppReducer';
 import {taskAPI} from '../../api/API';
-import {handlerServerError, handleServerNetworkError} from '../../utils/error-utils';
+import {handleAsyncServerError, handleServerNetworkError} from '../../utils/error-utils';
 
 
-export const getTasks = createAsyncThunk('tasks/getTasks', async (todolistID: string, {dispatch}) => {
+export const getTasks = createAsyncThunk('tasks/getTasks', async (todolistID: string, thunkAPI) => {
+  const {dispatch} = thunkAPI
   try {
     dispatch(setAppStatusAC({status: 'loading'}))
     const res = await taskAPI.getTasks(todolistID)
     return {tasks: res.data.items, todolistID}
   } catch (e) {
-    handleServerNetworkError((e as Error).message, dispatch)
+    return handleServerNetworkError((e as Error).message, thunkAPI)
   } finally {
     dispatch(setAppStatusAC({status: 'idle'}))
   }
 })
-export const removeTask = createAsyncThunk('tasks/removeTask', async (param: { todolistID: string, taskID: string }, {
-  dispatch
-}) => {
+export const removeTask = createAsyncThunk('tasks/removeTask', async (param: { todolistID: string, taskID: string }, thunkAPI) => {
+  const {dispatch} = thunkAPI
   try {
     dispatch(setAppStatusAC({status: 'loading'}))
     const res = await taskAPI.deleteTask(param.todolistID, param.taskID)
     if (res.data.resultCode === 0) {
       return {todolistID: param.todolistID, taskID: param.taskID}
     } else {
-      handlerServerError(res.data, dispatch)
+      return handleAsyncServerError(res.data, thunkAPI)
     }
   } catch (e) {
-    handleServerNetworkError((e as Error).message, dispatch)
+    return handleServerNetworkError((e as Error).message, thunkAPI)
   } finally {
     dispatch(setAppStatusAC({status: 'idle'}))
   }
 })
-export const addTask = createAsyncThunk<TaskType, { todolistID: string, title: string },  { rejectValue: { errors: Array<string>, fieldsError?: FieldsErrorsType[] } }>('tasks/addTask', async (param, {
-  dispatch,
-  rejectWithValue
-}) => {
+
+export const addTask = createAsyncThunk<TaskType, { todolistID: string, title: string }, RejectValueType>('tasks/addTask', async (param, thunkAPI) => {
+  const {dispatch} = thunkAPI
   try {
     dispatch(setAppStatusAC({status: 'loading'}))
     const res = await taskAPI.createTask(param.todolistID, param.title)
@@ -52,18 +52,14 @@ export const addTask = createAsyncThunk<TaskType, { todolistID: string, title: s
       dispatch(setAppStatusAC({status: 'succeeded'}))
       return res.data.data.item
     } else {
-      handlerServerError(res.data, dispatch, false)
-      return rejectWithValue({errors: res.data.messages, fieldsError: res.data.fieldsErrors}) // выплюнуть action с типом rejected, v reduxe я его не обрабатываю, хотя можно, но использую его в формике. Еррорс попадает в пейлоад actiona-a
+      return handleAsyncServerError(res.data, thunkAPI)
     }
   } catch (e) {
-    handleServerNetworkError((e as Error).message, dispatch, false)
-    return rejectWithValue({errors: [(e as Error).message], fieldsError: undefined})
+    return handleServerNetworkError((e as Error).message, thunkAPI, false)
   }
 })
-export const updateTask = createAsyncThunk('tasks/updateTask', async (param: { task: TaskType, domainModel: UpdateTaskModelDomainType }, {
-  dispatch,
-  rejectWithValue
-}) => {
+export const updateTask = createAsyncThunk('tasks/updateTask', async (param: { task: TaskType, domainModel: UpdateTaskModelDomainType }, thunkAPI) => {
+  const {dispatch} = thunkAPI
   try {
     dispatch(changeTaskEntityStatusAC({
       entityStatus: 'loading',
@@ -85,12 +81,10 @@ export const updateTask = createAsyncThunk('tasks/updateTask', async (param: { t
       dispatch(setAppStatusAC({status: 'succeeded'}))
       return {todolistID: param.task.todoListId, taskID: param.task.id, domainModel: param.domainModel}
     } else {
-      handlerServerError<{ item: TaskType }>(res.data, dispatch)
-      return rejectWithValue(null)
+      return handleAsyncServerError<{ item: TaskType }>(res.data, thunkAPI)
     }
   } catch (e) {
-    handleServerNetworkError((e as Error).message, dispatch)
-    return rejectWithValue(null)
+    return handleServerNetworkError((e as Error).message, thunkAPI,)
   } finally {
     dispatch(changeTaskEntityStatusAC({entityStatus: 'idle', todolistID: param.task.todoListId, taskID: param.task.id}))
   }
@@ -127,7 +121,7 @@ const slice = createSlice({
         return {}
       })
       .addCase(getTodolists.fulfilled, (state, action) => {
-        action.payload.todolists.forEach((m) => {
+        action.payload.todolists.forEach((m: TodolistType) => {
           state[m.id] = []
         })
       })
