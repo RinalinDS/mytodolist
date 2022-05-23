@@ -9,27 +9,28 @@ import {
   UpdateTaskModelDomainType,
   UpdateTaskModelType
 } from '../../types';
-import {setAppStatusAC} from './AppReducer';
+import {appActions} from './Application/';
 import {taskAPI} from '../../api/API';
 import {handleAsyncServerError, handleServerNetworkError} from '../../utils/error-utils';
 
+const {setAppStatus} = appActions
 
 export const getTasks = createAsyncThunk('tasks/getTasks', async (todolistID: string, thunkAPI) => {
   const {dispatch} = thunkAPI
   try {
-    dispatch(setAppStatusAC({status: 'loading'}))
+    dispatch(setAppStatus({status: 'loading'}))
     const res = await taskAPI.getTasks(todolistID)
     return {tasks: res.data.items, todolistID}
   } catch (e) {
     return handleServerNetworkError((e as Error).message, thunkAPI)
   } finally {
-    dispatch(setAppStatusAC({status: 'idle'}))
+    dispatch(setAppStatus({status: 'idle'}))
   }
 })
 export const removeTask = createAsyncThunk('tasks/removeTask', async (param: { todolistID: string, taskID: string }, thunkAPI) => {
   const {dispatch} = thunkAPI
   try {
-    dispatch(setAppStatusAC({status: 'loading'}))
+    dispatch(setAppStatus({status: 'loading'}))
     const res = await taskAPI.deleteTask(param.todolistID, param.taskID)
     if (res.data.resultCode === 0) {
       return {todolistID: param.todolistID, taskID: param.taskID}
@@ -39,17 +40,17 @@ export const removeTask = createAsyncThunk('tasks/removeTask', async (param: { t
   } catch (e) {
     return handleServerNetworkError((e as Error).message, thunkAPI)
   } finally {
-    dispatch(setAppStatusAC({status: 'idle'}))
+    dispatch(setAppStatus({status: 'idle'}))
   }
 })
 
 export const addTask = createAsyncThunk<TaskType, { todolistID: string, title: string }, RejectValueType>('tasks/addTask', async (param, thunkAPI) => {
   const {dispatch} = thunkAPI
   try {
-    dispatch(setAppStatusAC({status: 'loading'}))
+    dispatch(setAppStatus({status: 'loading'}))
     const res = await taskAPI.createTask(param.todolistID, param.title)
     if (res.data.resultCode === 0) {
-      dispatch(setAppStatusAC({status: 'succeeded'}))
+      dispatch(setAppStatus({status: 'succeeded'}))
       return res.data.data.item
     } else {
       return handleAsyncServerError(res.data, thunkAPI)
@@ -66,7 +67,7 @@ export const updateTask = createAsyncThunk('tasks/updateTask', async (param: { t
       todolistID: param.task.todoListId,
       taskID: param.task.id
     }))
-    dispatch(setAppStatusAC({status: 'loading'}))
+    dispatch(setAppStatus({status: 'loading'}))
     const apiModel: UpdateTaskModelType = {
       title: param.task.title,
       description: param.task.description,
@@ -78,7 +79,7 @@ export const updateTask = createAsyncThunk('tasks/updateTask', async (param: { t
     }
     const res = await taskAPI.updateTask(param.task.todoListId, param.task.id, apiModel)
     if (res.data.resultCode === 0) {
-      dispatch(setAppStatusAC({status: 'succeeded'}))
+      dispatch(setAppStatus({status: 'succeeded'}))
       return {todolistID: param.task.todoListId, taskID: param.task.id, domainModel: param.domainModel}
     } else {
       return handleAsyncServerError<{ item: TaskType }>(res.data, thunkAPI)
@@ -98,7 +99,7 @@ export const asyncActions = {
 }
 
 // REDUCER
-const slice = createSlice({
+export const slice = createSlice({
   name: 'tasks',
   initialState: {} as TasksType,
   reducers: {

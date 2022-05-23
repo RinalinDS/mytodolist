@@ -1,10 +1,7 @@
-import {
-  appReducer, initializeApp,
-  setAppErrorAC,
-  setAppStatusAC,
-} from '../store/reducers/AppReducer';
+import {appActions, appReducer} from '../store/reducers/Application/';
 import {NullableType, RequestStatusType} from '../types';
 
+const {initializeApp, setAppError, setAppStatus} = appActions
 
 type initialStateType = {
   status: RequestStatusType,
@@ -25,7 +22,7 @@ beforeEach(() => {
 
 test('correct error message should be set', () => {
 
-  const endState = appReducer(initialState, setAppErrorAC({error: 'SOMETHING WRONG'}))
+  const endState = appReducer(initialState, setAppError({error: 'SOMETHING WRONG'}))
 
   expect(endState.error).toBe('SOMETHING WRONG');
 
@@ -33,7 +30,7 @@ test('correct error message should be set', () => {
 
 test('correct status should be set', () => {
 
-  const endState = appReducer(initialState, setAppStatusAC({status: 'loading'}))
+  const endState = appReducer(initialState, setAppStatus({status: 'loading'}))
 
   expect(endState.status).toBe('loading');
 

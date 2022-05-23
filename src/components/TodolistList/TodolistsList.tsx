@@ -1,28 +1,25 @@
 import React, {FC, useCallback, useEffect} from "react";
-import {useActions, useAppDispatch, useAppSelector} from "../../store/store";
 import Grid from "@material-ui/core/Grid";
 import {AddItemForm, AddItemFormSubmitHelperType} from "../common/AddItemForm/AddItemForm";
 import {Todolist} from "./Todolist/Todolist";
 import {Navigate} from "react-router-dom";
 import {authSelectors, todolistSelectors} from '../../store/selectors';
 import {todolistsActions} from '../../store';
+import {storeHooks} from '../../hooks';
 
 
 export const TodolistsList: FC = () => {
-
+  const {useActions, useAppDispatch, useAppSelector} = storeHooks
   const dispatch = useAppDispatch()
   const todolists = useAppSelector(todolistSelectors.selectTodolists)
   const isLoggedIn = useAppSelector(authSelectors.selectIsLoggedIn)
-
   const {getTodolists} = useActions(todolistsActions)
 
   const addTodolistsCallback = useCallback(async (title: string, helper: AddItemFormSubmitHelperType) => {
-    console.log('hello')
     let thunk = todolistsActions.addTodolist(title)
     const resultAction = await dispatch(thunk)
     if (todolistsActions.addTodolist.rejected.match(resultAction)) {
       if (resultAction.payload?.errors?.length) {
-        console.log('1')
         const errorMessage = resultAction.payload?.errors[0]
         helper.setError(errorMessage)
       } else {

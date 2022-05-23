@@ -27,3 +27,9 @@ export type {
   FieldsErrorsType,
   RejectValueType,
 } from './AppTypes'
+
+export type {
+  AppRootStateType,
+  ThunkType,
+  AppDispatchType
+} from './StoreTypes'

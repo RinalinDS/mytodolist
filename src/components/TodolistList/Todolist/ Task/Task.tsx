@@ -5,8 +5,8 @@ import {Delete} from "@mui/icons-material/";
 import {EditableSpan} from "../../../common/EditableSpan/EditableSpan";
 import {TaskStatuses} from '../../../../enums'
 import {TaskType} from '../../../../types';
-import {useActions, useAppSelector} from '../../../../store/store';
 import {taskActions} from '../../../../store';
+import {useActions, useAppSelector} from '../../../../hooks/storeHooks';
 
 
 type TaskPropsType = {

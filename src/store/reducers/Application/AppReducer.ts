@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {NullableType, RequestStatusType} from '../../types';
-import {authAPI} from '../../api/API';
-import {setIsLoggedIn} from './authReducer';
+import {NullableType, RequestStatusType} from '../../../types';
+import {authAPI} from '../../../api/API';
+import {setIsLoggedIn} from '../authReducer';
 
 
 // НИКОГДА БЛЯДЬ НЕ ПИШИ ПУСТОЙ ОБЪЕКТ ( {} ) ЕСЛИ НЕТУ ПАРАМЕТРОВ ! ВСТАВЬ РАНДОМНОЕ НАЗВАНИЕ , НО НЕ ПУСТОЙ ОБЪЕКТ !
@@ -18,7 +18,7 @@ export const asyncActions = {
   initializeApp
 }
 
-const slice = createSlice({
+export const slice = createSlice({
   name: 'app',
   initialState: {
     status: 'idle' as RequestStatusType,
@@ -26,10 +26,10 @@ const slice = createSlice({
     isInitialized: false
   },
   reducers: {
-    setAppStatusAC(state, action: PayloadAction<{ status: RequestStatusType }>) {
+    setAppStatus(state, action: PayloadAction<{ status: RequestStatusType }>) {
       state.status = action.payload.status
     },
-    setAppErrorAC(state, action: PayloadAction<{ error: NullableType<string> }>) {
+    setAppError(state, action: PayloadAction<{ error: NullableType<string> }>) {
       state.error = action.payload.error
     },
   },
@@ -42,17 +42,9 @@ const slice = createSlice({
 
 })
 
-export const appReducer = slice.reducer
-
-// это реально ЭКШН КРЕАТОРЫ , автоматом сформрованные РедаксТулКитом, на основе методов(мини-редюсеров)
-// да они идентичны по названию, но это разные штуки.
-export const {setAppStatusAC, setAppErrorAC} = slice.actions
 
 
-export type setAppStatusACType = ReturnType<typeof setAppStatusAC>
-export type setAppErrorACType = ReturnType<typeof setAppErrorAC>
 
-export type AppReducerActionsType = setAppStatusACType | setAppErrorACType
 
 
 

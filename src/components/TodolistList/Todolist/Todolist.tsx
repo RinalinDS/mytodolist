@@ -2,7 +2,7 @@ import React, {FC, memo, useCallback} from "react";
 import {AddItemForm, AddItemFormSubmitHelperType} from "../../common/AddItemForm/AddItemForm";
 import {EditableSpan} from "../../common/EditableSpan/EditableSpan";
 import {Button, IconButton} from "@material-ui/core";
-import {useActions, useAppDispatch, useAppSelector} from "../../../store/store";
+import {storeHooks} from './../../../hooks'
 import {Task} from "./ Task/Task";
 import {Delete} from "@mui/icons-material";
 import {TaskStatuses} from '../../../enums';
@@ -16,7 +16,7 @@ type TodolistPropsType = {
 }
 
 export const Todolist: FC<TodolistPropsType> = memo(({todolistID}) => {
-
+  const {useActions, useAppDispatch, useAppSelector} = storeHooks
   const dispatch = useAppDispatch()
 
   const tasks = useAppSelector<Array<TaskType>>(state => state.tasks[todolistID])

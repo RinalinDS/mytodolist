@@ -4,22 +4,24 @@ import AppBar from "@material-ui/core/AppBar";
 import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
 import Toolbar from "@material-ui/core/Toolbar";
-import CircularProgress from '@mui/material/CircularProgress';
 import {TodolistsList} from "./components/TodolistList/TodolistsList";
-import {useActions, useAppSelector} from "./store/store";
+import {storeHooks} from './hooks'
 import {ErrorSnackbar} from "./components/common/SnackbarError/SnackbarError";
 import {Login} from './components/Login/Login';
 import {Navigate, Route, Routes, useNavigate} from 'react-router-dom';
-import {RequestStatusType} from './types';
 import {appSelectors, authSelectors} from './store/selectors';
 import {appActions, authActions} from './store';
+import {InitializePreloader} from './components/Prealoder/InitializePreloader';
 
 
 export const App: FC = () => {
-  const status = useAppSelector<RequestStatusType>(appSelectors.selectStatus)
-  const isInitialized = useAppSelector<boolean>(appSelectors.selectIsInitialized)
-  const isLoggedIn = useAppSelector<boolean>(authSelectors.selectIsLoggedIn)
+  const {useActions, useAppSelector} = storeHooks
   const navigate = useNavigate();
+
+  const status = useAppSelector(appSelectors.selectStatus)
+  const isInitialized = useAppSelector(appSelectors.selectIsInitialized)
+  const isLoggedIn = useAppSelector(authSelectors.selectIsLoggedIn)
+
 
   const {initializeApp} = useActions(appActions)
   const {logout} = useActions(authActions)
@@ -39,10 +41,7 @@ export const App: FC = () => {
   }
 
   if (!isInitialized) {
-    return <div
-      style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
-      <CircularProgress/>
-    </div>
+    return <InitializePreloader/>
   }
 
   return (
@@ -51,12 +50,13 @@ export const App: FC = () => {
         <Toolbar>
           <Button color="inherit" onClick={backHomeHandler}>Home</Button>
           {isLoggedIn && <Button color="inherit" onClick={logoutHandler}>Log out</Button>}
-
         </Toolbar>
       </AppBar>
       {status === 'loading' && <LinearProgress color={'secondary'}/>}
       <Container fixed style={{marginBottom: '50px'}}>
         <Routes>
+          // TODO вынести в enum пути
+          // TODO вынести статус коды в енам
           <Route path={'/'} element={<TodolistsList/>}/>
           <Route path={'/login'} element={<Login/>}/>
           <Route path={'/404'} element={<h1>Someone FUCKED UP</h1>}/>

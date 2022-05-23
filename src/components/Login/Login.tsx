@@ -8,7 +8,7 @@ import FormLabel from '@mui/material/FormLabel';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import {FormikHelpers, useFormik} from 'formik';
-import {useAppDispatch, useAppSelector} from '../../store/store';
+import {storeHooks} from '../../hooks'
 import {Navigate} from 'react-router-dom';
 import {FormValuesType, LoginParamsType} from '../../types';
 import {authSelectors} from '../../store/selectors/';
@@ -16,6 +16,7 @@ import {authActions} from '../../store';
 
 
 export const Login: FC = () => {
+  const {useAppDispatch, useAppSelector} = storeHooks
   const isLoggedIn = useAppSelector<boolean>(authSelectors.selectIsLoggedIn)
   const dispatch = useAppDispatch()
 
