@@ -11,19 +11,19 @@ import {
 } from '../../types';
 import {appActions} from './Application/';
 import {taskAPI} from '../../api/API';
-import {handleAsyncServerError, handleServerNetworkError} from '../../utils/error-utils';
+import {handleAsyncServerError, handleAsyncServerNetworkError} from '../../utils/error-utils';
 import {StatusCode} from '../../enums';
 
 const {setAppStatus} = appActions
 
-export const getTasks = createAsyncThunk('tasks/getTasks', async (todolistID: string, thunkAPI) => {
+export const getTasks = createAsyncThunk<{ tasks: TaskType[], todolistID: string }, string, RejectValueType>('tasks/getTasks', async (todolistID, thunkAPI) => {
   const {dispatch} = thunkAPI
   try {
     dispatch(setAppStatus({status: 'loading'}))
     const res = await taskAPI.getTasks(todolistID)
     return {tasks: res.data.items, todolistID}
   } catch (e) {
-    return handleServerNetworkError((e as Error).message, thunkAPI)
+    return handleAsyncServerNetworkError((e as Error).message, thunkAPI)
   } finally {
     dispatch(setAppStatus({status: 'idle'}))
   }
@@ -39,7 +39,7 @@ export const removeTask = createAsyncThunk('tasks/removeTask', async (param: { t
       return handleAsyncServerError(res.data, thunkAPI)
     }
   } catch (e) {
-    return handleServerNetworkError((e as Error).message, thunkAPI)
+    return handleAsyncServerNetworkError((e as Error).message, thunkAPI)
   } finally {
     dispatch(setAppStatus({status: 'idle'}))
   }
@@ -57,7 +57,7 @@ export const addTask = createAsyncThunk<TaskType, { todolistID: string, title: s
       return handleAsyncServerError(res.data, thunkAPI)
     }
   } catch (e) {
-    return handleServerNetworkError((e as Error).message, thunkAPI, false)
+    return handleAsyncServerNetworkError((e as Error).message, thunkAPI, false)
   }
 })
 export const updateTask = createAsyncThunk('tasks/updateTask', async (param: { task: TaskType, domainModel: UpdateTaskModelDomainType }, thunkAPI) => {
@@ -86,7 +86,7 @@ export const updateTask = createAsyncThunk('tasks/updateTask', async (param: { t
       return handleAsyncServerError<{ item: TaskType }>(res.data, thunkAPI)
     }
   } catch (e) {
-    return handleServerNetworkError((e as Error).message, thunkAPI,)
+    return handleAsyncServerNetworkError((e as Error).message, thunkAPI,)
   } finally {
     dispatch(changeTaskEntityStatusAC({entityStatus: 'idle', todolistID: param.task.todoListId, taskID: param.task.id}))
   }
@@ -128,15 +128,11 @@ export const slice = createSlice({
         })
       })
       .addCase(getTasks.fulfilled, (state, action) => {
-        if (action.payload) {
           state[action.payload.todolistID] = action.payload.tasks
-        }
       })
       .addCase(removeTask.fulfilled, (state, action) => {
-        if (action.payload) {
           const index = state[action.payload.todolistID].findIndex(s => s.id === action.payload?.taskID)
           state[action.payload.todolistID].splice(index, 1)
-        }
       })
       .addCase(addTask.fulfilled, (state, action) => {
         state[action.payload.todoListId].unshift(action.payload)

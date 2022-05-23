@@ -16,7 +16,7 @@ export const handleAsyncServerError = <T>(data: BaseResponseType<T>, thunkAPI: T
 }
 
 
-export const handleServerNetworkError = (message: string, thunkAPI: ThunkApiType, showError: boolean = true) => {
+export const handleAsyncServerNetworkError = (message: string, thunkAPI: ThunkApiType, showError: boolean = true) => {
   if (showError) {
     thunkAPI.dispatch(appActions.setAppError({error: message ? message : 'Some Error occurred'}))
   }

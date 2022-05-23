@@ -1,6 +1,6 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {FilterValueType, RejectValueType, RequestStatusType, TodolistDomainType, TodolistType} from '../../types';
-import {handleAsyncServerError, handleServerNetworkError} from '../../utils/error-utils';
+import {handleAsyncServerError, handleAsyncServerNetworkError} from '../../utils/error-utils';
 import {todolistApi} from '../../api/API';
 import {appActions} from './Application/';
 import {getTasks} from './TasksReducer';
@@ -8,7 +8,9 @@ import {StatusCode} from '../../enums';
 
 const {setAppStatus} = appActions
 
-export const getTodolists = createAsyncThunk('todolists/getTodos', async (param, thunkAPI) => {
+// чтобы в редюсере не пришлось отдельно типизировать в мапе, нужно все равно писать типизацию createAsyncThunk, где:
+// 1-й параметр типизации - это тип успешного ретурна, 2й тип входящих аргументов , 3-й тип велью ,которое при реджекте
+export const getTodolists = createAsyncThunk<{todolists: TodolistType[]}, null, RejectValueType>('todolists/getTodos', async (param, thunkAPI) => {
   const {dispatch} = thunkAPI
   try {
     dispatch(setAppStatus({status: 'loading'}))
@@ -19,7 +21,7 @@ export const getTodolists = createAsyncThunk('todolists/getTodos', async (param,
     dispatch(setAppStatus({status: 'succeeded'}))
     return {todolists: res.data}
   } catch (e) {
-    return handleServerNetworkError((e as Error).message, thunkAPI, false)
+    return handleAsyncServerNetworkError((e as Error).message, thunkAPI, false)
   }
 })
 
@@ -36,7 +38,7 @@ export const removeTodolist = createAsyncThunk('todolists/deleteTodo', async (to
       return handleAsyncServerError(res.data, thunkAPI)
     }
   } catch (e) {
-    return handleServerNetworkError((e as Error).message, thunkAPI)
+    return handleAsyncServerNetworkError((e as Error).message, thunkAPI)
   }
 })
 
@@ -52,7 +54,7 @@ export const addTodolist = createAsyncThunk<TodolistType, string, RejectValueTyp
       return handleAsyncServerError<{ item: TodolistType }>(res.data, thunkAPI)
     }
   } catch (e) {
-    return handleServerNetworkError((e as Error).message, thunkAPI, false)
+    return handleAsyncServerNetworkError((e as Error).message, thunkAPI, false)
   }
 })
 
@@ -68,7 +70,7 @@ export const changeTodolistTitle = createAsyncThunk('todolists/changeTodoTitle',
       return handleAsyncServerError(res.data, thunkAPI)
     }
   } catch (e) {
-    return handleServerNetworkError((e as Error).message, thunkAPI)
+    return handleAsyncServerNetworkError((e as Error).message, thunkAPI)
   }
 })
 
@@ -98,7 +100,7 @@ export const slice = createSlice({
   extraReducers: builder => {
     builder
       .addCase(getTodolists.fulfilled, (state, action) => {
-        return action.payload.todolists.map((m: TodolistType) => ({...m, filter: "all", entityStatus: 'idle'}))
+        return action.payload.todolists.map((m) => ({...m, filter: "all", entityStatus: 'idle'}))
       })
       .addCase(removeTodolist.fulfilled, (state, action) => {
         const index = state.findIndex(s => s.id === action.payload)

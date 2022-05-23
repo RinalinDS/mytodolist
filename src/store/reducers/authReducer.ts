@@ -2,7 +2,7 @@ import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {LoginParamsType, RejectValueType} from '../../types';
 import {appActions} from './Application/';
 import {authAPI} from '../../api/API';
-import {handleAsyncServerError, handleServerNetworkError} from '../../utils/error-utils';
+import {handleAsyncServerError, handleAsyncServerNetworkError} from '../../utils/error-utils';
 import {clearTodolistsData} from './TodolistsReducer';
 import {StatusCode} from '../../enums';
 
@@ -24,7 +24,7 @@ export const login = createAsyncThunk<undefined, LoginParamsType, RejectValueTyp
       return handleAsyncServerError(res.data, thunkAPI)
     }
   } catch (e) {
-    return handleServerNetworkError((e as Error).message, thunkAPI)
+    return handleAsyncServerNetworkError((e as Error).message, thunkAPI)
   }
 })
 // НИКОГДА БЛЯДЬ НЕ ПИШИ ПУСТОЙ ОБЪЕКТ ( {} ) ЕСЛИ НЕT ПАРАМЕТРОВ ! ВСТАВЬ РАНДОМНОЕ НАЗВАНИЕ , НО НЕ ПУСТОЙ ОБЪЕКТ !
@@ -41,7 +41,7 @@ export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
       return handleAsyncServerError(res.data, thunkAPI)
     }
   } catch (e) {
-    return handleServerNetworkError((e as Error).message, thunkAPI)
+    return handleAsyncServerNetworkError((e as Error).message, thunkAPI)
   }
 })
 
