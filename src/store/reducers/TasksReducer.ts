@@ -9,29 +9,28 @@ import {
   UpdateTaskModelDomainType,
   UpdateTaskModelType
 } from '../../types';
-import {appActions} from './Application/';
 import {taskAPI} from '../../api/API';
 import {handleAsyncServerError, handleAsyncServerNetworkError} from '../../utils/error-utils';
 import {StatusCode} from '../../enums';
+import {appActions} from './Application';
 
-const {setAppStatus} = appActions
 
 export const getTasks = createAsyncThunk<{ tasks: TaskType[], todolistID: string }, string, RejectValueType>('tasks/getTasks', async (todolistID, thunkAPI) => {
   const {dispatch} = thunkAPI
   try {
-    dispatch(setAppStatus({status: 'loading'}))
+    dispatch(appActions.setAppStatus({status: 'loading'}))
     const res = await taskAPI.getTasks(todolistID)
     return {tasks: res.data.items, todolistID}
   } catch (e) {
     return handleAsyncServerNetworkError((e as Error).message, thunkAPI)
   } finally {
-    dispatch(setAppStatus({status: 'idle'}))
+    dispatch(appActions.setAppStatus({status: 'idle'}))
   }
 })
-export const removeTask = createAsyncThunk('tasks/removeTask', async (param: { todolistID: string, taskID: string }, thunkAPI) => {
+export const removeTask = createAsyncThunk<{todolistID: string, taskID: string }, {todolistID: string, taskID: string}, RejectValueType>('tasks/removeTask', async (param, thunkAPI) => {
   const {dispatch} = thunkAPI
   try {
-    dispatch(setAppStatus({status: 'loading'}))
+    dispatch(appActions.setAppStatus({status: 'loading'}))
     const res = await taskAPI.deleteTask(param.todolistID, param.taskID)
     if (res.data.resultCode === StatusCode.Success) {
       return {todolistID: param.todolistID, taskID: param.taskID}
@@ -41,17 +40,17 @@ export const removeTask = createAsyncThunk('tasks/removeTask', async (param: { t
   } catch (e) {
     return handleAsyncServerNetworkError((e as Error).message, thunkAPI)
   } finally {
-    dispatch(setAppStatus({status: 'idle'}))
+    dispatch(appActions.setAppStatus({status: 'idle'}))
   }
 })
 
 export const addTask = createAsyncThunk<TaskType, { todolistID: string, title: string }, RejectValueType>('tasks/addTask', async (param, thunkAPI) => {
   const {dispatch} = thunkAPI
   try {
-    dispatch(setAppStatus({status: 'loading'}))
+    dispatch(appActions.setAppStatus({status: 'loading'}))
     const res = await taskAPI.createTask(param.todolistID, param.title)
     if (res.data.resultCode === StatusCode.Success) {
-      dispatch(setAppStatus({status: 'succeeded'}))
+      dispatch(appActions.setAppStatus({status: 'succeeded'}))
       return res.data.data.item
     } else {
       return handleAsyncServerError(res.data, thunkAPI)
@@ -60,7 +59,7 @@ export const addTask = createAsyncThunk<TaskType, { todolistID: string, title: s
     return handleAsyncServerNetworkError((e as Error).message, thunkAPI, false)
   }
 })
-export const updateTask = createAsyncThunk('tasks/updateTask', async (param: { task: TaskType, domainModel: UpdateTaskModelDomainType }, thunkAPI) => {
+export const updateTask = createAsyncThunk<{todolistID: string, taskID: string, domainModel: UpdateTaskModelDomainType}, { task: TaskType, domainModel: UpdateTaskModelDomainType }, RejectValueType>('tasks/updateTask', async (param, thunkAPI) => {
   const {dispatch} = thunkAPI
   try {
     dispatch(changeTaskEntityStatusAC({
@@ -68,7 +67,7 @@ export const updateTask = createAsyncThunk('tasks/updateTask', async (param: { t
       todolistID: param.task.todoListId,
       taskID: param.task.id
     }))
-    dispatch(setAppStatus({status: 'loading'}))
+    dispatch(appActions.setAppStatus({status: 'loading'}))
     const apiModel: UpdateTaskModelType = {
       title: param.task.title,
       description: param.task.description,
@@ -80,7 +79,7 @@ export const updateTask = createAsyncThunk('tasks/updateTask', async (param: { t
     }
     const res = await taskAPI.updateTask(param.task.todoListId, param.task.id, apiModel)
     if (res.data.resultCode === StatusCode.Success) {
-      dispatch(setAppStatus({status: 'succeeded'}))
+      dispatch(appActions.setAppStatus({status: 'succeeded'}))
       return {todolistID: param.task.todoListId, taskID: param.task.id, domainModel: param.domainModel}
     } else {
       return handleAsyncServerError<{ item: TaskType }>(res.data, thunkAPI)

@@ -43,8 +43,7 @@ export const slice = createSlice({
 
 })
 
-
-
+export const {setAppStatus, setAppError} = slice.actions
 
 
 
