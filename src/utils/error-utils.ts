@@ -1,5 +1,4 @@
 import {appActions} from "../store/reducers/Application/";
-import {Dispatch} from "redux";
 import {BaseResponseType} from '../types';
 
 type ThunkApiType = {
@@ -7,12 +6,6 @@ type ThunkApiType = {
   rejectWithValue: Function
 }
 
-export const handlerServerError = <T>(data: BaseResponseType<T>, dispatch: Dispatch,  showError: boolean = true) => {
-  if (showError) {
-    dispatch(appActions.setAppError({error: data.messages.length ? data.messages[0] : 'Some Error occurred'}))
-  }
-  dispatch(appActions.setAppStatus({status: 'failed'}))
-}
 
 export const handleAsyncServerError = <T>(data: BaseResponseType<T>, thunkAPI: ThunkApiType, showError: boolean = true) => {
   if (showError) {
@@ -23,7 +16,7 @@ export const handleAsyncServerError = <T>(data: BaseResponseType<T>, thunkAPI: T
 }
 
 
-export const handleServerNetworkError = (message: string, thunkAPI : ThunkApiType , showError: boolean = true) => {
+export const handleServerNetworkError = (message: string, thunkAPI: ThunkApiType, showError: boolean = true) => {
   if (showError) {
     thunkAPI.dispatch(appActions.setAppError({error: message ? message : 'Some Error occurred'}))
   }

@@ -2,7 +2,7 @@ import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {LoginParamsType, RejectValueType} from '../../types';
 import {appActions} from './Application/';
 import {authAPI} from '../../api/API';
-import {handlerServerError, handleServerNetworkError} from '../../utils/error-utils';
+import {handleAsyncServerError, handleServerNetworkError} from '../../utils/error-utils';
 import {clearTodolistsData} from './TodolistsReducer';
 import {StatusCode} from '../../enums';
 
@@ -21,7 +21,7 @@ export const login = createAsyncThunk<undefined, LoginParamsType, RejectValueTyp
       dispatch(appActions.setAppStatus({status: 'succeeded'}))
       return; // получается , что если я нажму ретурн, значит позитивный ауткам, а значит можно не передавать лишний раз "тру", а в редюсере менять без пейлоада на "тру"
     } else {
-      handlerServerError(res.data, dispatch)
+      handleAsyncServerError(res.data, thunkAPI)
       return rejectWithValue({errors: res.data.messages, fieldsError: res.data.fieldsErrors}) // выплюнуть action с типом rejected, v reduxe я его не обрабатываю, хотя можно, но использую его в формике. Еррорс попадает в пейлоад actiona-a
     }
   } catch (e) {
@@ -40,7 +40,7 @@ export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
       dispatch(clearTodolistsData())
       return
     } else {
-      handlerServerError(res.data, dispatch)
+      handleAsyncServerError(res.data, thunkAPI)
       return rejectWithValue({errors: res.data.messages, fieldsError: res.data.fieldsErrors})
     }
   } catch (e) {
