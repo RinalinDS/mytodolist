@@ -1,3 +1,10 @@
+import * as TaskTypes from './TaskTypes'
+
+export {
+  TaskTypes
+}
+
+
 export type {
   TasksType,
   TaskType,

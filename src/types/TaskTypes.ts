@@ -1,4 +1,4 @@
-import {TaskPriorities, TaskStatuses} from '../enums';
+import {TaskPriority, TaskStatus} from '../enums';
 import {RequestStatusType} from './index';
 
 export type TasksType = {
@@ -23,8 +23,8 @@ export type TaskType = {
   description: string
   id: string
   title: string
-  status: TaskStatuses
-  priority: TaskPriorities
+  status: TaskStatus
+  priority: TaskPriority
   todoListId: string
   order: number
   startDate: string

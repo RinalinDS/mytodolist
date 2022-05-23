@@ -1,6 +1,6 @@
 import {v1} from "uuid";
 import {addTask, getTasks, removeTask, tasksReducer, updateTask,} from "../store/reducers/TasksReducer";
-import {TaskPriorities, TaskStatuses} from '../enums';
+import {TaskPriority, TaskStatus} from '../enums';
 import {TasksType, TaskType} from '../types';
 import {getTodolists} from '../store/reducers/TodolistsReducer';
 
@@ -18,52 +18,52 @@ beforeEach(() => {
       {
         id: v1(),
         title: "HTML",
-        status: TaskStatuses.Completed,
+        status: TaskStatus.Completed,
         addedDate: '',
         deadline: '',
         description: '',
         startDate: '',
         order: 0,
-        priority: TaskPriorities.Low,
+        priority: TaskPriority.Low,
         todoListId: todolistID1,
         entityStatus: 'idle'
       },
       {
         id: v1(),
         title: "JS",
-        status: TaskStatuses.Completed,
+        status: TaskStatus.Completed,
         addedDate: '',
         deadline: '',
         description: '',
         startDate: '',
         order: 0,
-        priority: TaskPriorities.Low,
+        priority: TaskPriority.Low,
         todoListId: todolistID1,
         entityStatus: 'idle'
       },
       {
         id: v1(),
         title: "React",
-        status: TaskStatuses.New,
+        status: TaskStatus.New,
         addedDate: '',
         deadline: '',
         description: '',
         startDate: '',
         order: 0,
-        priority: TaskPriorities.Low,
+        priority: TaskPriority.Low,
         todoListId: todolistID1,
         entityStatus: 'idle'
       },
       {
         id: v1(),
         title: "Redux",
-        status: TaskStatuses.New,
+        status: TaskStatus.New,
         addedDate: '',
         deadline: '',
         description: '',
         startDate: '',
         order: 0,
-        priority: TaskPriorities.Low,
+        priority: TaskPriority.Low,
         todoListId: todolistID1,
         entityStatus: 'idle',
       }
@@ -72,13 +72,13 @@ beforeEach(() => {
       {
         id: v1(),
         title: "Lucky number of Slevin",
-        status: TaskStatuses.Completed,
+        status: TaskStatus.Completed,
         addedDate: '',
         deadline: '',
         description: '',
         startDate: '',
         order: 0,
-        priority: TaskPriorities.Low,
+        priority: TaskPriority.Low,
         todoListId: todolistID2,
         entityStatus: 'idle',
       },
@@ -86,12 +86,12 @@ beforeEach(() => {
         id: v1(),
         title: "Inception",
         addedDate: '',
-        status: TaskStatuses.New,
+        status: TaskStatus.New,
         deadline: '',
         description: '',
         startDate: '',
         order: 0,
-        priority: TaskPriorities.Low,
+        priority: TaskPriority.Low,
         todoListId: todolistID2,
         entityStatus: 'idle',
       },
@@ -120,11 +120,11 @@ test("proper task should be added", () => {
   const task: TaskType = {
     id: '1',
     title: newTaskTitle,
-    status: TaskStatuses.New,
+    status: TaskStatus.New,
     addedDate: '',
     startDate: '',
     order: 0,
-    priority: TaskPriorities.Low,
+    priority: TaskPriority.Low,
     todoListId: todolistID1,
     deadline: ' ',
     description: '',
@@ -147,11 +147,11 @@ test("proper task should have new status", () => {
   const task: TaskType = {
     id: '1',
     title: 'DOES IT MATTER?',
-    status: TaskStatuses.New,
+    status: TaskStatus.New,
     addedDate: '',
     startDate: '',
     order: 0,
-    priority: TaskPriorities.Low,
+    priority: TaskPriority.Low,
     todoListId: todolistID1,
     deadline: ' ',
     description: '',
@@ -160,24 +160,24 @@ test("proper task should have new status", () => {
   const updatedTaskStatus = tasksReducer(tasks, updateTask.fulfilled({
     todolistID: todolistID2,
     taskID: tasks[todolistID2][0].id,
-    domainModel: {status: TaskStatuses.New}
-  }, '', {task, domainModel: {status: TaskStatuses.New}}))
+    domainModel: {status: TaskStatus.New}
+  }, '', {task, domainModel: {status: TaskStatus.New}}))
 
   expect(updatedTaskStatus[todolistID1].length).toBe(4)
   expect(updatedTaskStatus[todolistID2].length).toBe(2)
-  expect(updatedTaskStatus[todolistID1][2].status).toBe(TaskStatuses.New)
-  expect(updatedTaskStatus[todolistID2][0].status).toBe(TaskStatuses.New)
+  expect(updatedTaskStatus[todolistID1][2].status).toBe(TaskStatus.New)
+  expect(updatedTaskStatus[todolistID2][0].status).toBe(TaskStatus.New)
 })
 
 test("proper task should have new title", () => {
   const task: TaskType = {
     id: '1',
     title: 'DOES IT MATTER?',
-    status: TaskStatuses.New,
+    status: TaskStatus.New,
     addedDate: '',
     startDate: '',
     order: 0,
-    priority: TaskPriorities.Low,
+    priority: TaskPriority.Low,
     todoListId: todolistID1,
     deadline: ' ',
     description: '',
@@ -194,8 +194,8 @@ test("proper task should have new title", () => {
 
   expect(updatedTaskTitle[todolistID1].length).toBe(4)
   expect(updatedTaskTitle[todolistID2].length).toBe(2)
-  expect(updatedTaskTitle[todolistID1][2].status).toBe(TaskStatuses.New)
-  expect(updatedTaskTitle[todolistID2][0].status).toBe(TaskStatuses.Completed)
+  expect(updatedTaskTitle[todolistID1][2].status).toBe(TaskStatus.New)
+  expect(updatedTaskTitle[todolistID2][0].status).toBe(TaskStatus.Completed)
   expect(updatedTaskTitle[todolistID2][0].title).toBe("Centurion")
   expect(updatedTaskTitle[todolistID2][1].title).toBe("Inception")
   expect(updatedTaskTitle[todolistID1][0].title).toBe("HTML")

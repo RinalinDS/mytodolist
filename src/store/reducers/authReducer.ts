@@ -4,6 +4,7 @@ import {appActions} from './Application/';
 import {authAPI} from '../../api/API';
 import {handlerServerError, handleServerNetworkError} from '../../utils/error-utils';
 import {clearTodolistsData} from './TodolistsReducer';
+import {StatusCode} from '../../enums';
 
 // вот эта огромная типизация снизу : 1е это типизация fullfilled payloda , 2е, типизация передаваемых аргументов в санку, 3е типизация reject payloda.
 // чтобы в формике не говорило, что action.payload при reject - type unknown, а нормально все было,
@@ -16,7 +17,7 @@ export const login = createAsyncThunk<undefined, LoginParamsType, RejectValueTyp
   try {
     dispatch(appActions.setAppStatus({status: 'loading'}))
     const res = await authAPI.login(data)
-    if (res.data.resultCode === 0) {
+    if (res.data.resultCode === StatusCode.Success) {
       dispatch(appActions.setAppStatus({status: 'succeeded'}))
       return; // получается , что если я нажму ретурн, значит позитивный ауткам, а значит можно не передавать лишний раз "тру", а в редюсере менять без пейлоада на "тру"
     } else {
@@ -34,7 +35,7 @@ export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
   try {
     dispatch(appActions.setAppStatus({status: 'loading'}))
     const res = await authAPI.logout()
-    if (res.data.resultCode === 0) {
+    if (res.data.resultCode === StatusCode.Success) {
       dispatch(appActions.setAppStatus({status: 'succeeded'}))
       dispatch(clearTodolistsData())
       return

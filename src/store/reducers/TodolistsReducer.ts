@@ -4,6 +4,7 @@ import {handleAsyncServerError, handleServerNetworkError} from '../../utils/erro
 import {todolistApi} from '../../api/API';
 import {appActions} from './Application/';
 import {getTasks} from './TasksReducer';
+import {StatusCode} from '../../enums';
 
 const {setAppStatus} = appActions
 
@@ -28,7 +29,7 @@ export const removeTodolist = createAsyncThunk('todolists/deleteTodo', async (to
     dispatch(setAppStatus({status: 'loading'}))
     dispatch(changeEntityStatus({entityStatus: 'loading', todolistID}))
     const res = await todolistApi.deleteTodo(todolistID)
-    if (res.data.resultCode === 0) {
+    if (res.data.resultCode === StatusCode.Success) {
       dispatch(setAppStatus({status: 'succeeded'}))
       return todolistID
     } else {
@@ -44,7 +45,7 @@ export const addTodolist = createAsyncThunk<TodolistType, string, RejectValueTyp
   try {
     dispatch(setAppStatus({status: 'loading'}))
     const res = await todolistApi.createTodo(title)
-    if (res.data.resultCode === 0) {
+    if (res.data.resultCode === StatusCode.Success) {
       dispatch(setAppStatus({status: 'succeeded'}))
       return res.data.data.item
     } else {
@@ -60,7 +61,7 @@ export const changeTodolistTitle = createAsyncThunk('todolists/changeTodoTitle',
   try {
     dispatch(setAppStatus({status: 'loading'}))
     const res = await todolistApi.updateTodoTitle(param.title, param.todolistID)
-    if (res.data.resultCode === 0) {
+    if (res.data.resultCode === StatusCode.Success) {
       dispatch(setAppStatus({status: 'succeeded'}))
       return {todolistID: param.todolistID, title: param.title}
     } else {

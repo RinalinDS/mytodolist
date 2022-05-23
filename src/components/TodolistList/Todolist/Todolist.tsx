@@ -5,7 +5,7 @@ import {Button, IconButton} from "@material-ui/core";
 import {storeHooks} from './../../../hooks'
 import {Task} from "./ Task/Task";
 import {Delete} from "@mui/icons-material";
-import {TaskStatuses} from '../../../enums';
+import {TaskStatus} from '../../../enums';
 import {FilterValueType, TaskType, TodolistDomainType} from '../../../types';
 import {taskActions, todolistsActions} from '../../../store';
 import Paper from '@material-ui/core/Paper';
@@ -64,10 +64,10 @@ export const Todolist: FC<TodolistPropsType> = memo(({todolistID}) => {
 
   let tasksForTodolist = tasks
   if (todolist.filter === "active") {
-    tasksForTodolist = tasks.filter(f => f.status === TaskStatuses.New);
+    tasksForTodolist = tasks.filter(f => f.status === TaskStatus.New);
   }
   if (todolist.filter === "completed") {
-    tasksForTodolist = tasks.filter(f => f.status === TaskStatuses.Completed);
+    tasksForTodolist = tasks.filter(f => f.status === TaskStatus.Completed);
   }
   const isTodoDisabled = todolist.entityStatus === 'loading'
   return (

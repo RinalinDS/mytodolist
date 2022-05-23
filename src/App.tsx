@@ -11,7 +11,8 @@ import {Login} from './components/Login/Login';
 import {Navigate, Route, Routes, useNavigate} from 'react-router-dom';
 import {appSelectors, authSelectors} from './store/selectors';
 import {appActions, authActions} from './store';
-import {InitializePreloader} from './components/Prealoder/InitializePreloader';
+import {InitializePreloader} from './components/common/Prealoder/InitializePreloader';
+import {Path} from './enums';
 
 
 export const App: FC = () => {
@@ -55,12 +56,10 @@ export const App: FC = () => {
       {status === 'loading' && <LinearProgress color={'secondary'}/>}
       <Container fixed style={{marginBottom: '50px'}}>
         <Routes>
-          // TODO вынести в enum пути
-          // TODO вынести статус коды в енам
-          <Route path={'/'} element={<TodolistsList/>}/>
-          <Route path={'/login'} element={<Login/>}/>
-          <Route path={'/404'} element={<h1>Someone FUCKED UP</h1>}/>
-          <Route path={'*'} element={<Navigate to={'/404'}/>}/>
+          <Route path={Path.Home} element={<TodolistsList/>}/>
+          <Route path={Path.Login} element={<Login/>}/>
+          <Route path={Path.ErrorPage} element={<h1>Someone FUCKED UP</h1>}/>
+          <Route path={Path.AnyOther} element={<Navigate to={Path.ErrorPage}/>}/>
         </Routes>
       </Container>
       <ErrorSnackbar/>

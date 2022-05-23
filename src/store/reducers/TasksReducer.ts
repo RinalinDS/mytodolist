@@ -12,6 +12,7 @@ import {
 import {appActions} from './Application/';
 import {taskAPI} from '../../api/API';
 import {handleAsyncServerError, handleServerNetworkError} from '../../utils/error-utils';
+import {StatusCode} from '../../enums';
 
 const {setAppStatus} = appActions
 
@@ -32,7 +33,7 @@ export const removeTask = createAsyncThunk('tasks/removeTask', async (param: { t
   try {
     dispatch(setAppStatus({status: 'loading'}))
     const res = await taskAPI.deleteTask(param.todolistID, param.taskID)
-    if (res.data.resultCode === 0) {
+    if (res.data.resultCode === StatusCode.Success) {
       return {todolistID: param.todolistID, taskID: param.taskID}
     } else {
       return handleAsyncServerError(res.data, thunkAPI)
@@ -49,7 +50,7 @@ export const addTask = createAsyncThunk<TaskType, { todolistID: string, title: s
   try {
     dispatch(setAppStatus({status: 'loading'}))
     const res = await taskAPI.createTask(param.todolistID, param.title)
-    if (res.data.resultCode === 0) {
+    if (res.data.resultCode === StatusCode.Success) {
       dispatch(setAppStatus({status: 'succeeded'}))
       return res.data.data.item
     } else {
@@ -78,7 +79,7 @@ export const updateTask = createAsyncThunk('tasks/updateTask', async (param: { t
       ...param.domainModel
     }
     const res = await taskAPI.updateTask(param.task.todoListId, param.task.id, apiModel)
-    if (res.data.resultCode === 0) {
+    if (res.data.resultCode === StatusCode.Success) {
       dispatch(setAppStatus({status: 'succeeded'}))
       return {todolistID: param.task.todoListId, taskID: param.task.id, domainModel: param.domainModel}
     } else {

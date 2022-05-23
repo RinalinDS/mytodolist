@@ -3,7 +3,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Checkbox from "@material-ui/core/Checkbox";
 import {Delete} from "@mui/icons-material/";
 import {EditableSpan} from "../../../common/EditableSpan/EditableSpan";
-import {TaskStatuses} from '../../../../enums'
+import {TaskStatus} from '../../../../enums'
 import {TaskType} from '../../../../types';
 import {taskActions} from '../../../../store';
 import {useActions, useAppSelector} from '../../../../hooks/storeHooks';
@@ -23,14 +23,14 @@ export const Task: FC<TaskPropsType> = React.memo(({taskID, todolistID}) => {
   const removeTaskHandler = useCallback(() => removeTask({todolistID, taskID}), [taskID, todolistID])
 
   const changeTaskStatus = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    updateTask({task, domainModel: {status: e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New}})
+    updateTask({task, domainModel: {status: e.currentTarget.checked ? TaskStatus.Completed : TaskStatus.New}})
   }, [task])
 
   const changeTaskTitle = useCallback((title: string) =>
     updateTask({task, domainModel: {title}}), [task])
 
   const isTaskDisabled = task.entityStatus === 'loading'
-  const isTaskCompleted =  task.status === TaskStatuses.Completed
+  const isTaskCompleted =  task.status === TaskStatus.Completed
 
   return (
     <div key={task.id} className={isTaskCompleted ? "is-done" : ""} style={{position: 'relative'}}>
