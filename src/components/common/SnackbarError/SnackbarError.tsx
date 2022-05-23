@@ -4,7 +4,7 @@ import Snackbar from '@mui/material/Snackbar';
 import {storeHooks} from './../../../hooks'
 import {appSelectors} from '../../../store/selectors';
 import {appActions} from '../../../store/reducers/Application';
-
+import {useActions} from '../../../hooks/storeHooks';
 
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
@@ -13,16 +13,16 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 export function ErrorSnackbar() {
-  const {setAppError} = appActions
-  const {useAppDispatch, useAppSelector} = storeHooks
+  const {setAppError} = useActions(appActions)
+  const {useAppSelector} = storeHooks
   const error = useAppSelector(appSelectors.selectError)
-  const dispatch = useAppDispatch()
+
 
   const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }
-    dispatch(setAppError({error: null}));
+    setAppError({error: null});
   };
 
   return (

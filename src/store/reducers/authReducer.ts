@@ -13,7 +13,7 @@ import {StatusCode} from '../../enums';
 
 
 export const login = createAsyncThunk<undefined, LoginParamsType, RejectValueType>('auth/login', async (data: LoginParamsType, thunkAPI) => {
-  const {dispatch, rejectWithValue} = thunkAPI
+  const {dispatch } = thunkAPI
   try {
     dispatch(appActions.setAppStatus({status: 'loading'}))
     const res = await authAPI.login(data)
@@ -21,17 +21,15 @@ export const login = createAsyncThunk<undefined, LoginParamsType, RejectValueTyp
       dispatch(appActions.setAppStatus({status: 'succeeded'}))
       return; // получается , что если я нажму ретурн, значит позитивный ауткам, а значит можно не передавать лишний раз "тру", а в редюсере менять без пейлоада на "тру"
     } else {
-      handleAsyncServerError(res.data, thunkAPI)
-      return rejectWithValue({errors: res.data.messages, fieldsError: res.data.fieldsErrors}) // выплюнуть action с типом rejected, v reduxe я его не обрабатываю, хотя можно, но использую его в формике. Еррорс попадает в пейлоад actiona-a
+      return handleAsyncServerError(res.data, thunkAPI)
     }
   } catch (e) {
-    handleServerNetworkError((e as Error).message, thunkAPI)
-    return rejectWithValue({errors: [(e as Error).message], fieldsError: undefined})
+    return handleServerNetworkError((e as Error).message, thunkAPI)
   }
 })
 // НИКОГДА БЛЯДЬ НЕ ПИШИ ПУСТОЙ ОБЪЕКТ ( {} ) ЕСЛИ НЕT ПАРАМЕТРОВ ! ВСТАВЬ РАНДОМНОЕ НАЗВАНИЕ , НО НЕ ПУСТОЙ ОБЪЕКТ !
 export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
-  const {dispatch, rejectWithValue} = thunkAPI
+  const {dispatch} = thunkAPI
   try {
     dispatch(appActions.setAppStatus({status: 'loading'}))
     const res = await authAPI.logout()
@@ -40,12 +38,10 @@ export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
       dispatch(clearTodolistsData())
       return
     } else {
-      handleAsyncServerError(res.data, thunkAPI)
-      return rejectWithValue({errors: res.data.messages, fieldsError: res.data.fieldsErrors})
+      return handleAsyncServerError(res.data, thunkAPI)
     }
   } catch (e) {
-    handleServerNetworkError((e as Error).message, thunkAPI)
-    return rejectWithValue({errors: [(e as Error).message], fieldsError: undefined})
+    return handleServerNetworkError((e as Error).message, thunkAPI)
   }
 })
 

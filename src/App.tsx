@@ -10,9 +10,10 @@ import {ErrorSnackbar} from "./components/common/SnackbarError/SnackbarError";
 import {Login} from './components/Login/Login';
 import {Navigate, Route, Routes, useNavigate} from 'react-router-dom';
 import {appSelectors, authSelectors} from './store/selectors';
-import {appActions, authActions} from './store';
+import {authActions} from './store';
 import {InitializePreloader} from './components/common/Prealoder/InitializePreloader';
 import {Path} from './enums';
+import {appActions} from './store/reducers/Application';
 
 
 export const App: FC = () => {
