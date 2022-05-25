@@ -1,17 +1,19 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {FilterValueType, RejectValueType, RequestStatusType, TodolistDomainType, TodolistType} from '../../types';
-import {handleAsyncServerError, handleAsyncServerNetworkError} from '../../utils/error-utils';
-import {todolistApi} from '../../api/API';
-import {appActions} from './Application/';
-import {getTasks} from './TasksReducer';
-import {StatusCode} from '../../enums';
+import {FilterValueType, RejectValueType, RequestStatusType, TodolistDomainType, TodolistType} from '../../../types';
+import {handleAsyncServerError, handleAsyncServerNetworkError} from '../../../utils/error-utils';
+import {todolistApi} from '../../../api/API';
+import {appActions} from '../Application';
+import {tasksActions} from '../Tasks/';
+import {StatusCode} from '../../../enums';
 
-// const { setAppStatus } = appActions // TODO суппорт
+const {getTasks} = tasksActions
+
+// const { setAppStatus } = appActions // TODO
 
 // чтобы в редюсере не пришлось отдельно типизировать в мапе, нужно все равно писать типизацию createAsyncThunk, где:
 // 1-й параметр типизации - это тип успешного ретурна, 2й тип входящих аргументов , 3-й тип велью ,которое при реджекте
-// если входящих параметров нет - ебашь undefined , не null !!
-export const getTodolists = createAsyncThunk<{todolists: TodolistType[]}, undefined, RejectValueType>('todolists/getTodos', async (param, thunkAPI) => {
+// если входящих параметров нет - ставь undefined , не null !!
+const getTodolists = createAsyncThunk<{todolists: TodolistType[]}, undefined, RejectValueType>('todolists/getTodos', async (param, thunkAPI) => {
   const {dispatch} = thunkAPI
   try {
     dispatch(appActions.setAppStatus({status: 'loading'}))
@@ -26,7 +28,7 @@ export const getTodolists = createAsyncThunk<{todolists: TodolistType[]}, undefi
   }
 })
 
-export const removeTodolist = createAsyncThunk('todolists/deleteTodo', async (todolistID: string, thunkAPI) => {
+const removeTodolist = createAsyncThunk('todolists/deleteTodo', async (todolistID: string, thunkAPI) => {
   const {dispatch} = thunkAPI
   try {
     dispatch(appActions.setAppStatus({status: 'loading'}))
@@ -43,7 +45,7 @@ export const removeTodolist = createAsyncThunk('todolists/deleteTodo', async (to
   }
 })
 
-export const addTodolist = createAsyncThunk<TodolistType, string, RejectValueType>('todolists/createTodo', async (title, thunkAPI) => {
+const addTodolist = createAsyncThunk<TodolistType, string, RejectValueType>('todolists/createTodo', async (title, thunkAPI) => {
   const {dispatch} = thunkAPI
   try {
     dispatch(appActions.setAppStatus({status: 'loading'}))
@@ -59,7 +61,7 @@ export const addTodolist = createAsyncThunk<TodolistType, string, RejectValueTyp
   }
 })
 
-export const changeTodolistTitle = createAsyncThunk('todolists/changeTodoTitle', async (param: { todolistID: string, title: string }, thunkAPI) => {
+const changeTodolistTitle = createAsyncThunk('todolists/changeTodoTitle', async (param: { todolistID: string, title: string }, thunkAPI) => {
   const {dispatch} = thunkAPI
   try {
     dispatch(appActions.setAppStatus({status: 'loading'}))
@@ -82,7 +84,7 @@ export const asyncActions = {
   changeTodolistTitle,
 }
 
-export const slice = createSlice({
+const slice = createSlice({
   name: 'todolists',
   initialState: [] as Array<TodolistDomainType>,
   reducers: {
@@ -119,11 +121,13 @@ export const slice = createSlice({
 
 export const todolistsReducer = slice.reducer
 
-export const {
+export const  {
   changeFilter,
   changeEntityStatus,
   clearTodolistsData,
 } = slice.actions
 
 
-
+export const todoActions = {changeFilter,
+  changeEntityStatus,
+  clearTodolistsData,}

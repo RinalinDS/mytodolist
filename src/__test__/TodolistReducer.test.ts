@@ -1,12 +1,12 @@
 import {v1} from 'uuid';
-import {
-  addTodolist,
-  changeFilter, changeTodolistTitle, getTodolists, removeTodolist,
-  todolistsReducer,
-} from "../store/reducers/TodolistsReducer";
+import {asyncActions, todoActions, todolistsReducer} from "../store/reducers/Todolist/TodolistsReducer";
 import {FilterValueType, TodolistDomainType} from '../types';
 
-
+const todolistsActions = {
+  ...asyncActions,
+  ...todoActions
+}
+const {addTodolist, changeFilter, changeTodolistTitle, getTodolists, removeTodolist} = todolistsActions
 
 let todolistId1: string;
 let todolistId2: string;
@@ -73,7 +73,7 @@ test('correct filter of todolist should be changed', () => {
 });
 
 
-test('todolists should be added', ()=> {
-  const endState = todolistsReducer([], getTodolists.fulfilled ({todolists: startState}, 'requestID', undefined))
+test('todolists should be added', () => {
+  const endState = todolistsReducer([], getTodolists.fulfilled({todolists: startState}, 'requestID', undefined))
   expect(endState.length).toBe(2)
 })

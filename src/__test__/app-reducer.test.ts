@@ -1,9 +1,9 @@
 import {NullableType, RequestStatusType} from "../types";
 import {appReducer} from '../store/reducers/Application';
-import {asyncActions, setAppError, setAppStatus} from "../store/reducers/Application/AppReducer";
+import {appActions} from "../store/reducers/Application";
 
 
-
+const {setAppStatus, setAppError, initializeApp} = appActions
 
 type initialStateType = {
   status: RequestStatusType,
@@ -20,7 +20,7 @@ beforeEach(() => {
     isInitialized: false
   }
 })
-// TODO суппорт, почему оно влияет на деструктуризацию ?!
+// TODO  почему оно влияет на деструктуризацию ?!
 
 test('correct error message should be set', () => {
 
@@ -40,7 +40,7 @@ test('correct status should be set', () => {
 
 test('correct isInitialized value should be set', () => {
 
-  const endState = appReducer(initialState, asyncActions.initializeApp.fulfilled('', '', undefined))
+  const endState = appReducer(initialState, initializeApp.fulfilled('', '', undefined))
 
   expect(endState.isInitialized).toBeTruthy()
 

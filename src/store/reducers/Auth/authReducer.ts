@@ -1,10 +1,12 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {LoginParamsType, RejectValueType} from '../../types';
-import {appActions} from './Application/';
-import {authAPI} from '../../api/API';
-import {handleAsyncServerError, handleAsyncServerNetworkError} from '../../utils/error-utils';
-import {clearTodolistsData} from './TodolistsReducer';
-import {StatusCode} from '../../enums';
+import {LoginParamsType, RejectValueType} from '../../../types';
+import {appActions} from '../Application';
+import {authAPI} from '../../../api/API';
+import {handleAsyncServerError, handleAsyncServerNetworkError} from '../../../utils/error-utils';
+import {clearTodolistsData} from '../Todolist/TodolistsReducer';
+import {StatusCode} from '../../../enums';
+
+
 
 // вот эта огромная типизация снизу : 1е это типизация fullfilled payloda , 2е, типизация передаваемых аргументов в санку, 3е типизация reject payloda.
 // чтобы в формике не говорило, что action.payload при reject - type unknown, а нормально все было,
@@ -12,7 +14,7 @@ import {StatusCode} from '../../enums';
 // UPD : так как мне теперь не нужен первый тип вместо, то {isLoggedIn: boolean} стал undefined, т.к. у меня пустой ретурн.
 
 
-export const login = createAsyncThunk<undefined, LoginParamsType, RejectValueType>('auth/login', async (data: LoginParamsType, thunkAPI) => {
+const login = createAsyncThunk<undefined, LoginParamsType, RejectValueType>('auth/login', async (data: LoginParamsType, thunkAPI) => {
   const {dispatch } = thunkAPI
   try {
     dispatch(appActions.setAppStatus({status: 'loading'}))
@@ -28,7 +30,7 @@ export const login = createAsyncThunk<undefined, LoginParamsType, RejectValueTyp
   }
 })
 // НИКОГДА БЛЯДЬ НЕ ПИШИ ПУСТОЙ ОБЪЕКТ ( {} ) ЕСЛИ НЕT ПАРАМЕТРОВ ! ВСТАВЬ РАНДОМНОЕ НАЗВАНИЕ , НО НЕ ПУСТОЙ ОБЪЕКТ !
-export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
+const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
   const {dispatch} = thunkAPI
   try {
     dispatch(appActions.setAppStatus({status: 'loading'}))
@@ -50,7 +52,7 @@ export const asyncActions = {
   logout,
 }
 
-const slice = createSlice({
+export const slice = createSlice({
   name: 'auth',
   initialState: {
     isLoggedIn: false
@@ -71,8 +73,8 @@ const slice = createSlice({
   }
 })
 
-export const authReducer = slice.reducer
-export const {setIsLoggedIn} = slice.actions
+// export const authReducer = slice.reducer
+// export const {setIsLoggedIn} = slice.actions
 
 
 

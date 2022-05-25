@@ -5,8 +5,8 @@ import {Delete} from "@mui/icons-material/";
 import {EditableSpan} from "../../../common/EditableSpan/EditableSpan";
 import {TaskStatus} from '../../../../enums'
 import {TaskType} from '../../../../types';
-import {taskActions} from '../../../../store';
 import {useActions, useAppSelector} from '../../../../hooks/storeHooks';
+import {tasksActions} from '../../../../store/reducers/Tasks';
 
 
 type TaskPropsType = {
@@ -18,7 +18,7 @@ export const Task: FC<TaskPropsType> = React.memo(({taskID, todolistID}) => {
 
   const task = useAppSelector<TaskType>(state => state.tasks[todolistID].filter(f => f.id === taskID)[0])
 
-  const {updateTask, removeTask} = useActions(taskActions)
+  const {updateTask, removeTask} = useActions(tasksActions)
 
   const removeTaskHandler = useCallback(() => removeTask({todolistID, taskID}), [taskID, todolistID])
 

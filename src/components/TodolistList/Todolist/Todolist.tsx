@@ -7,8 +7,9 @@ import {Task} from "./ Task/Task";
 import {Delete} from "@mui/icons-material";
 import {TaskStatus} from '../../../enums';
 import {FilterValueType, TaskType, TodolistDomainType} from '../../../types';
-import {taskActions, todolistsActions} from '../../../store';
 import Paper from '@material-ui/core/Paper';
+import {asyncActions as todolistsActions, todoActions} from '../../../store/reducers/Todolist/TodolistsReducer';
+import {tasksActions} from '../../../store/reducers/Tasks';
 
 
 type TodolistPropsType = {
@@ -21,7 +22,8 @@ export const Todolist: FC<TodolistPropsType> = memo(({todolistID}) => {
 
   const tasks = useAppSelector<Array<TaskType>>(state => state.tasks[todolistID])
   const todolist = useAppSelector<TodolistDomainType>(state => state.todolists.filter(f => todolistID === f.id)[0])
-  const {removeTodolist, changeTodolistTitle, changeFilter} = useActions(todolistsActions)
+  const {removeTodolist, changeTodolistTitle } = useActions(todolistsActions)
+  const {changeFilter} = useActions(todoActions)
 
   const changeTodolistFilter = useCallback((filter: FilterValueType) => {
     changeFilter({filter, todolistID: todolistID})
@@ -31,9 +33,9 @@ export const Todolist: FC<TodolistPropsType> = memo(({todolistID}) => {
 // ya ne ponimayu kak ya peredal funckii naverx iz additem form suda , no oni sid9t v objecte helper ,
 // i tam est callbacki seteerror i settitle, voobwe eto kajets9 plohaya praktika tak delat.
   const addTasksCallback = useCallback(async (title: string, helper: AddItemFormSubmitHelperType) => {
-    let thunk = taskActions.addTask({title, todolistID})
+    let thunk = tasksActions.addTask({title, todolistID})
     const resultAction = await dispatch(thunk)
-    if (taskActions.addTask.rejected.match(resultAction)) {
+    if (tasksActions.addTask.rejected.match(resultAction)) {
       if (resultAction.payload?.errors?.length) {
         const errorMessage = resultAction.payload?.errors[0]
         helper.setError(errorMessage)

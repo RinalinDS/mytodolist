@@ -4,7 +4,7 @@ import {AddItemForm, AddItemFormSubmitHelperType} from "../common/AddItemForm/Ad
 import {Todolist} from "./Todolist/Todolist";
 import {Navigate} from "react-router-dom";
 import {authSelectors, todolistSelectors} from '../../store/selectors';
-import {todolistsActions} from '../../store';
+import {asyncActions as todolistsActions} from '../../store/reducers/Todolist/TodolistsReducer'
 import {storeHooks} from '../../hooks';
 
 
@@ -13,12 +13,12 @@ export const TodolistsList: FC = () => {
   const dispatch = useAppDispatch()
   const todolists = useAppSelector(todolistSelectors.selectTodolists)
   const isLoggedIn = useAppSelector(authSelectors.selectIsLoggedIn)
-  const {getTodolists} = useActions(todolistsActions)
+  const {getTodolists, addTodolist} = useActions(todolistsActions)
 
   const addTodolistsCallback = useCallback(async (title: string, helper: AddItemFormSubmitHelperType) => {
-    let thunk = todolistsActions.addTodolist(title)
+    let thunk = addTodolist(title)
     const resultAction = await dispatch(thunk)
-    if (todolistsActions.addTodolist.rejected.match(resultAction)) {
+    if (addTodolist.rejected.match(resultAction)) {
       if (resultAction.payload?.errors?.length) {
         const errorMessage = resultAction.payload?.errors[0]
         helper.setError(errorMessage)

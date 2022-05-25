@@ -1,10 +1,10 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {NullableType, RequestStatusType} from '../../../types';
 import {authAPI} from '../../../api/API';
-import {setIsLoggedIn} from '../authReducer';
+import {authActions} from '../Auth/';
 import {StatusCode} from '../../../enums';
 
-
+const {setIsLoggedIn} = authActions
 // НИКОГДА БЛЯДЬ НЕ ПИШИ ПУСТОЙ ОБЪЕКТ ( {} ) ЕСЛИ НЕТУ ПАРАМЕТРОВ ! ВСТАВЬ РАНДОМНОЕ НАЗВАНИЕ , НО НЕ ПУСТОЙ ОБЪЕКТ !
 
 export const initializeApp = createAsyncThunk('app/initializeAppTC', async (_, {dispatch}) => {
