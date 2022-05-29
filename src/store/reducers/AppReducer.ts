@@ -1,8 +1,8 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {NullableType, RequestStatusType} from '../../../types';
-import {authAPI} from '../../../api/API';
-import {setIsLoggedIn} from '../authReducer';
-import {StatusCode} from '../../../enums';
+import {NullableType, RequestStatusType} from '../../types';
+import {authAPI} from '../../api/API';
+import {StatusCode} from '../../enums';
+import {authActions} from './AuthReducer';
 
 
 // НИКОГДА БЛЯДЬ НЕ ПИШИ ПУСТОЙ ОБЪЕКТ ( {} ) ЕСЛИ НЕТУ ПАРАМЕТРОВ ! ВСТАВЬ РАНДОМНОЕ НАЗВАНИЕ , НО НЕ ПУСТОЙ ОБЪЕКТ !
@@ -10,16 +10,13 @@ import {StatusCode} from '../../../enums';
 export const initializeApp = createAsyncThunk('app/initializeAppTC', async (_, {dispatch}) => {
   const res = await authAPI.me()
   if (res.data.resultCode === StatusCode.Success) {
-    dispatch(setIsLoggedIn({value: true}))
+    dispatch(authActions.setIsLoggedIn({value: true}))
   }
   return ''
 })
 
-export const asyncActions = {
-  initializeApp
-}
 
-export const slice = createSlice({
+const slice = createSlice({
   name: 'app',
   initialState: {
     status: 'idle' as RequestStatusType,
@@ -43,8 +40,14 @@ export const slice = createSlice({
 
 })
 
+export const appReducer = slice.reducer
 export const {setAppStatus, setAppError} = slice.actions
 
+export const appActions = {
+  initializeApp,
+  setAppStatus,
+  setAppError,
+}
 
 
 

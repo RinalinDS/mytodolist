@@ -5,8 +5,8 @@ import {Delete} from "@mui/icons-material/";
 import {EditableSpan} from "../../../common/EditableSpan/EditableSpan";
 import {TaskStatus} from '../../../../enums'
 import {TaskType} from '../../../../types';
-import {taskActions} from '../../../../store';
 import {useActions, useAppSelector} from '../../../../hooks/storeHooks';
+import {TaskActions} from '../../../../store/reducers/TasksReducer';
 
 
 type TaskPropsType = {
@@ -18,7 +18,7 @@ export const Task: FC<TaskPropsType> = React.memo(({taskID, todolistID}) => {
 
   const task = useAppSelector<TaskType>(state => state.tasks[todolistID].filter(f => f.id === taskID)[0])
 
-  const {updateTask, removeTask} = useActions(taskActions)
+  const {updateTask, removeTask} = useActions(TaskActions)
 
   const removeTaskHandler = useCallback(() => removeTask({todolistID, taskID}), [taskID, todolistID])
 
@@ -30,7 +30,7 @@ export const Task: FC<TaskPropsType> = React.memo(({taskID, todolistID}) => {
     updateTask({task, domainModel: {title}}), [task])
 
   const isTaskDisabled = task.entityStatus === 'loading'
-  const isTaskCompleted =  task.status === TaskStatus.Completed
+  const isTaskCompleted = task.status === TaskStatus.Completed
 
   return (
     <div key={task.id} className={isTaskCompleted ? "is-done" : ""} style={{position: 'relative'}}>
@@ -41,7 +41,8 @@ export const Task: FC<TaskPropsType> = React.memo(({taskID, todolistID}) => {
         disabled={isTaskDisabled}
       />
       <EditableSpan title={task.title} onChange={changeTaskTitle} disabled={isTaskDisabled}/>
-      <IconButton size={'small'} onClick={removeTaskHandler} disabled={isTaskDisabled} style={{position: 'absolute', right: '2px', top: '2px'}}>
+      <IconButton size={'small'} onClick={removeTaskHandler} disabled={isTaskDisabled}
+                  style={{position: 'absolute', right: '2px', top: '2px'}}>
         <Delete fontSize={'small'}/>
       </IconButton>
     </div>

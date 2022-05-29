@@ -2,8 +2,8 @@ import {combineReducers} from "redux";
 import {todolistsReducer} from "./reducers/TodolistsReducer";
 import {tasksReducer} from "./reducers/TasksReducer";
 import thunkMiddleware from "redux-thunk";
-import {appReducer} from "./reducers/Application/";
-import {authReducer} from './reducers/authReducer';
+import {appReducer} from "./reducers/AppReducer";
+import {authReducer} from './reducers/AuthReducer';
 import {configureStore} from '@reduxjs/toolkit';
 
 

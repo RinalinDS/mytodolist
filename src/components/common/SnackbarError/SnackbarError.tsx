@@ -3,7 +3,7 @@ import MuiAlert, {AlertProps} from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import {storeHooks} from './../../../hooks'
 import {appSelectors} from '../../../store/selectors';
-import {appActions} from '../../../store/reducers/Application';
+import {appActions} from '../../../store/reducers/AppReducer';
 import {useActions} from '../../../hooks/storeHooks';
 
 

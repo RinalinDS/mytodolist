@@ -1,10 +1,11 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {LoginParamsType, RejectValueType} from '../../types';
-import {appActions} from './Application/';
 import {authAPI} from '../../api/API';
 import {handleAsyncServerError, handleAsyncServerNetworkError} from '../../utils/error-utils';
-import {clearTodolistsData} from './TodolistsReducer';
+import {TodoActions} from './TodolistsReducer';
 import {StatusCode} from '../../enums';
+import { setAppStatus } from './AppReducer';
+
 
 // вот эта огромная типизация снизу : 1е это типизация fullfilled payloda , 2е, типизация передаваемых аргументов в санку, 3е типизация reject payloda.
 // чтобы в формике не говорило, что action.payload при reject - type unknown, а нормально все было,
@@ -13,12 +14,12 @@ import {StatusCode} from '../../enums';
 
 
 export const login = createAsyncThunk<undefined, LoginParamsType, RejectValueType>('auth/login', async (data: LoginParamsType, thunkAPI) => {
-  const {dispatch } = thunkAPI
+  const {dispatch} = thunkAPI
   try {
-    dispatch(appActions.setAppStatus({status: 'loading'}))
+    dispatch(setAppStatus({status: 'loading'}))
     const res = await authAPI.login(data)
     if (res.data.resultCode === StatusCode.Success) {
-      dispatch(appActions.setAppStatus({status: 'succeeded'}))
+      dispatch(setAppStatus({status: 'succeeded'}))
       return; // получается , что если я нажму ретурн, значит позитивный ауткам, а значит можно не передавать лишний раз "тру", а в редюсере менять без пейлоада на "тру"
     } else {
       return handleAsyncServerError(res.data, thunkAPI)
@@ -31,11 +32,11 @@ export const login = createAsyncThunk<undefined, LoginParamsType, RejectValueTyp
 export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
   const {dispatch} = thunkAPI
   try {
-    dispatch(appActions.setAppStatus({status: 'loading'}))
+    dispatch(setAppStatus({status: 'loading'}))
     const res = await authAPI.logout()
     if (res.data.resultCode === StatusCode.Success) {
-      dispatch(appActions.setAppStatus({status: 'succeeded'}))
-      dispatch(clearTodolistsData())
+      dispatch(setAppStatus({status: 'succeeded'}))
+      dispatch(TodoActions.clearTodolistsData())
       return
     } else {
       return handleAsyncServerError(res.data, thunkAPI)
@@ -45,10 +46,6 @@ export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
   }
 })
 
-export const asyncActions = {
-  login,
-  logout,
-}
 
 const slice = createSlice({
   name: 'auth',
@@ -72,8 +69,13 @@ const slice = createSlice({
 })
 
 export const authReducer = slice.reducer
-export const {setIsLoggedIn} = slice.actions
+const {setIsLoggedIn} = slice.actions
 
+export const authActions = {
+  setIsLoggedIn,
+  login,
+  logout,
+}
 
 
 

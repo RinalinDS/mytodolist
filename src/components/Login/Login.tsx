@@ -12,7 +12,8 @@ import {storeHooks} from '../../hooks'
 import {Navigate} from 'react-router-dom';
 import {FormValuesType, LoginParamsType} from '../../types';
 import {authSelectors} from '../../store/selectors/';
-import {authActions} from '../../store';
+import {authActions} from '../../store/reducers/AuthReducer';
+
 
 
 export const Login: FC = () => {

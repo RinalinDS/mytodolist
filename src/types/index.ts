@@ -1,7 +1,9 @@
 import * as TaskTypes from './TaskTypes'
+import * as UtilTypes from './UtilTypes'
 
 export {
-  TaskTypes
+  TaskTypes,
+  UtilTypes
 }
 
 

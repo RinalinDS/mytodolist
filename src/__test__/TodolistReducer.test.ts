@@ -1,12 +1,9 @@
 import {v1} from 'uuid';
-import {
-  addTodolist,
-  changeFilter, changeTodolistTitle, getTodolists, removeTodolist,
-  todolistsReducer,
-} from "../store/reducers/TodolistsReducer";
+import {TodoActions, todolistsReducer,} from "../store/reducers/TodolistsReducer";
 import {FilterValueType, TodolistDomainType} from '../types';
 
 
+const {addTodolist, changeFilter, changeTodolistTitle, getTodolists, removeTodolist} = TodoActions
 
 let todolistId1: string;
 let todolistId2: string;
@@ -73,7 +70,7 @@ test('correct filter of todolist should be changed', () => {
 });
 
 
-test('todolists should be added', ()=> {
-  const endState = todolistsReducer([], getTodolists.fulfilled ({todolists: startState}, 'requestID', undefined))
+test('todolists should be added', () => {
+  const endState = todolistsReducer([], getTodolists.fulfilled({todolists: startState}, 'requestID', undefined))
   expect(endState.length).toBe(2)
 })
