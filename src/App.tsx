@@ -50,10 +50,10 @@ export const App: FC = () => {
 
   return (
     <div>
-      <AppBar position="static">
-        <Toolbar>
+      <AppBar position="static" style={{ background: '#2E3B55' }}>
+        <Toolbar style={{display:'flex', justifyContent:'space-between'}}>
           <Button color="inherit" onClick={backHomeHandler}>Home</Button>
-          {isLoggedIn && <Button color="inherit" onClick={logoutHandler}>Log out</Button>}
+          {isLoggedIn && <Button  color="inherit" onClick={logoutHandler}>Log out</Button>}
         </Toolbar>
       </AppBar>
       {status === 'loading' && <LinearProgress color={'secondary'}/>}

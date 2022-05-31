@@ -76,7 +76,7 @@ export const Todolist: FC<TodolistPropsType> = memo(({todolistID}) => {
   return (
     <Paper style={{position: 'relative', padding: '10px', backgroundColor: 'aliceblue'}}>
       <IconButton size={'small'}
-                  onClick={deleteTodolistHandler} style={{position: 'absolute', right: '13px', top: '20px'}}>
+                  onClick={deleteTodolistHandler} style={{position: 'absolute', right: '13px', top: '30px'}}>
         <Delete fontSize={'small'}/>
       </IconButton>
       <h3 style={{marginRight: '35px'}}><EditableSpan title={todolist.title} onChange={changeTodolistTitleHandler}/>
