@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import LinearProgress from "@material-ui/core/LinearProgress";
 import AppBar from "@material-ui/core/AppBar";
 import Button from "@material-ui/core/Button";
@@ -15,7 +15,14 @@ import {InitializePreloader} from './components/common/Prealoder/InitializePrelo
 import {Path} from './enums';
 import {authActions} from './store/reducers/AuthReducer';
 import {appActions} from './store/reducers/AppReducer';
+import styled, {ThemeProvider} from 'styled-components';
+import {Toggler} from './Toggler';
+import {darkTheme, GlobalStyles, lightTheme} from './Global';
 
+const AppWrapper = styled.div`
+  width: 100%;
+  min-height: 100vh;
+`
 
 
 export const App: FC = () => {
@@ -27,7 +34,7 @@ export const App: FC = () => {
   const isLoggedIn = useAppSelector(authSelectors.selectIsLoggedIn)
 
 
-  const {initializeApp} = useActions(appActions)
+  const {initializeApp, setAppTheme} = useActions(appActions)
   const {logout} = useActions(authActions)
 
   useEffect(() => {
@@ -35,6 +42,25 @@ export const App: FC = () => {
     // это все та же строка dispatch(initilizeAppTC()),но теперь , благодаря хуку useActions, вызов происходит скрыто от нас, но это просто фикция)
   }, [])
 
+  const [theme, setTheme] = useState("dark");
+  const isDarkTheme = theme === "dark";
+
+  const toggleTheme = () => {
+    const updatedTheme = isDarkTheme ? "light" : "dark";
+    setTheme(updatedTheme);
+    localStorage.setItem("theme", updatedTheme);
+    setAppTheme(updatedTheme)
+  };
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    const prefersDark = window.matchMedia &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (savedTheme && ["dark", "light"].includes(savedTheme)) {
+      setTheme(savedTheme);
+    } else if (prefersDark) {
+      setTheme("dark");
+    }
+  }, []);
 
   const logoutHandler = () => {
     logout()
@@ -50,22 +76,31 @@ export const App: FC = () => {
 
   return (
     <div>
-      <AppBar position="static" style={{ background: '#2E3B55' }}>
-        <Toolbar style={{display:'flex', justifyContent:'space-between'}}>
-          <Button color="inherit" onClick={backHomeHandler}>Home</Button>
-          {isLoggedIn && <Button  color="inherit" onClick={logoutHandler}>Log out</Button>}
-        </Toolbar>
-      </AppBar>
-      {status === 'loading' && <LinearProgress color={'secondary'}/>}
-      <Container fixed style={{marginBottom: '50px'}}>
-        <Routes>
-          <Route path={Path.Home} element={<TodolistsList/>}/>
-          <Route path={Path.Login} element={<Login/>}/>
-          <Route path={Path.ErrorPage} element={<h1>Someone FUCKED UP</h1>}/>
-          <Route path={Path.AnyOther} element={<Navigate to={Path.ErrorPage}/>}/>
-        </Routes>
-      </Container>
-      <ErrorSnackbar/>
+      <ThemeProvider theme={isDarkTheme ? darkTheme : lightTheme}>
+        <GlobalStyles/>
+        <AppWrapper>
+          <AppBar position="static" style={{background: '#2E3B55'}}>
+            <Toolbar style={{display: 'flex', justifyContent: 'space-between'}}>
+              <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                <Button color="inherit" onClick={backHomeHandler}>Home</Button>
+                <Toggler value={isDarkTheme}
+                         onChange={toggleTheme}> {isDarkTheme ? 'Make Light' : ' Make Dark'} </Toggler>
+              </div>
+              {isLoggedIn && <Button color="inherit" onClick={logoutHandler}>Log out</Button>}
+            </Toolbar>
+          </AppBar>
+          {status === 'loading' && <LinearProgress color={'secondary'}/>}
+          <Container fixed style={{marginBottom: '50px'}}>
+            <Routes>
+              <Route path={Path.Home} element={<TodolistsList/>}/>
+              <Route path={Path.Login} element={<Login/>}/>
+              <Route path={Path.ErrorPage} element={<h1>Someone FUCKED UP</h1>}/>
+              <Route path={Path.AnyOther} element={<Navigate to={Path.ErrorPage}/>}/>
+            </Routes>
+          </Container>
+          <ErrorSnackbar/>
+        </AppWrapper>
+      </ThemeProvider>
     </div>
 
 

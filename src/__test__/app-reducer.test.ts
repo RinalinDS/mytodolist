@@ -6,6 +6,7 @@ type initialStateType = {
   status: RequestStatusType,
   error: NullableType<string>,
   isInitialized: boolean
+  theme: 'dark' | 'light'
 }
 
 let initialState: initialStateType;
@@ -14,7 +15,8 @@ beforeEach(() => {
   initialState = {
     status: 'idle',
     error: null as NullableType<string>,
-    isInitialized: false
+    isInitialized: false,
+    theme: 'dark'
   }
 })
 

@@ -21,7 +21,8 @@ const slice = createSlice({
   initialState: {
     status: 'idle' as RequestStatusType,
     error: null as NullableType<string>,
-    isInitialized: false
+    isInitialized: false,
+    theme: 'dark'
   },
   reducers: {
     setAppStatus(state, action: PayloadAction<{ status: RequestStatusType }>) {
@@ -30,6 +31,9 @@ const slice = createSlice({
     setAppError(state, action: PayloadAction<{ error: NullableType<string> }>) {
       state.error = action.payload.error
     },
+    setAppTheme(state, action: PayloadAction<string>) {
+      state.theme = action.payload
+    }
   },
   extraReducers: builder => {
     builder
@@ -41,12 +45,13 @@ const slice = createSlice({
 })
 
 export const appReducer = slice.reducer
-export const {setAppStatus, setAppError} = slice.actions
+export const {setAppStatus, setAppError, setAppTheme} = slice.actions
 
 export const appActions = {
   initializeApp,
   setAppStatus,
   setAppError,
+  setAppTheme
 }
 
 
