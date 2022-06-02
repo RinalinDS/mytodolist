@@ -7,8 +7,7 @@ import {Task} from "./ Task/Task";
 import {Delete} from "@mui/icons-material";
 import {TaskStatus} from '../../../enums';
 import {FilterValueType, TaskType, TodolistDomainType} from '../../../types';
-
-import Paper from '@material-ui/core/Paper';
+import s from './Todolist.module.css'
 import {TodoActions} from '../../../store/reducers/TodolistsReducer';
 import {TaskActions} from '../../../store/reducers/TasksReducer';
 
@@ -22,10 +21,11 @@ export const Todolist: FC<TodolistPropsType> = memo(({todolistID}) => {
   const dispatch = useAppDispatch()
 
   const tasks = useAppSelector<Array<TaskType>>(state => state.tasks[todolistID])
+  const theme = useAppSelector<string>(state => state.app.theme) // TODO selector написать
   const todolist = useAppSelector<TodolistDomainType>(state => state.todolists.filter(f => todolistID === f.id)[0])
   const {removeTodolist, changeTodolistTitle, changeFilter} = useActions(TodoActions)
 
-
+  const isDarkTheme = theme === "dark";
   const changeTodolistFilter = useCallback((filter: FilterValueType) => {
     changeFilter({filter, todolistID: todolistID})
   }, [todolistID])
@@ -74,7 +74,7 @@ export const Todolist: FC<TodolistPropsType> = memo(({todolistID}) => {
   }
   const isTodoDisabled = todolist.entityStatus === 'loading'
   return (
-    <Paper style={{position: 'relative', padding: '10px', backgroundColor: 'aliceblue'}}>
+    <div className={`${s.list} ${isDarkTheme ? s.dark: s.light}`}>
       <IconButton size={'small'}
                   onClick={deleteTodolistHandler} style={{position: 'absolute', right: '13px', top: '30px'}}>
         <Delete fontSize={'small'}/>
@@ -103,6 +103,6 @@ export const Todolist: FC<TodolistPropsType> = memo(({todolistID}) => {
                 onClick={() => changeTodolistFilter('completed')} color="primary">Completed
         </Button>
       </div>
-    </Paper>
+    </div>
   )
 })

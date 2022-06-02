@@ -57,8 +57,10 @@ export const App: FC = () => {
       window.matchMedia('(prefers-color-scheme: dark)').matches;
     if (savedTheme && ["dark", "light"].includes(savedTheme)) {
       setTheme(savedTheme);
+      setAppTheme(savedTheme)
     } else if (prefersDark) {
       setTheme("dark");
+      setAppTheme('dark')
     }
   }, []);
 

@@ -1,0 +1,16 @@
+.list {
+    position: relative;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.light {
+    background: aliceblue;
+    color: #121620;
+}
+
+
+.dark {
+    background: #3d4141;
+    color: #f1f1f1;
+}

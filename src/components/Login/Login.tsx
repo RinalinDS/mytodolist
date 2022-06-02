@@ -20,6 +20,9 @@ export const Login: FC = () => {
   const {useAppDispatch, useAppSelector} = storeHooks
   const isLoggedIn = useAppSelector<boolean>(authSelectors.selectIsLoggedIn)
   const dispatch = useAppDispatch()
+  const theme = useAppSelector<string>(state => state.app.theme) // TODO selector написать
+  const isDarkTheme = theme === "dark";
+
 
 
   const formik = useFormik({
@@ -58,7 +61,7 @@ export const Login: FC = () => {
   return <Grid container justifyContent={'center'}>
     <Grid item justifyContent={'center'}>
       <FormControl>
-        <FormLabel>
+        <FormLabel style={{color: isDarkTheme?  '#f1f1f1' : '#121620'}}>
           <p>To log in get registered
             <a href={'https://social-network.samuraijs.com/'}
                target={'_blank'}> here
@@ -71,12 +74,16 @@ export const Login: FC = () => {
 
         <form onSubmit={formik.handleSubmit}>
           <FormGroup>
-            <TextField label="Email" margin="normal" {...formik.getFieldProps('email')}/>
+            <TextField label="Email" margin="normal" {...formik.getFieldProps('email')}  InputLabelProps={{
+              style: isDarkTheme? { backgroundColor: '#fff' } :{}
+            }}/>
             {formik.touched.email && formik.errors.email &&
               <div style={{color: 'red'}}>{formik.errors.email}</div>}
             <TextField type="password" label="Password"
                        margin="normal"  {...formik.getFieldProps('password')}
-            />
+                       InputLabelProps={{
+                         style: isDarkTheme? { backgroundColor: '#fff' } :{}
+                       }}/>
             {formik.touched.password && formik.errors.password &&
               <div style={{color: 'red'}}>{formik.errors.password}</div>}
             <FormControlLabel label={'Remember me'}

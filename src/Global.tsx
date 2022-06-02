@@ -14,8 +14,6 @@ export const GlobalStyles = createGlobalStyle<GlobalType>`
     transition: background 0.2s ease-in, color 0.2s ease-in;
   }
   * {
-    margin: 0;
-    padding: 0;
     box-sizing: border-box;
     font-family: Verdana, Arial, Helvetica, sans-serif;
   }
