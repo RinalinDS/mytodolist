@@ -1,2 +1,2 @@
-##SPA for managing to-do lists and their items. Implemented: add todolist / task, remove todolist / task, rename todolist / task, marking the completed task, displaying all / active / confirmed tasks in todolist.
-##Technologies: JavaScript, TypeScript, React, Redux Toolkit, Redux-Thunk Material UI, SCSS, Formik
+### SPA for managing to-do lists and their items. Implemented: add todolist / task, remove todolist / task, rename todolist / task, marking the completed task, displaying all / active / confirmed tasks in todolist.
+### Technologies: JavaScript, TypeScript, React, Redux Toolkit, Redux-Thunk Material UI, SCSS, Formik
