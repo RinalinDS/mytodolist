@@ -1,5 +1,20 @@
 import React, {ChangeEvent, FC, memo, useState} from "react";
-import TextField from "@material-ui/core/TextField";
+import styled from 'styled-components';
+
+const StyledInput = styled.input`
+  font: inherit;
+  letter-spacing: inherit;
+  border: 0;
+  box-sizing: content-box;
+  background: none;
+  height: 1.4375em;
+  margin: 0;
+  -webkit-tap-highlight-color: transparent;
+  display: block;
+  min-width: 0;
+  width: 80%;
+  padding: 8.5px 14px;
+`
 
 type EditableSpanPropsType = {
   title: string
@@ -26,9 +41,9 @@ export const EditableSpan: FC<EditableSpanPropsType> = memo(({title, onChange, d
 
   return (
     edit
-      ? <TextField variant='outlined' size='small' value={newTitle} onBlur={onBlurHandler}
-                   disabled={disabled} autoFocus onChange={onSetNewTitleHandler}/>
-      : <span onDoubleClick={onDoubleClickHandler}>{title}</span>
+      ? <StyledInput disabled={disabled} value={newTitle} onBlur={onBlurHandler}
+                     autoFocus onChange={onSetNewTitleHandler}/>
+      : <span style={{padding: '8.5px 7px', width: '70%'}} onDoubleClick={onDoubleClickHandler}>{title}</span>
 
   )
 })

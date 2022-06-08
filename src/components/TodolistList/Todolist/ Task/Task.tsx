@@ -33,7 +33,7 @@ export const Task: FC<TaskPropsType> = React.memo(({taskID, todolistID}) => {
   const isTaskCompleted = task.status === TaskStatus.Completed
 
   return (
-    <div key={task.id} className={isTaskCompleted ? "is-done" : ""} style={{position: 'relative'}}>
+    <div key={task.id} className={isTaskCompleted ? "is-done" : ""} style={{position: 'relative', display:'flex'}}>
       <Checkbox
         checked={isTaskCompleted}
         color="primary"

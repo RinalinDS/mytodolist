@@ -13,6 +13,23 @@ export const GlobalStyles = createGlobalStyle<GlobalType>`
     color: ${({theme}) => theme.text};
     transition: background 0.2s ease-in, color 0.2s ease-in;
   }
+
+  &::-webkit-scrollbar {
+    
+    height: 10px;
+    width: 10px;
+    background: gray;
+  }
+
+  &::-webkit-scrollbar-thumb:horizontal {
+    background: #621ebb;
+    border-radius: 20px;   
+  }
+  &::-webkit-scrollbar-thumb:vertical {
+    background: #621ebb;
+    border-radius: 20px;
+  }
+
   * {
     box-sizing: border-box;
     font-family: Verdana, Arial, Helvetica, sans-serif;

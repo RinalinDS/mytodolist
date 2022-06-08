@@ -7,6 +7,7 @@ import {authSelectors, todolistSelectors} from '../../store/selectors';
 
 import {storeHooks} from '../../hooks';
 import {TodoActions} from '../../store/reducers/TodolistsReducer';
+import s from './style/TodolistList.module.css'
 
 
 export const TodolistsList: FC = () => {
@@ -43,7 +44,8 @@ export const TodolistsList: FC = () => {
       <Grid container style={{padding: "20px"}}>
         <AddItemForm callBack={addTodolistsCallback}/>
       </Grid>
-      <Grid container spacing={3} style={{flexWrap: 'nowrap', overflowX: 'scroll'}}>
+      <div className={s.test} style={{flexWrap: 'nowrap', overflowX: 'scroll', scrollbarColor: 'yellow'}}>
+      {/*<Grid  container spacing={3} >*/}
         {todolists.map(m => {
           return <Grid key={m.id} item>
             <div style={{width: '300px', wordBreak: 'break-all'}}>
@@ -54,7 +56,8 @@ export const TodolistsList: FC = () => {
             </div>
           </Grid>
         })}
-      </Grid>
+      {/*</Grid>*/}
+      </div>
     </>
   )
 }
