@@ -4,6 +4,7 @@ import styled from 'styled-components';
 const StyledInput = styled.input`
   font: inherit;
   letter-spacing: inherit;
+  color: currentColor;
   border: 0;
   box-sizing: content-box;
   background: none;
