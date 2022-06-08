@@ -86,7 +86,7 @@ export const App: FC = () => {
               <div style={{display: 'flex', justifyContent: 'space-between'}}>
                 <Button color="inherit" onClick={backHomeHandler}>Home</Button>
                 <Toggler value={isDarkTheme}
-                         onChange={toggleTheme}> {isDarkTheme ? 'Make Light' : ' Make Dark'} </Toggler>
+                         onChange={toggleTheme}> Dark </Toggler>
               </div>
               {isLoggedIn && <Button color="inherit" onClick={logoutHandler}>Log out</Button>}
             </Toolbar>
